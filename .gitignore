@@ -9,6 +9,11 @@ non_tracked/
 _build/
 _static/
 _templates/
+tests/
+
+# Ignore specified files
+setup.py
+requirements.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
