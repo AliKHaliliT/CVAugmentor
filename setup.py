@@ -26,4 +26,11 @@ setup(name='CVAugmentor',
         ],
         packages=['CVAugmentor', 'CVAugmentor.assets', 'CVAugmentor.assets.utils', 'CVAugmentor.assets.main'],
         include_package_data=True,
+        install_requires=[
+            'colorama==0.4.6',
+            'numpy==1.24.3',
+            'opencv-python==4.6.0.66',
+            'Pillow==9.0.1',
+            'tqdm==4.64.0',
+        ],
 )
