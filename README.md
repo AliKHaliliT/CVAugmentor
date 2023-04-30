@@ -23,6 +23,7 @@ You can install the package using pip:
 pip install CVAugmentor
 ```
 ## Usage
+For a detailed usage guide, please refer to the [documentation](https://alikhalilit.github.io/CVAugmentor/).
 ### Single Image Augmentation
 ```python
 # Importing the libraries
