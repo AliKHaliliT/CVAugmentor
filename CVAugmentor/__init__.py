@@ -11,3 +11,7 @@ The package is built on top of the OpenCV and Pillow libraries.
 # Importing the libraries
 from .pipeline import Pipeline
 from .assets.main.augmentations_class import Augmentations
+
+
+# Defining the version
+__version__ = '1.0.0'
