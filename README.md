@@ -18,6 +18,7 @@ Available augmentations are:
     cutout,
     negative,
 ## Installation
+You can install the package using pip:
 ```bash
 pip install CVAugmentor
 ```
