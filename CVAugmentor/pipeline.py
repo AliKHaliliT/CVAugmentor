@@ -5,6 +5,7 @@ from .assets.main.video_augmentor_class import VideoAugmentor
 from .assets.main.image_augmentor_class import ImageAugmentor
 from typing import Dict, Callable, Optional
 import os
+from tqdm import tqdm
 
 
 # Defining the Pipeline class
@@ -35,7 +36,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
 
     # Defining the augment method
     def augment(self, input_path: str, output_path: str, target: str, process_type: str, mode: str,
-                augmentations: Dict[str, Callable], verbose: Optional[bool] = False, warn_verbose: Optional[bool] = False) -> None:
+                augmentations: Dict[str, Callable], verbose: Optional[bool] = False, aug_verbose: Optional[False] = False, warn_verbose: Optional[bool] = False) -> None:
         
         """
         
@@ -133,7 +134,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
         if process_type == "batch":
             
             # Looping through the input files
-            for input_file in self.sorted_alphanumeric(os.listdir(input_path)):
+            for input_file in tqdm(self.sorted_alphanumeric(os.listdir(input_path)), desc='Overall Progress', unit=' Videos', leave=False, dynamic_ncols=True, diable=not verbose):
                 
                 # Checking if the input file is valid
                 if not self.is_target_type(input_file, target):
@@ -151,9 +152,9 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
 
                 # Augmenting the input file
                 if mode == "sequential":
-                    augmentor.augment_one_by_one(input_file_path, output_file_path, augmentations, verbose)
+                    augmentor.augment_one_by_one(input_file_path, output_file_path, augmentations, aug_verbose)
                 elif mode == "singular":
-                    augmentor.augment_all_at_once(input_file_path, output_file_path, augmentations, verbose)
+                    augmentor.augment_all_at_once(input_file_path, output_file_path, augmentations, aug_verbose)
 
         elif process_type == "single":
                 

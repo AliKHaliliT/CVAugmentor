@@ -14,4 +14,4 @@ from .assets.main.augmentations_class import Augmentations
 
 
 # Defining the version
-__version__ = '1.0.5'
+__version__ = '1.0.6'
