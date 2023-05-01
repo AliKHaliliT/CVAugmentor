@@ -36,7 +36,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
 
     # Defining the augment method
     def augment(self, input_path: str, output_path: str, target: str, process_type: str, mode: str,
-                augmentations: Dict[str, Callable], verbose: Optional[bool] = False, aug_verbose: Optional[False] = False, warn_verbose: Optional[bool] = False) -> None:
+                augmentations: Dict[str, Callable], verbose: Optional[bool] = False, aug_verbose: Optional[bool] = False, warn_verbose: Optional[bool] = False) -> None:
         
         """
         
