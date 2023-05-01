@@ -82,7 +82,13 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
             The keys are the names of the augmentations and the values are the augmentations themselves.
 
         verbose : bool, optional
+            If True, prints the overall progress of the augmentation process. The default is False.
+
+        aug_verbose : bool, optional
             If True, prints the progress of the augmentation process. The default is False.
+
+        warn_verbose : bool, optional
+            If True, prints the warnings. The default is False.
 
         
         Returns
@@ -134,7 +140,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
         if process_type == "batch":
             
             # Looping through the input files
-            for input_file in tqdm(self.sorted_alphanumeric(os.listdir(input_path)), desc='Overall Progress', unit=' Videos', leave=False, dynamic_ncols=True, diable=not verbose):
+            for input_file in tqdm(self.sorted_alphanumeric(os.listdir(input_path)), desc='Overall Progress', unit=' Videos', leave=False, dynamic_ncols=True, disable=not verbose):
                 
                 # Checking if the input file is valid
                 if not self.is_target_type(input_file, target):
