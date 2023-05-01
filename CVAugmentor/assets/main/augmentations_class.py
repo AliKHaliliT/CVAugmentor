@@ -25,7 +25,7 @@ class Augmentations():
             blur,
             noise,
             cutout,
-            negative,
+            negative.
     
     """
     
@@ -55,34 +55,35 @@ class Augmentations():
     @staticmethod
     def no_augmentation() -> Callable[[Image.Image], Image.Image]:
             
-            """
-    
-            No augmentation. 
-            This can be used when you want to copy the image to the output folder without augmenting it.
-    
-    
-            Parameters
-            ----------
-            image : Image.Image
-                Image to be augmented.
-    
-    
-            Returns
-            -------
-            image : Image.Image
-                Augmented image.
-    
-            """
-    
-            # Defining the wrapper function
-            def no_augmentation_wrapper(image: Image.Image) -> Image.Image:
-    
-                # Return the image
-                return image
-    
-    
-            # Return the wrapper function
-            return no_augmentation_wrapper
+        """
+
+        No augmentation. 
+        This can be used when you want to copy the image to the output folder without augmenting it.
+
+
+        Parameters
+        ----------
+        None.
+
+
+        Returns
+        -------
+        no_augmentation_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
+
+        """
+
+        # Defining the wrapper function
+        def no_augmentation_wrapper(image: Image.Image) -> Image.Image:
+
+            # Return the image
+            return image
+
+
+        # Return the wrapper function
+        return no_augmentation_wrapper
     
 
     # Defining the flip method
@@ -96,9 +97,6 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be flipped.
-
         flip_type : str, optional
             Type of flip. The default is "vertical".
                 The options are:
@@ -110,8 +108,10 @@ class Augmentations():
 
         Returns
         -------
-        img_flipped : Image.Image
-            Flipped image.
+        flip_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -155,17 +155,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be zoomed.
-
         zoom_size : tuple, optional
             Size of the zoom. The default is None. If None, a random zoom size is generated.
 
 
         Returns
         -------
-        img_zoomed : Image.Image
-            Zoomed image.
+        zoom_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -232,9 +231,6 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be rotated.
-
         rotate_type : str, optional
             Type of rotation. The default is "definite".
                 The options are:
@@ -249,8 +245,10 @@ class Augmentations():
             
         Returns
         -------
-        img_rotated : Image.Image
-            Rotated image.
+        rotate_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -297,17 +295,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be sheared.
-
         shear : tuple, optional
             Shear values. The default is None. If None, a random shear value is generated.
         
             
         Returns
         -------
-        img_sheared : Image.Image
-            Sheared image.
+        shear_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -362,14 +359,15 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
+        None.
             
+        
         Returns
         -------
-        img_grayed : Image.Image
-            Grayscaled image.
+        grayscale_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -417,17 +415,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         hue_shift : int or float, optional
             Hue shift value. The default is None. If None, a random hue shift value is generated.
 
             
         Returns
         -------
-        img_hued : Image.Image
-            Hue shifted image.
+        hue_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -485,17 +482,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         saturation_factor : int or float, optional
             Saturation factor. The default is None. If None, a random saturation factor is generated.
 
 
         Returns
         -------
-        img_saturated : Image.Image
-            Saturation adjusted image.
+        saturation_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -537,17 +533,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         brightness_factor : int or float, optional
             Brightness factor. The default is None. If None, a random brightness factor is generated.
 
 
         Returns
         -------
-        img_brightened : Image.Image
-            Brightness adjusted image.
+        brightness_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -589,17 +584,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         exposure_factor : int or float, optional
             Exposure factor. The default is None. If None, a random exposure factor is generated.
 
 
         Returns
         -------
-        img_exposed : Image.Image
-            Exposure adjusted image.
+        exposure_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
         
@@ -654,17 +648,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         radius : int or float, optional
             Blur radius. The default is None. If None, a random blur radius is generated.
 
 
         Returns
         -------
-        img_blurred : Image.Image
-            Blurred image.
+        blur_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -715,17 +708,16 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-        
         intensity : int or float, optional
             Noise intensity. The default is None. If None, a random noise intensity is generated.
 
 
         Returns
         -------
-        noisy_img : Image.Image
-            Noisy image.
+        noise_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -787,9 +779,6 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to grayscale.
-
         max_size : int or float, optional
             Maximum size of the cutout. The default is None. If None, a random maximum size is generated.
 
@@ -799,8 +788,10 @@ class Augmentations():
 
         Returns
         -------
-        img_cutout : Image.Image
-            Cutout image.
+        cutout_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
@@ -869,14 +860,15 @@ class Augmentations():
 
         Parameters
         ----------
-        image : Image.Image
-            Image to be converted to negative.
+        None.
 
         
         Returns
         -------
-        img_negative : Image.Image
-            Negative image.
+        negative_wrapper : function
+            Args:
+                image : Image.Image
+                    The image to be augmented.
 
         """
 
