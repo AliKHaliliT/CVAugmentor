@@ -5,17 +5,17 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CVAugmentor &mdash; CVAugmentor  documentation</title>
-      <link rel="stylesheet" href="static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
-    <script src="static/js/html5shiv.min.js"></script>
+    <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
-        <script src="static/jquery.js"></script>
-        <script src="static/underscore.js"></script>
-        <script src="static/doctools.js"></script>
-    <script src="static/js/theme.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -78,7 +78,7 @@ The package is built on top of the OpenCV and Pillow libraries.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CVAugmentor.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="headerlink" href="#CVAugmentor.pipeline.Pipeline" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="CVAugmentor.pipeline.Pipeline.augment">
-<span class="sig-name descname"><span class="pre">augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CVAugmentor.pipeline.Pipeline.augment" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aug_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CVAugmentor.pipeline.Pipeline.augment" title="Permalink to this definition"></a></dt>
 <dd><p>Augments the input data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -98,7 +98,7 @@ The package is built on top of the OpenCV and Pillow libraries.</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>type</strong> (<em>str</em>) – <dl class="simple">
+<li><p><strong>process_type</strong> (<em>str</em>) – <dl class="simple">
 <dt>Type of the augmentation.</dt><dd><dl class="simple">
 <dt>The options are:</dt><dd><dl class="simple">
 <dt>”batch”</dt><dd><p>Batch type means that the input and output paths are directories.</p>
@@ -128,7 +128,9 @@ This means that the data will be saved only after all augmentations were applied
 </p></li>
 <li><p><strong>augmentations</strong> (<em>dict</em>) – Dict of augmentations to be applied to the data.
 The keys are the names of the augmentations and the values are the augmentations themselves.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the progress of the augmentation process. The default is False.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the overall progress of the augmentation process. The default is False.</p></li>
+<li><p><strong>aug_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the progress of the augmentation process. The default is False.</p></li>
+<li><p><strong>warn_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the warnings. The default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -157,7 +159,7 @@ exposure,
 blur,
 noise,
 cutout,
-negative,</p>
+negative.</p>
 </dd>
 </dl>
 </dd>
@@ -168,16 +170,21 @@ negative,</p>
 <dd><p>Blur the image. The blur radius is the standard deviation of the Gaussian blur.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>radius</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Blur radius. The default is None. If None, a random blur radius is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>radius</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Blur radius. The default is None. If None, a random blur radius is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_blurred</strong> – Blurred image.</p>
+<dd class="field-even"><p><p><strong>blur_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -188,16 +195,21 @@ negative,</p>
 <dd><p>Adjust the brightness of the image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>brightness_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Brightness factor. The default is None. If None, a random brightness factor is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>brightness_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Brightness factor. The default is None. If None, a random brightness factor is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_brightened</strong> – Brightness adjusted image.</p>
+<dd class="field-even"><p><p><strong>brightness_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,16 +221,23 @@ negative,</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
 <li><p><strong>max_size</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Maximum size of the cutout. The default is None. If None, a random maximum size is generated.</p></li>
 <li><p><strong>max_count</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of cutouts. The default is None. If None, a random maximum count is generated.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_cutout</strong> – Cutout image.</p>
+<dd class="field-even"><p><p><strong>cutout_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -229,16 +248,21 @@ negative,</p>
 <dd><p>Adjust the exposure of the image. The exposure means the amount of light that reaches the image sensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>exposure_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Exposure factor. The default is None. If None, a random exposure factor is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>exposure_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Exposure factor. The default is None. If None, a random exposure factor is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_exposed</strong> – Exposure adjusted image.</p>
+<dd class="field-even"><p><p><strong>exposure_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -249,9 +273,7 @@ negative,</p>
 <dd><p>Flip the image horizontally or vertically.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be flipped.</p></li>
-<li><p><strong>flip_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dd class="field-odd"><p><strong>flip_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
 <dt>Type of flip. The default is “vertical”.</dt><dd><dl class="simple">
 <dt>The options are:</dt><dd><dl class="simple">
 <dt>”horizontal”</dt><dd><p>Flip the image horizontally</p>
@@ -263,14 +285,21 @@ negative,</p>
 </dl>
 </dd>
 </dl>
-</p></li>
-</ul>
+</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_flipped</strong> – Flipped image.</p>
+<dd class="field-even"><p><p><strong>flip_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,13 +314,21 @@ negative,</p>
 <p>Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_grayed</strong> – Grayscaled image.</p>
+<dd class="field-even"><p><p><strong>grayscale_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,16 +339,21 @@ negative,</p>
 <dd><p>Shift the hue of the image. Hue is the color of the image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>hue_shift</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Hue shift value. The default is None. If None, a random hue shift value is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>hue_shift</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Hue shift value. The default is None. If None, a random hue shift value is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_hued</strong> – Hue shifted image.</p>
+<dd class="field-even"><p><p><strong>hue_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,13 +364,21 @@ negative,</p>
 <dd><p>Convert the image to negative. This method converts the image to negative by inverting each pixel’s RGB value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to negative.</p>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_negative</strong> – Negative image.</p>
+<dd class="field-even"><p><p><strong>negative_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -340,13 +390,21 @@ negative,</p>
 This can be used when you want to copy the image to the output folder without augmenting it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>image</strong> (<em>Image.Image</em>) – Image to be augmented.</p>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>image</strong> – Augmented image.</p>
+<dd class="field-even"><p><p><strong>no_augmentation_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -358,16 +416,21 @@ This can be used when you want to copy the image to the output folder without au
 It creates a noisy image that looks like the output from an analog TV with bad reception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>intensity</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Noise intensity. The default is None. If None, a random noise intensity is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>intensity</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Noise intensity. The default is None. If None, a random noise intensity is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>noisy_img</strong> – Noisy image.</p>
+<dd class="field-even"><p><p><strong>noise_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,7 +442,6 @@ It creates a noisy image that looks like the output from an analog TV with bad r
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be rotated.</p></li>
 <li><p><strong>rotate_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
 <dt>Type of rotation. The default is “definite”.</dt><dd><dl class="simple">
 <dt>The options are:</dt><dd><dl class="simple">
@@ -397,10 +459,18 @@ It creates a noisy image that looks like the output from an analog TV with bad r
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_rotated</strong> – Rotated image.</p>
+<dd class="field-even"><p><p><strong>rotate_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,16 +481,21 @@ It creates a noisy image that looks like the output from an analog TV with bad r
 <dd><p>Adjust the saturation of the image. The stauration means the intensity of the colors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be converted to grayscale.</p></li>
-<li><p><strong>saturation_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Saturation factor. The default is None. If None, a random saturation factor is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>saturation_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Saturation factor. The default is None. If None, a random saturation factor is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_saturated</strong> – Saturation adjusted image.</p>
+<dd class="field-even"><p><p><strong>saturation_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -431,16 +506,21 @@ It creates a noisy image that looks like the output from an analog TV with bad r
 <dd><p>Shear the image. The shearing means that the image is slanted along the x-axis and/or y-axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be sheared.</p></li>
-<li><p><strong>shear</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shear values. The default is None. If None, a random shear value is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>shear</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shear values. The default is None. If None, a random shear value is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_sheared</strong> – Sheared image.</p>
+<dd class="field-even"><p><p><strong>shear_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
@@ -451,16 +531,21 @@ It creates a noisy image that looks like the output from an analog TV with bad r
 <dd><p>Zoom the image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>Image.Image</em>) – Image to be zoomed.</p></li>
-<li><p><strong>zoom_size</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size of the zoom. The default is None. If None, a random zoom size is generated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>zoom_size</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size of the zoom. The default is None. If None, a random zoom size is generated.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_zoomed</strong> – Zoomed image.</p>
+<dd class="field-even"><p><p><strong>zoom_wrapper</strong> –</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Image.Image</p>
+<dd class="field-odd"><p>function</p>
 </dd>
 </dl>
 </dd></dl>
