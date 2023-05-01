@@ -16,7 +16,7 @@ Available augmentations are:
     blur,
     noise,
     cutout,
-    negative,
+    negative.
 ## Installation
 You can install the package using pip:
 ```bash
