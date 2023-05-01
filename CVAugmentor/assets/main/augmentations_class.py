@@ -168,10 +168,6 @@ class Augmentations():
 
         """
 
-        # Defining the position variables in order to prevent inconsistent zooming
-        x, y = None, None
-
-
         # Defining the wrapper function
         def zoom_wrapper(image: Image.Image) -> Image.Image:
 
@@ -199,11 +195,8 @@ class Augmentations():
             
 
             # Generate a random x-position and y-position for the zoom
-            nonlocal x, y
-
-            if x is None and y is None: # Though checking only for x is enough
-                x = np.random.randint(0, width - zoom_size[0])
-                y = np.random.randint(0, height - zoom_size[1])
+            x = np.random.RandomState(42).randint(0, width - zoom_size[0])
+            y = np.random.RandomState(42).randint(0, height - zoom_size[1])
 
             # Zoom the image using the random position and zoom size
             zoom = image.crop((x, y, x + zoom_size[0], y + zoom_size[1]))
@@ -721,10 +714,6 @@ class Augmentations():
 
         """
 
-        # Defining the noise array in order to prevent inconsistent noise patterns
-        noise = None
-
-
         # Defining the wrapper function
         def noise_wrapper(image: Image.Image) -> Image.Image:
 
@@ -748,10 +737,7 @@ class Augmentations():
             img_array = np.array(image)
 
             # Generate a noise array with the same dimensions as the image
-            nonlocal noise
-
-            if noise is None:
-                noise = np.random.rand(*img_array.shape) * intensity
+            noise = np.random.RandomState(42).rand(*img_array.shape) * intensity
 
             # Add the noise to the pixel values of the image
             noisy_img = np.clip(img_array + noise * 255, 0, 255).astype(np.uint8)
