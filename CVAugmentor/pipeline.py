@@ -34,7 +34,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
 
 
     # Defining the augment method
-    def augment(self, input_path: str, output_path: str, target: str, type: str, mode: str,
+    def augment(self, input_path: str, output_path: str, target: str, process_type: str, mode: str,
                 augmentations: Dict[str, Callable], verbose: Optional[bool] = False, warn_verbose: Optional[bool] = False) -> None:
         
         """
@@ -58,7 +58,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
                     "video"
                         Specifies that the target of the augmentation is a video.
 
-        type : str
+        process_type : str
             Type of the augmentation.
                 The options are:
                     "batch"
@@ -94,12 +94,12 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
         if not os.path.exists(input_path):
             raise ValueError(f"Invalid input path: {input_path}")
         
-        # Checking if the type is valid
-        if type != "batch" and type != "single":
-            raise ValueError(f"Invalid type type: {type}")
+        # Checking if the process_type is valid
+        if process_type != "batch" and process_type != "single":
+            raise ValueError(f"Invalid process type: {process_type}")
         
         # Checking if the output path is valid
-        if type == "batch" and not os.path.exists(output_path):
+        if process_type == "batch" and not os.path.exists(output_path):
             raise ValueError(f"Invalid output path: {output_path}")
 
         # Checking if the target is valid
@@ -112,7 +112,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
         
         # Checking if the augmentations is valid
         if not isinstance(augmentations, dict):
-            raise ValueError(f"Invalid augmentations type: {type}")
+            raise ValueError(f"Invalid augmentations type: {process_type}")
         elif len(augmentations) == 0:
             raise ValueError("augmentations dict is empty.")
         
@@ -130,7 +130,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
             raise ValueError(f"Invalid target type: {target}")
         
         # Augmentation
-        if type == "batch":
+        if process_type == "batch":
             
             # Looping through the input files
             for input_file in self.sorted_alphanumeric(os.listdir(input_path)):
@@ -155,7 +155,7 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
                 elif mode == "singular":
                     augmentor.augment_all_at_once(input_file_path, output_file_path, augmentations, verbose)
 
-        elif type == "single":
+        elif process_type == "single":
                 
                 # Checking if the input file is valid
                 if not self.is_target_type(input_path, target):
