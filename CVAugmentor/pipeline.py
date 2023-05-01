@@ -170,6 +170,6 @@ class Pipeline(AlphanumericSorter, FileTypeChecker):
                 
                 # Augmenting the input file
                 if mode == "sequential":
-                    augmentor.augment_one_by_one(input_path, output_path, augmentations, verbose)
+                    augmentor.augment_one_by_one(input_path, output_path, augmentations, aug_verbose)
                 elif mode == "singular":
-                    augmentor.augment_all_at_once(input_path, output_path, augmentations, verbose)
+                    augmentor.augment_all_at_once(input_path, output_path, augmentations, aug_verbose)
