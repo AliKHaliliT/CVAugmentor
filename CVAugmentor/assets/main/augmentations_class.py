@@ -345,8 +345,7 @@ class Augmentations():
 
         """
 
-        Convert the image to grayscale. The grayscale conversion is done using the formula:
-            gray_value = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        Convert the image to grayscale.
         Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.
 
 
