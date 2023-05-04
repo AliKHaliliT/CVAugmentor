@@ -1,5 +1,5 @@
 # Importing the libraries
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 import numpy as np
 from typing import Optional, Tuple, Union, Callable
 import warnings
@@ -345,8 +345,7 @@ class Augmentations():
 
         """
 
-        Convert the image to grayscale. The grayscale conversion is done using the formula:
-            gray_value = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        Convert the image to grayscale.
         Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.
 
 
@@ -367,26 +366,12 @@ class Augmentations():
         # Defining the wrapper function
         def grayscale_wrapper(image: Image.Image) -> Image.Image:
 
-            # Get the width and height of the image
-            width = image.size[0]
-            height = image.size[1]
-
-            # Create a new image with the same size as the original image
-            img_grayed = Image.new("RGB", (width, height))
-
-            # Loop through the pixels in the image
-            for x in range(width):
-                # Loop through the pixels in the image
-                for y in range(height):
-
-                    # Get the RGB values for the pixel
-                    r, g, b = image.getpixel((x, y))
-
-                    # Convert the RGB values to grayscale
-                    gray_value = int(0.2989 * r + 0.5870 * g + 0.1140 * b)
-
-                    # Set the grayscale value for the pixel in the new image
-                    img_grayed.putpixel((x, y), (gray_value, gray_value, gray_value))
+            # Convert the image to grayscale using the RGB weighted method
+            gray_image = image.convert("L")
+            
+            # Create a new image with 3 channels by copying the grayscale image
+            img_grayed = Image.new("RGB", gray_image.size)
+            img_grayed.paste(gray_image)
 
 
             # Return the grayscaled image
@@ -785,8 +770,7 @@ class Augmentations():
         def cutout_wrapper(image: Image.Image) -> Image.Image:
 
             # Get the width and height of the image
-            width = image.size[0]
-            height = image.size[1]
+            width, height = image.size
 
             # If max_count is None, generate a random max_count
             nonlocal max_count
@@ -841,7 +825,7 @@ class Augmentations():
 
         """
 
-        Convert the image to negative. This method converts the image to negative by inverting each pixel's RGB value.
+        Convert the image to negative. This method converts the image to negative by inverting the pixel values.
 
 
         Parameters
@@ -861,24 +845,13 @@ class Augmentations():
         # Defining the wrapper function
         def negative_wrapper(image: Image.Image) -> Image.Image:
 
-            # Load the image
-            pixels = image.load()
+            # Invert the image using the ImageOps.invert() method
+            image = image.convert("RGB")
+            img_negatived = ImageOps.invert(image)
+            
 
-            # Invert each pixel's RGB value
-            for i in range(image.size[0]):
-                # Loop through the y-axis
-                for j in range(image.size[1]):
-
-                    # Get the pixel value
-                    pixel = pixels[i, j]
-                    # Invert the pixel value
-                    new_pixel = tuple(255 - x for x in pixel)
-                    # Set the pixel value
-                    pixels[i, j] = new_pixel
-
-
-            # Return the negative image
-            return image
+            # Return the negatived image
+            return img_negatived
     
 
         # Return the wrapper function
