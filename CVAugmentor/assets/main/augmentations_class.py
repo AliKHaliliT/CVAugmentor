@@ -1,5 +1,5 @@
 # Importing the libraries
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 import numpy as np
 from typing import Optional, Tuple, Union, Callable
 import warnings
@@ -827,7 +827,7 @@ class Augmentations():
 
         """
 
-        Convert the image to negative. This method converts the image to negative by inverting each pixel's RGB value.
+        Convert the image to negative. This method converts the image to negative by inverting the pixel values.
 
 
         Parameters
@@ -847,24 +847,13 @@ class Augmentations():
         # Defining the wrapper function
         def negative_wrapper(image: Image.Image) -> Image.Image:
 
-            # Load the image
-            pixels = image.load()
+            # Invert the image using the ImageOps.invert() method
+            image = image.convert("RGB")
+            img_negatived = ImageOps.invert(image)
+            
 
-            # Invert each pixel's RGB value
-            for i in range(image.size[0]):
-                # Loop through the y-axis
-                for j in range(image.size[1]):
-
-                    # Get the pixel value
-                    pixel = pixels[i, j]
-                    # Invert the pixel value
-                    new_pixel = tuple(255 - x for x in pixel)
-                    # Set the pixel value
-                    pixels[i, j] = new_pixel
-
-
-            # Return the negative image
-            return image
+            # Return the negatived image
+            return img_negatived
     
 
         # Return the wrapper function
