@@ -10,7 +10,7 @@ def readme():
 
 # Defining the setup function
 setup(name='CVAugmentor',
-        version='1.0.11',
+        version='1.0.12',
         description='A package for augmenting images and videos for computer vision tasks',
         long_description=readme(),
         long_description_content_type='text/markdown',
