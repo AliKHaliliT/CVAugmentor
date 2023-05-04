@@ -307,11 +307,8 @@ negative.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.grayscale">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grayscale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.grayscale" title="Permalink to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>Convert the image to grayscale. The grayscale conversion is done using the formula:</dt><dd><p>gray_value = 0.2989 * r + 0.5870 * g + 0.1140 * b</p>
-</dd>
-</dl>
-<p>Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.</p>
+<dd><p>Convert the image to grayscale.
+Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>None.</strong> – </p>
@@ -361,7 +358,7 @@ negative.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.negative">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">negative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.negative" title="Permalink to this definition"></a></dt>
-<dd><p>Convert the image to negative. This method converts the image to negative by inverting each pixel’s RGB value.</p>
+<dd><p>Convert the image to negative. This method converts the image to negative by inverting the pixel values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>None.</strong> – </p>
