@@ -367,26 +367,12 @@ class Augmentations():
         # Defining the wrapper function
         def grayscale_wrapper(image: Image.Image) -> Image.Image:
 
-            # Get the width and height of the image
-            width = image.size[0]
-            height = image.size[1]
-
-            # Create a new image with the same size as the original image
-            img_grayed = Image.new("RGB", (width, height))
-
-            # Loop through the pixels in the image
-            for x in range(width):
-                # Loop through the pixels in the image
-                for y in range(height):
-
-                    # Get the RGB values for the pixel
-                    r, g, b = image.getpixel((x, y))
-
-                    # Convert the RGB values to grayscale
-                    gray_value = int(0.2989 * r + 0.5870 * g + 0.1140 * b)
-
-                    # Set the grayscale value for the pixel in the new image
-                    img_grayed.putpixel((x, y), (gray_value, gray_value, gray_value))
+            # Convert the image to grayscale using the RGB weighted method
+            gray_image = image.convert("L")
+            
+            # Create a new image with 3 channels by copying the grayscale image
+            img_grayed = Image.new("RGB", gray_image.size)
+            img_grayed.paste(gray_image)
 
 
             # Return the grayscaled image
