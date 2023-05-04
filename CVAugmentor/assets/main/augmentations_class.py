@@ -771,8 +771,7 @@ class Augmentations():
         def cutout_wrapper(image: Image.Image) -> Image.Image:
 
             # Get the width and height of the image
-            width = image.size[0]
-            height = image.size[1]
+            width, height = image.size
 
             # If max_count is None, generate a random max_count
             nonlocal max_count
