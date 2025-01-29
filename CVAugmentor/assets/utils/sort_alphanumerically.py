@@ -22,7 +22,7 @@ def sorted_alphanumerically(input_list: list[str]) -> list[str]:
     """
 
     if not isinstance(input_list, list) or not all(isinstance(string, str) for string in input_list):
-        raise ValueError("input_list must be a list of strings")
+        raise ValueError(f"input_list must be a list of strings. Received: {input_list} with type {type(input_list)}")
     
 
     convert = lambda text: int(text) if text.isdigit() else text.lower()

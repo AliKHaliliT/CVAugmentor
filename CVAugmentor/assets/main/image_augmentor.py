@@ -71,13 +71,13 @@ class ImageAugmentor():
         """
         
         if not isinstance(image_path, str) or not os.path.isfile(image_path):
-            raise ValueError("image_path must be a valid file path")
+            raise ValueError(f"image_path must be a valid file path. Received: {image_path} with type {type(image_path)}")
         if not isinstance(output_path, str) or not os.path.isdir(output_path):
-            raise ValueError("output_path must be a valid directory path")
+            raise ValueError(f"output_path must be a valid directory path. Received: {output_path} with type {type(output_path)}")
         if not isinstance(augmentations, dict) or not all(isinstance(k, str) and callable(v) for k, v in augmentations.items()):
-            raise ValueError("augmentations must be a dictionary with string keys and callable values")
+            raise ValueError(f"augmentations must be a dictionary with string keys and callable values. Received: {augmentations} with type {type(augmentations)}")
         if verbose is not None and not isinstance(verbose, bool):
-            raise TypeError("verbose must be a boolean")
+            raise TypeError(f"verbose must be a boolean. Received: {verbose} with type {type(verbose)}")
 
 
     def apply_sequentially(self, 

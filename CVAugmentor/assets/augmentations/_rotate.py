@@ -45,9 +45,9 @@ class Rotate:
         """
 
         if rotate_type not in ["definite", "random"]:
-            raise ValueError("rotate_type must either be 'definite' or 'random'")
+            raise ValueError(f"rotate_type must either be 'definite' or 'random'. Received: {rotate_type} with type {type(rotate_type)}")
         if not isinstance(angle, (int, float)):
-            raise ValueError("angle must be an integer or float")
+            raise ValueError(f"angle must be an integer or float. Received: {angle} with type {type(angle)}")
 
 
         self.rotate_type = rotate_type
@@ -75,7 +75,7 @@ class Rotate:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
         return image.rotate((self.angle or np.random.randint(-self.angle, self.angle)))

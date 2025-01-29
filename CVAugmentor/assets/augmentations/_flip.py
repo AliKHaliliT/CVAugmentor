@@ -39,7 +39,7 @@ class Flip:
         """
 
         if flip_type not in ["horizontal", "vertical"]:
-            raise ValueError("flip_type must either be 'horizontal' or 'vertical'")
+            raise ValueError(f"flip_type must either be 'horizontal' or 'vertical'. Received: {flip_type} with type {type(flip_type)}")
 
 
         self.flip_type = flip_type
@@ -66,7 +66,7 @@ class Flip:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         img = np.array(image)

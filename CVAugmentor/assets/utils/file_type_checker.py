@@ -25,9 +25,9 @@ def is_target_type(filename: str, target: str) -> bool:
     """
 
     if not isinstance(filename, str):
-        raise ValueError("filename must be a string")
+        raise ValueError(f"filename must be a string. Received: {filename} with type {type(filename)}")
     if not isinstance(target, str):
-        raise ValueError("target must be a string")
+        raise ValueError(f"target must be a string. Received: {target} with type {type(target)}")
     
 
     # Get the mime type

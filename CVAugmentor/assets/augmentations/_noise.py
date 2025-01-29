@@ -42,7 +42,7 @@ class Noise:
         """
 
         if intensity is not None and not isinstance(intensity, (int, float)):
-            raise ValueError("intensity must either be an int or a float")
+            raise ValueError(f"intensity must either be an int or a float. Received: {intensity} with type {type(intensity)}")
         
         if intensity < -1 or intensity > 1:
             logging.warning("The optimal value for intensity is between -1 and 1.")
@@ -72,7 +72,7 @@ class Noise:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         intensity = self.intensity or np.random.uniform(-1, 1)

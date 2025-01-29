@@ -36,7 +36,7 @@ class Hue:
         """
 
         if hue_shift is not None and not isinstance(hue_shift, (int, float)) and (hue_shift < -360 or hue_shift > 360):
-            raise ValueError("hue_shift must either be an int or a float between -360 and 360")
+            raise ValueError(f"hue_shift must either be an int or a float between -360 and 360. Received: {hue_shift} with type {type(hue_shift)}")
         
 
         self.hue_shift = hue_shift
@@ -63,7 +63,7 @@ class Hue:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         h, s, v = image.convert("HSV").split()

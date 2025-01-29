@@ -42,7 +42,7 @@ class Blur:
         """
 
         if radius is not None and not isinstance(radius, (int, float)):
-            raise ValueError("radius must either be an int or a float")
+            raise ValueError(f"radius must either be an int or a float. Received: {radius} with type {type(radius)}")
         
         if radius > 5:
             logging.warning("Radius should ideally be between 0 and 5.")
@@ -72,7 +72,7 @@ class Blur:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
         # Apply the Gaussian blur filter to the image and return it

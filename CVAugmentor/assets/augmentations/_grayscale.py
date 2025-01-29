@@ -57,7 +57,7 @@ class Grayscale:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
         # Create a new image with 3 channels by copying the grayscale image (created using the RGB weighted method)

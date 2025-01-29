@@ -56,7 +56,7 @@ class Negative:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
         # Convert the image to negative by inverting the pixel values

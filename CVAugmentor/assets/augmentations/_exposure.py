@@ -41,7 +41,7 @@ class Exposure:
         """
 
         if exposure_factor is not None and not isinstance(exposure_factor, (int, float)):
-            raise ValueError("exposure_factor must either be an int or a float")
+            raise ValueError(f"exposure_factor must either be an int or a float. Received: {exposure_factor} with type {type(exposure_factor)}")
         
         if not 0.3 <= exposure_factor <= 1.7:
             logging.warning("Exposure factor should ideally be between 0.3 and 1.7.")
@@ -71,7 +71,7 @@ class Exposure:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
         return Image.fromarray(np.clip((np.array(image) * (self.exposure_factor or np.random.uniform(0.3, 1.7))), 0, 255).astype(np.uint8))

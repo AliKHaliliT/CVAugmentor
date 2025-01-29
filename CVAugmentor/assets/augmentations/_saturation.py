@@ -36,7 +36,7 @@ class Saturation:
         """
 
         if saturation_factor is not None and not isinstance(saturation_factor, (int, float)):
-            raise ValueError("saturation_factor must either be an int or a float")
+            raise ValueError(f"saturation_factor must either be an int or a float. Received: {saturation_factor} with type {type(saturation_factor)}")
 
 
         self.saturation_factor = saturation_factor
@@ -63,7 +63,7 @@ class Saturation:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         # Convert the image to the HSV color space and enhance saturation

@@ -96,19 +96,19 @@ class Pipeline():
         """
         
         if not isinstance(input_path, str) or not os.path.exists(input_path):
-            raise ValueError(f"input_path must be a valid string and exist. Received: {input_path}")
+            raise ValueError(f"input_path must be a valid string and exist. Received: {input_path} with type {type(input_path)}")
         if process_type not in ["single", "video"]:
-            raise ValueError(f"process_type must either be 'single' or 'video'. Received: {process_type}")
+            raise ValueError(f"process_type must either be 'single' or 'video'. Received: {process_type} with type {type(process_type)}")
         if not isinstance(output_path, str) or not os.path.exists(output_path):
-            raise ValueError(f"output_path must be valid. Received: {output_path}")
+            raise ValueError(f"output_path must be valid. Received: {output_path} with type {type(output_path)}")
         if target not in ["image", "video"]:
-            raise ValueError(f"target must either be 'image' or 'video'. Received: {target}")
+            raise ValueError(f"target must either be 'image' or 'video'. Received: {target} with type {type(target)}")
         if mode not in ["sequential", "singular"]:
-            raise ValueError(f"mode must either be 'sequential' or 'singular'. Received: {mode}")
+            raise ValueError(f"mode must either be 'sequential' or 'singular'. Received: {mode} with type {type(mode)}")
         if not isinstance(verbose, bool):
-            raise ValueError(f"verbose must be a boolean. Received: {verbose}")
+            raise ValueError(f"verbose must be a boolean. Received: {verbose} with type {type(verbose)}")
         if not isinstance(warn_verbose, bool):
-            raise ValueError(f"verbose must be a boolean. Received: {warn_verbose}")
+            raise ValueError(f"verbose must be a boolean. Received: {warn_verbose} with type {type(warn_verbose)}")
 
 
     def augment(self, 

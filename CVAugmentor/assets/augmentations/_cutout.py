@@ -40,9 +40,9 @@ class Cutout:
         """
 
         if max_count is not None and not isinstance(max_count, int):
-            raise ValueError("max_count must be an integer")
+            raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
         if max_size is not None and not isinstance(max_size, (int, float)):
-            raise ValueError("max_size must either be an int or a float")
+            raise ValueError(f"max_size must either be an int or a float. Received: {max_size} with type {type(max_size)}")
         
 
         self.max_count = max_count
@@ -70,7 +70,7 @@ class Cutout:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         max_size = self.max_size or np.random.randint(1, min(image.size[0], image.size[1]) // 4)

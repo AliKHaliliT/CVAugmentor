@@ -36,7 +36,7 @@ class Zoom:
         """
 
         if zoom_size is not None and (not isinstance(zoom_size, tuple) or len(zoom_size) != 2 or any(x <= 0 for x in zoom_size)):
-            raise ValueError("zoom_size must be a tuple of length two woth positive numbers")
+            raise ValueError(f"zoom_size must be a tuple of length two woth positive numbers. Received: {zoom_size} with type {type(zoom_size)}")
             
 
         self.zoom_size = zoom_size
@@ -63,7 +63,7 @@ class Zoom:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
         zoom_size = self.zoom_size or (

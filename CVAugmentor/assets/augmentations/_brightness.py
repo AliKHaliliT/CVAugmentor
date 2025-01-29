@@ -36,7 +36,7 @@ class Brightness:
         """
 
         if brightness_factor is not None and not isinstance(brightness_factor, (int, float)):
-            raise ValueError("brightness_factor must either be an int or a float")
+            raise ValueError(f"brightness_factor must either be an int or a float. Received: {brightness_factor} with type {type(brightness_factor)}")
 
 
         self.brightness_factor = brightness_factor
@@ -63,7 +63,7 @@ class Brightness:
         """
 
         if not isinstance(image, Image.Image):
-            raise TypeError("image must be an instance of the PIL Image")
+            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
         
         return ImageEnhance.Brightness(image).enhance(1 + (self.brightness_factor or np.random.uniform(0, 0.5)))
