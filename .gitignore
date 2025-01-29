@@ -5,7 +5,7 @@
 # Ignore specified folders
 experiments/
 test/
-non_tracked/
+local_util_resources/
 _build/
 _static/
 _templates/

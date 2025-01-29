@@ -1,8 +1,6 @@
-# Importing the libraries
 from setuptools import setup
 
 
-# Defining the readme function
 def readme():
     with open('README.md') as f:
         return f.read()

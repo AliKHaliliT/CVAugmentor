@@ -8,10 +8,8 @@ in a automated manner. The aim of the package is to make augmentation easier.
 The package is built on top of the OpenCV and Pillow libraries.
 
 """
-# Importing the libraries
-from .pipeline import Pipeline
-from .assets.main.augmentations_class import Augmentations
+from .assets.main.pipeline import Pipeline
+from .assets import augmentations as Augmentations
 
 
-# Defining the version
-__version__ = '1.0.12'
+__version__ = '1.1.0'

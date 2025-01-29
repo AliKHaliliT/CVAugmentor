@@ -18,7 +18,7 @@ Available augmentations are:
     cutout,
     negative.
 ## Installation
-You can install the package using pip:
+The package is built using **Python 3.12.8**. To install the required packages, run the following command:
 ```bash
 pip install CVAugmentor
 ```
