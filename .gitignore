@@ -3,7 +3,6 @@
 
 ### User Defined ###
 # Ignore specified folders
-experiments/
 test/
 local_util_resources/
 _build/
