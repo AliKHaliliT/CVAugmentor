@@ -121,16 +121,15 @@ class VideoAugmentor():
         total_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 
 
-        for name, augmentation in tqdm(
-                                       total=augmentations.items(), 
+        for name, augmentation in tqdm(iterable=augmentations.items(), 
                                        desc="Applying augmentations", 
                                        unit="augmentation", 
                                        ncols=100,
+                                       dynamic_ncols=True,
                                        disable=not verbose):
 
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            output_path = f"{os.path.splitext(output_path)[0]}_{name}{os.path.splitext(output_path)[1]}"
-            writer = cv2.VideoWriter(output_path, 
+            writer = cv2.VideoWriter(f"{os.path.splitext(output_path)[0]}_{name}{os.path.splitext(output_path)[1]}", 
                                      cv2.VideoWriter_fourcc(*"mp4v"), 
                                      (int(video.get(cv2.CAP_PROP_FPS))), 
                                      (int(video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)))
@@ -202,11 +201,11 @@ class VideoAugmentor():
             (width, height)
         )
 
-        for _ in tqdm(
-                      total=range(total_frames), 
+        for _ in tqdm(iterable=range(total_frames), 
                       desc="Processing video", 
                       unit="frame", 
-                      ncols=100, 
+                      ncols=100,
+                      dynamic_ncols=True,
                       disable=not verbose):
             
             ret, frame = video.read()

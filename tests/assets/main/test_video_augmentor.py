@@ -122,7 +122,7 @@ class VideoAugmentor():
 
 
         for name, augmentation in tqdm(
-                                       total=augmentations.items(), 
+                                       iterable=augmentations.items(), 
                                        desc="Applying augmentations", 
                                        unit="augmentation", 
                                        ncols=100,
@@ -203,7 +203,7 @@ class VideoAugmentor():
         )
 
         for _ in tqdm(
-                      total=range(total_frames), 
+                      iterable=range(total_frames), 
                       desc="Processing video", 
                       unit="frame", 
                       ncols=100, 

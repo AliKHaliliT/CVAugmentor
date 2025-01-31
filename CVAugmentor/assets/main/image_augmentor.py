@@ -116,17 +116,15 @@ class ImageAugmentor():
 
 
         # Applying the augmentation
-        for name, augmentation in tqdm(
-                                       augmentations.items(),
+        for name, augmentation in tqdm(iterable=augmentations.items(),
                                        desc="Applying augmentations",
                                        unit="augmentation",
                                        ncols=100,
-                                       unit_scale=True,
                                        dynamic_ncols=True,
                                        disable=not verbose):
             
             augmentation(Image.open(image_path)).save(
-                os.path.splitext(output_path)[0] + '_' + name + os.path.splitext(output_path)[1]
+                f"{os.path.splitext(output_path)[0]}_{name}{os.path.splitext(output_path)[1]}"
             )
 
 
@@ -171,12 +169,10 @@ class ImageAugmentor():
         image = Image.open(image_path)
 
         # Applying the augmentations
-        for augmentation in tqdm(
-                                 augmentations.values(),
+        for augmentation in tqdm(iterable=augmentations.values(),
                                  desc="Applying augmentations",
                                  unit="augmentation",
                                  ncols=100,
-                                 unit_scale=True,
                                  dynamic_ncols=True,
                                  disable=not verbose):
             

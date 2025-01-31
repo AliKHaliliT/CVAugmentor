@@ -71,7 +71,7 @@ def _process_batch(input_path: str,
     
     """
 
-    for input_file in tqdm(total=sorted_alphanumerically(os.listdir(input_path)), 
+    for input_file in tqdm(iterable=sorted_alphanumerically(os.listdir(input_path)), 
                             desc="Overall progress", 
                             unit="videos", 
                             ncols=100,

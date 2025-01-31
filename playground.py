@@ -29,16 +29,16 @@ from CVAugmentor import Pipeline
 
 ## Define the augmentations
 augmentations = {
-    "zoom": aug.zoom(),
-    "flip": aug.flip(),
+    "zoom": aug.Zoom(),
+    "flip": aug.Flip(),
 }
 
 ## Create a Pipeline object
 p = Pipeline()
 
 ## Augment the video
-p.augment(input_path="path/to/input_video", 
-          output_path="path/to/output_video", 
+p.augment(input_path="util_resources/samples/videos/0.mp4", 
+          output_path="util_resources/experiments/single_video/0.mp4", 
           target="video", 
           process_type="single", 
           mode="singular", 
@@ -53,8 +53,8 @@ p.augment(input_path="path/to/input_video",
 
 # ## Define the augmentations
 # augmentations = {
-#     "zoom": aug.zoom(),
-#     "flip": aug.flip(),
+#     "zoom": aug.Zoom(),
+#     "flip": aug.Flip(),
 # }
 
 # ## Create a Pipeline object
@@ -78,8 +78,8 @@ p.augment(input_path="path/to/input_video",
 
 # ## Define the augmentations
 # augmentations = {
-#     "zoom": aug.zoom(),
-#     "flip": aug.flip(),
+#     "zoom": aug.Zoom(),
+#     "flip": aug.Flip(),
 # }
 
 # ## Create a Pipeline object
