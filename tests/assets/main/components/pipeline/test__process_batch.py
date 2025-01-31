@@ -40,7 +40,7 @@ def _process_batch(input_path: str,
                     Specifies that the target of the augmentation is a video.
 
     warn_verbose : bool, optional
-        If True, prints the warnings. The default value is `False`.
+        If True, prints the warnings. The default value is `True`.
 
     output_path : str
         Path to the output data.

@@ -35,7 +35,7 @@ class Pipeline():
                          process_type: str, 
                          mode: str,
                          verbose: Optional[bool] = False, 
-                         warn_verbose: Optional[bool] = False) -> None:
+                         warn_verbose: Optional[bool] = True) -> None:
         
         """
         
@@ -86,7 +86,7 @@ class Pipeline():
             If True, prints the progress of the augmentation process. The default value is `False`.
 
         warn_verbose : bool, optional
-            If True, prints the warnings. The default value is `False`.
+            If True, prints the warnings. The default value is `True`.
 
         
         Returns
@@ -120,7 +120,7 @@ class Pipeline():
                 augmentations: dict[str, Callable[..., None]], 
                 verbose: Optional[bool] = False, 
                 aug_verbose: Optional[bool] = False, 
-                warn_verbose: Optional[bool] = False) -> None:
+                warn_verbose: Optional[bool] = True) -> None:
         
         """
         
@@ -171,7 +171,7 @@ class Pipeline():
             If True, prints the progress of the augmentation process. The default value is `False`.
 
         warn_verbose : bool, optional
-            If True, prints the warnings. The default value is `False`.
+            If True, prints the warnings. The default value is `True`.
 
         
         Returns

@@ -35,7 +35,7 @@ class Pipeline():
                          process_type: str, 
                          mode: str,
                          verbose: Optional[bool] = False, 
-                         warn_verbose: Optional[bool] = False) -> None:
+                         warn_verbose: Optional[bool] = True) -> None:
         
         """
         
@@ -86,7 +86,7 @@ class Pipeline():
             If True, prints the progress of the augmentation process. The default value is `False`.
 
         warn_verbose : bool, optional
-            If True, prints the warnings. The default value is `False`.
+            If True, prints the warnings. The default value is `True`.
 
         
         Returns
@@ -99,7 +99,7 @@ class Pipeline():
             raise ValueError(f"input_path must be a valid string and exist. Received: {input_path} with type {type(input_path)}")
         if process_type not in ["single", "video"]:
             raise ValueError(f"process_type must either be 'single' or 'video'. Received: {process_type} with type {type(process_type)}")
-        if not isinstance(output_path, str) or not os.path.exists(output_path):
+        if not isinstance(output_path, str) or not os.path.exists(os.path.dirname(output_path)):
             raise ValueError(f"output_path must be valid. Received: {output_path} with type {type(output_path)}")
         if target not in ["image", "video"]:
             raise ValueError(f"target must either be 'image' or 'video'. Received: {target} with type {type(target)}")
@@ -120,7 +120,7 @@ class Pipeline():
                 augmentations: dict[str, Callable[..., None]], 
                 verbose: Optional[bool] = False, 
                 aug_verbose: Optional[bool] = False, 
-                warn_verbose: Optional[bool] = False) -> None:
+                warn_verbose: Optional[bool] = True) -> None:
         
         """
         
@@ -171,7 +171,7 @@ class Pipeline():
             If True, prints the progress of the augmentation process. The default value is `False`.
 
         warn_verbose : bool, optional
-            If True, prints the warnings. The default value is `False`.
+            If True, prints the warnings. The default value is `True`.
 
         
         Returns
@@ -192,20 +192,18 @@ class Pipeline():
         augmentor = _choose_augmentor(target)
         
         if process_type == "single":
-            _process_single(input_path, 
-                                 output_path, 
-                                 target, 
-                                 augmentations, 
-                                 mode, 
-                                 augmentor, 
-                                 aug_verbose)
+            _process_single(mode, 
+                            augmentor, 
+                            input_path, 
+                            target, 
+                            output_path, 
+                            augmentations, 
+                            aug_verbose)
         elif process_type == "batch":
-            _process_batch(input_path, 
-                                output_path, 
-                                target, 
-                                augmentations, 
-                                mode, 
-                                augmentor, 
-                                verbose, 
-                                aug_verbose, 
-                                warn_verbose)
+            _process_batch(mode, 
+                           augmentor, 
+                           input_path, 
+                           target, 
+                           output_path, 
+                           augmentations, 
+                           aug_verbose)

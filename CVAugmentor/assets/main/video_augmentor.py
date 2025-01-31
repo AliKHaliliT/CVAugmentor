@@ -74,7 +74,7 @@ class VideoAugmentor():
 
         if not isinstance(video_path, str) or not os.path.isfile(video_path):
             raise ValueError(f"video_path must be a valid file path. Received: {video_path} with type {type(video_path)}")
-        if not isinstance(output_path, str) or not os.path.isdir(output_path):
+        if not isinstance(output_path, str) or not os.path.isdir(os.path.dirname(output_path)):
             raise ValueError(f"output_path must be a valid directory path. Received: {output_path} with type {type(output_path)}")
         if not isinstance(augmentations, dict) or not all(isinstance(k, str) and callable(v) for k, v in augmentations.items()):
             raise ValueError(f"augmentations must be a dictionary with string keys and callable values. Received: {augmentations} with type {type(augmentations)}")

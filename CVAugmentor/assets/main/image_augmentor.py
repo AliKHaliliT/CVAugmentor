@@ -72,7 +72,7 @@ class ImageAugmentor():
         
         if not isinstance(image_path, str) or not os.path.isfile(image_path):
             raise ValueError(f"image_path must be a valid file path. Received: {image_path} with type {type(image_path)}")
-        if not isinstance(output_path, str) or not os.path.isdir(output_path):
+        if not isinstance(output_path, str) or not os.path.isdir(os.path.dirname(output_path)):
             raise ValueError(f"output_path must be a valid directory path. Received: {output_path} with type {type(output_path)}")
         if not isinstance(augmentations, dict) or not all(isinstance(k, str) and callable(v) for k, v in augmentations.items()):
             raise ValueError(f"augmentations must be a dictionary with string keys and callable values. Received: {augmentations} with type {type(augmentations)}")
@@ -126,7 +126,7 @@ class ImageAugmentor():
                                        disable=not verbose):
             
             augmentation(Image.open(image_path)).save(
-                os.path.splitext(output_path)[0] + '_' + name + os.path.splitext(image_path)[1]
+                os.path.splitext(output_path)[0] + '_' + name + os.path.splitext(output_path)[1]
             )
 
 
