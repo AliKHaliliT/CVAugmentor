@@ -35,7 +35,8 @@ class Pipeline():
                          process_type: str, 
                          mode: str,
                          verbose: Optional[bool] = False, 
-                         warn_verbose: Optional[bool] = True) -> None:
+                         warn_verbose: Optional[bool] = True,
+                         random_state: Optional[bool] = False) -> None:
         
         """
         
@@ -87,6 +88,13 @@ class Pipeline():
 
         warn_verbose : bool, optional
             If True, prints the warnings. The default value is `True`.
+
+        random_state : bool, optional
+            When set to `True`, it resets the states of the augmentations. The default value is `False`.
+            This means that for any parameters that were randomly selected, new random values will be assigned. 
+            This functionality is particularly useful when augmenting a dataset where you want each sample to undergo the same augmentation process but with varying random behavior. 
+            However, you should only enable this option (`True`) if your augmentation dictionary contains unspecified parameters. 
+            Otherwise, setting it to `True` may introduce unnecessary overhead.
 
         
         Returns
@@ -109,6 +117,8 @@ class Pipeline():
             raise ValueError(f"verbose must be a boolean. Received: {verbose} with type {type(verbose)}")
         if not isinstance(warn_verbose, bool):
             raise ValueError(f"verbose must be a boolean. Received: {warn_verbose} with type {type(warn_verbose)}")
+        if not isinstance(random_state, bool):
+            raise ValueError(f"verbose must be a boolean. Received: {random_state} with type {type(random_state)}")
 
 
     def augment(self, 
@@ -120,7 +130,8 @@ class Pipeline():
                 augmentations: dict[str, Callable[..., None]], 
                 verbose: Optional[bool] = False, 
                 aug_verbose: Optional[bool] = False, 
-                warn_verbose: Optional[bool] = True) -> None:
+                warn_verbose: Optional[bool] = True,
+                random_state: Optional[bool] = False) -> None:
         
         """
         
@@ -173,7 +184,14 @@ class Pipeline():
         warn_verbose : bool, optional
             If True, prints the warnings. The default value is `True`.
 
+        random_state : bool, optional
+            When set to `True`, it resets the states of the augmentations. The default value is `False`.
+            This means that for any parameters that were randomly selected, new random values will be assigned. 
+            This functionality is particularly useful when augmenting a dataset where you want each sample to undergo the same augmentation process but with varying random behavior. 
+            However, you should only enable this option (`True`) if your augmentation dictionary contains unspecified parameters and this functionality is absolutely necessary.
+            Otherwise, setting it to `True` may introduce unnecessary overhead.
         
+            
         Returns
         -------
         None.
@@ -186,7 +204,8 @@ class Pipeline():
                               process_type, 
                               mode,
                               verbose, 
-                              warn_verbose)
+                              warn_verbose,
+                              random_state)
         
 
         augmentor = _choose_augmentor(target)

@@ -16,7 +16,8 @@ def _process_batch(input_path: str,
                    mode: str,
                    augmentor: Union[ImageAugmentor, VideoAugmentor],
                    augmentations: dict[str, Callable[..., None]], 
-                   aug_verbose: bool) -> None:
+                   aug_verbose: bool,
+                   random_state: bool) -> None:
     
     """
     
@@ -64,6 +65,13 @@ def _process_batch(input_path: str,
     aug_verbose : bool, optional
         If True, prints the progress of the augmentation process. The default value is `False`.
 
+    random_state : bool, optional
+        When set to `True`, it resets the states of the augmentations. The default value is `False`.
+        This means that for any parameters that were randomly selected, new random values will be assigned. 
+        This functionality is particularly useful when augmenting a dataset where you want each sample to undergo the same augmentation process but with varying random behavior. 
+        However, you should only enable this option (`True`) if your augmentation dictionary contains unspecified parameters. 
+        Otherwise, setting it to `True` may introduce unnecessary overhead.
+
     
     Returns
     -------
@@ -89,3 +97,8 @@ def _process_batch(input_path: str,
 
 
         _apply_augmentation(mode, augmentor, input_file_path, output_file_path, augmentations, aug_verbose)
+
+
+        if random_state:
+            for instance in augmentations.values():
+                instance.__init__()
