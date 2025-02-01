@@ -47,7 +47,7 @@ class Exposure:
             logging.warning("Exposure factor should ideally be between 0.3 and 1.7.")
         
 
-        self.exposure_factor = exposure_factor
+        self.exposure_factor = exposure_factor or np.random.uniform(0.3, 1.7)
 
 
     def _expose(self, image: Image.Image) -> Image.Image:
@@ -74,7 +74,7 @@ class Exposure:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
-        return Image.fromarray(np.clip((np.array(image) * (self.exposure_factor or np.random.uniform(0.3, 1.7))), 0, 255).astype(np.uint8))
+        return Image.fromarray(np.clip((np.array(image) * self.exposure_factor), 0, 255).astype(np.uint8))
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

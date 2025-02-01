@@ -48,7 +48,9 @@ class Noise:
             logging.warning("The optimal value for intensity is between -1 and 1.")
         
 
-        self.intensity = intensity
+        self.noise = None
+        self.random_state = np.random.randint(1, 99)
+        self.intensity = intensity or np.random.uniform(-1, 1)
 
 
     def _noise(self, image: Image.Image) -> Image.Image:
@@ -73,16 +75,17 @@ class Noise:
 
         if not isinstance(image, Image.Image):
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
 
-        intensity = self.intensity or np.random.uniform(-1, 1)
 
         # Convert the image to a numpy array
         img_array = np.array(image)
+        
         # Generate a noise array with the same dimensions as the image
-        noise = np.random.RandomState(42).rand(*img_array.shape) * intensity
+        if not self.noise or not self.noise.shape == img_array.shape:
+            self.noise = np.random.RandomState(self.random_state).rand(*img_array.shape) * self.intensity
+        
         # Add the noise to the pixel values of the image
-        noised_image = np.clip(img_array + noise * 255, 0, 255).astype(np.uint8)
+        noised_image = np.clip(img_array + self.noise * 255, 0, 255).astype(np.uint8)
 
 
         return Image.fromarray(noised_image)

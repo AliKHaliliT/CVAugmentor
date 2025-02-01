@@ -48,7 +48,7 @@ class Shear:
             logging.warning("The optimal value for shear is between -0.5 and 0.5.")
 
 
-        self.shear = shear
+        self.shear = shear or (np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5))
 
 
     def _shear(self, image: Image.Image) -> Image.Image:
@@ -73,12 +73,9 @@ class Shear:
 
         if not isinstance(image, Image.Image):
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        shear = self.shear or (np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5))
 
 
-        return image.transform(image.size, Image.AFFINE, (1, shear[0], 0, shear[1], 1, 0))
+        return image.transform(image.size, Image.AFFINE, (1, self.shear[0], 0, self.shear[1], 1, 0))
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

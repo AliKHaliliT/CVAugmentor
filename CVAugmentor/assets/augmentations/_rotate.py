@@ -16,8 +16,7 @@ class Rotate:
     
     """
 
-    def __init__(self, rotate_type: str = "definite", 
-                 angle: Union[int, float] = 90) -> None:
+    def __init__(self, angle: Union[int, float] = 90) -> None:
 
         """
 
@@ -26,14 +25,6 @@ class Rotate:
         
         Parameters
         ----------
-        rotate_type : str, optional
-            Type of rotation. The default value is `"definite"`.
-                The options are:
-                    `"definite"`
-                        Rotate the image by a fixed angle.
-                    `"random"`
-                        Rotate the image by a random angle.
-
         angle : int or float, optional
             Angle of rotation. The default value is `90`.
 
@@ -44,14 +35,11 @@ class Rotate:
 
         """
 
-        if rotate_type not in ["definite", "random"]:
-            raise ValueError(f"rotate_type must either be 'definite' or 'random'. Received: {rotate_type} with type {type(rotate_type)}")
         if not isinstance(angle, (int, float)):
             raise ValueError(f"angle must be an integer or float. Received: {angle} with type {type(angle)}")
+        
 
-
-        self.rotate_type = rotate_type
-        self.angle = angle
+        self.angle = angle or np.random.randint(-self.angle, self.angle)
 
 
     def _rotate(self, image: Image.Image) -> Image.Image:
@@ -78,7 +66,7 @@ class Rotate:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
 
-        return image.rotate((self.angle or np.random.randint(-self.angle, self.angle)))
+        return image.rotate(self.angle)
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

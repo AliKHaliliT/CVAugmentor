@@ -48,7 +48,7 @@ class Blur:
             logging.warning("Radius should ideally be between 0 and 5.")
         
 
-        self.radius = radius
+        self.radius = radius or np.random.randint(0, 5)
 
 
     def _blur(self, image: Image.Image) -> Image.Image:
@@ -76,7 +76,7 @@ class Blur:
 
 
         # Apply the Gaussian blur filter to the image and return it
-        return image.filter(ImageFilter.GaussianBlur((self.radius or np.random.randint(0, 5))))
+        return image.filter(ImageFilter.GaussianBlur(self.radius))
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

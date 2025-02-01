@@ -39,7 +39,7 @@ class Saturation:
             raise ValueError(f"saturation_factor must either be an int or a float. Received: {saturation_factor} with type {type(saturation_factor)}")
 
 
-        self.saturation_factor = saturation_factor
+        self.saturation_factor = self.saturation_factor or np.random.uniform(0, 0.5)
 
 
     def _saturation(self, image: Image.Image) -> Image.Image:
@@ -67,7 +67,7 @@ class Saturation:
         
 
         # Convert the image to the HSV color space and enhance saturation
-        return ImageEnhance.Color(image).enhance(1 + (self.saturation_factor or np.random.uniform(0, 0.5)))
+        return ImageEnhance.Color(image).enhance(1 + self.saturation_factor)
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

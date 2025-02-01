@@ -39,7 +39,7 @@ class Brightness:
             raise ValueError(f"brightness_factor must either be an int or a float. Received: {brightness_factor} with type {type(brightness_factor)}")
 
 
-        self.brightness_factor = brightness_factor
+        self.brightness_factor = brightness_factor or np.random.uniform(0, 0.5)
 
 
     def _brightness(self, image: Image.Image) -> Image.Image:
@@ -66,7 +66,7 @@ class Brightness:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
 
         
-        return ImageEnhance.Brightness(image).enhance(1 + (self.brightness_factor or np.random.uniform(0, 0.5)))
+        return ImageEnhance.Brightness(image).enhance(1 + self.brightness_factor)
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

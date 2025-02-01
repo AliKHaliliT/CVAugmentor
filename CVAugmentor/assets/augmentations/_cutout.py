@@ -16,8 +16,9 @@ class Cutout:
     
     """
 
-    def __init__(self, max_count: Optional[int] = None, 
-                 max_size: Optional[Union[int, float]] = None) -> None:
+    def __init__(self, 
+                 max_size: Optional[Union[int, float]] = None,
+                 max_count: Optional[int] = None) -> None:
 
         """ 
 
@@ -26,11 +27,11 @@ class Cutout:
         
         Parameters
         ----------
-        max_count : int, optional
-            Maximum number of cutouts. The default value is `None`. If `None`, a random maximum count will be used.
-        
         max_size : int or float, optional
             Maximum size of the cutout. The default value is `None`. If `None`, a random maximum size will be used.
+
+        max_count : int, optional
+            Maximum number of cutouts. The default value is `None`. If `None`, a random maximum count will be used.
             
 
         Returns
@@ -39,14 +40,15 @@ class Cutout:
         
         """
 
-        if max_count is not None and not isinstance(max_count, int):
-            raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
         if max_size is not None and not isinstance(max_size, (int, float)):
             raise ValueError(f"max_size must either be an int or a float. Received: {max_size} with type {type(max_size)}")
+        if max_count is not None and not isinstance(max_count, int):
+            raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
         
 
-        self.max_count = max_count
+        self.max_count = max_count or np.random.RandomState(self.random_state).randint(1, 6)
         self.max_size = max_size
+        self.random_state = np.random.randint(1, 99)
 
 
     def _cutout(self, image: Image.Image) -> Image.Image:
@@ -73,14 +75,14 @@ class Cutout:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
-        max_size = self.max_size or np.random.randint(1, min(image.size[0], image.size[1]) // 4)
+        self.max_size = self.max_size or np.random.RandomState(self.random_state).randint(1, min(image.size[0], image.size[1]) // 4)
 
         img_array = np.array(image)
 
-        for _ in range((self.max_count or np.random.randint(1, 6))):
-            y = np.random.randint(0, image.size[0] - max_size + 1)
-            x = np.random.randint(0, image.size[1] - max_size + 1)
-            img_array[x:x + max_size, y:y + max_size, :] = 0
+        for _ in range(self.max_count):
+            y = np.random.RandomState(self.random_state).randint(0, image.size[0] - self.max_size + 1)
+            x = np.random.RandomState(self.random_state).randint(0, image.size[1] - self.max_size + 1)
+            img_array[x:x + self.max_size, y:y + self.max_size, :] = 0
 
 
         return Image.fromarray(img_array)

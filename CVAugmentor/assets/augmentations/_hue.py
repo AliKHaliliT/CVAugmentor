@@ -39,7 +39,7 @@ class Hue:
             raise ValueError(f"hue_shift must either be an int or a float between -360 and 360. Received: {hue_shift} with type {type(hue_shift)}")
         
 
-        self.hue_shift = hue_shift
+        self.hue_shift = hue_shift or np.random.uniform(-360, 360)
 
 
     def _hue(self, image: Image.Image) -> Image.Image:
@@ -68,7 +68,7 @@ class Hue:
 
         h, s, v = image.convert("HSV").split()
 
-        h_data = (np.array(h) + (self.hue_shift or np.random.uniform(-360, 360))) % 256
+        h_data = (np.array(h) + self.hue_shift) % 256
         h = Image.fromarray(h_data.astype("uint8"), mode='L')
 
 

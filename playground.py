@@ -41,7 +41,7 @@ p.augment(input_path="util_resources/samples/videos/0.mp4",
           output_path="util_resources/experiments/single_video/0.mp4", 
           target="video", 
           process_type="single", 
-          mode="singular", 
+          mode="sequential", 
           augmentations=augmentations, 
           aug_verbose=True)
 
