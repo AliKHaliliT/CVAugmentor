@@ -43,11 +43,11 @@ class Exposure:
         if exposure_factor is not None and not isinstance(exposure_factor, (int, float)):
             raise ValueError(f"exposure_factor must either be an int or a float. Received: {exposure_factor} with type {type(exposure_factor)}")
         
-        if not 0.3 <= exposure_factor <= 1.7:
-            logging.warning("Exposure factor should ideally be between 0.3 and 1.7.")
-        
 
         self.exposure_factor = exposure_factor or np.random.uniform(0.3, 1.7)
+
+        if not 0.3 <= self.exposure_factor <= 1.7:
+            logging.warning("Exposure factor should ideally be between 0.3 and 1.7.")
 
 
     def _expose(self, image: Image.Image) -> Image.Image:

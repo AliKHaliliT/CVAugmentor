@@ -44,13 +44,13 @@ class Noise:
         if intensity is not None and not isinstance(intensity, (int, float)):
             raise ValueError(f"intensity must either be an int or a float. Received: {intensity} with type {type(intensity)}")
         
-        if intensity < -1 or intensity > 1:
-            logging.warning("The optimal value for intensity is between -1 and 1.")
-        
 
         self.noise = None
         self.random_state = np.random.randint(1, 99)
         self.intensity = intensity or np.random.uniform(-1, 1)
+
+        if not -1 <= self.intensity <= 1:
+            logging.warning("The optimal value for intensity is between -1 and 1.")
 
 
     def _noise(self, image: Image.Image) -> Image.Image:
@@ -81,7 +81,10 @@ class Noise:
         img_array = np.array(image)
         
         # Generate a noise array with the same dimensions as the image
-        if not self.noise or not self.noise.shape == img_array.shape:
+        if self.noise is not None:
+            if not self.noise.shape == img_array.shape:
+                self.noise = np.random.RandomState(self.random_state).rand(*img_array.shape) * self.intensity
+        else:
             self.noise = np.random.RandomState(self.random_state).rand(*img_array.shape) * self.intensity
         
         # Add the noise to the pixel values of the image

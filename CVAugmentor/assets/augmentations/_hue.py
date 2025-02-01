@@ -96,4 +96,4 @@ class Hue:
         """
         
 
-        return self._hue_shift(image)
+        return self._hue(image)

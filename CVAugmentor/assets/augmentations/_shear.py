@@ -44,11 +44,11 @@ class Shear:
         if shear is not None and (not isinstance(shear, tuple) or len(shear) != 2) and not (-1 <= shear[0] <= 1 and -1 <= shear[1] <= 1):
             raise ValueError(f"shear must be a tuple of decimal values (x, y) between -1 and 1. Received: {shear} with type {type(shear)}")
 
-        if not (-0.5 <= shear[0] <= 0.5 and -0.5 <= shear[1] <= 0.5):
-            logging.warning("The optimal value for shear is between -0.5 and 0.5.")
-
 
         self.shear = shear or (np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5))
+
+        if not (-0.5 <= self.shear[0] <= 0.5 and -0.5 <= self.shear[1] <= 0.5):
+            logging.warning("The optimal value for shear is between -0.5 and 0.5.")
 
 
     def _shear(self, image: Image.Image) -> Image.Image:

@@ -6,11 +6,11 @@ import os
 from ._apply_augmentations import _apply_augmentation
 
 
-def _process_single(mode: str, 
-                    augmentor: Union[ImageAugmentor, VideoAugmentor], 
-                    input_path: str, 
+def _process_single(input_path: str, 
                     target: str, 
                     output_path: str, 
+                    mode: str, 
+                    augmentor: Union[ImageAugmentor, VideoAugmentor], 
                     augmentations: dict[str, Callable[..., None]], 
                     aug_verbose: bool) -> None:
     
@@ -21,19 +21,6 @@ def _process_single(mode: str,
 
     Parameters
     ----------
-    mode : str
-        Mode of the augmentation.
-            The options are:
-                "sequential"
-                    Sequential mode means that the augmentations will be applied one by one.
-                    This means that the data will be saved after each augmentation.
-                "singular"
-                    Singular mode means that the augmentations will be applied all at once.
-                    This means that the data will be saved only after all augmentations were applied.
-
-    augmentor : ImageAugmentor or VideoAugmentor
-        The augmentor class.
-
     input_path : str
         Path to the input data.
 
@@ -47,6 +34,19 @@ def _process_single(mode: str,
 
     output_path : str
         Path to the output data.
+
+    mode : str
+        Mode of the augmentation.
+            The options are:
+                "sequential"
+                    Sequential mode means that the augmentations will be applied one by one.
+                    This means that the data will be saved after each augmentation.
+                "singular"
+                    Singular mode means that the augmentations will be applied all at once.
+                    This means that the data will be saved only after all augmentations were applied.
+
+    augmentor : ImageAugmentor or VideoAugmentor
+        The augmentor class.
 
     augmentations : dict
         A dictionary of augmentations to apply. Keys are augmentation names, and values are the corresponding functions.

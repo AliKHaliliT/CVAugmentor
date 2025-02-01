@@ -41,8 +41,6 @@ class Zoom:
 
         self.zoom_size = zoom_size
         self.random_state = np.random.randint(1, 99)
-        self.x = None
-        self.y = None
 
 
     def _zoom(self, image: Image.Image) -> Image.Image:
@@ -69,18 +67,16 @@ class Zoom:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
-        if not self.zoom_size or not self.zoom_size.shape[::-1] == image.size:
-            self.zoom_size = (
-                                np.random.RandomState(self.random_state).randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5),
-                                np.random.RandomState(self.random_state).randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5)
-                             )
+        zoom_size = self.zoom_size or (
+            np.random.RandomState(self.random_state).randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5),
+            np.random.RandomState(self.random_state).randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5)
+        )
 
-        if not self.x:
-            self.x = np.random.RandomState(self.random_state).randint(0, image.size[0] - self.zoom_size[0])
-            self.y = np.random.RandomState(self.random_state).randint(0, image.size[1] - self.zoom_size[1])
+        x = np.random.RandomState(self.random_state).randint(0, image.size[0] - zoom_size[0])
+        y = np.random.RandomState(self.random_state).randint(0, image.size[1] - zoom_size[1])
 
         
-        return (image.crop((self.x, self.y, self.x + self.zoom_size[0], self.y + self.zoom_size[1]))).resize((image.size[0], image.size[1]))
+        return (image.crop((x, y, x + zoom_size[0], y + zoom_size[1]))).resize((image.size[0], image.size[1]))
 
 
     def __call__(self, image: Image.Image) -> Image.Image:

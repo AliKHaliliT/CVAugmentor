@@ -46,7 +46,7 @@ class Cutout:
             raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
         
 
-        self.max_count = max_count or np.random.RandomState(self.random_state).randint(1, 6)
+        self.max_count = max_count or np.random.randint(1, 6)
         self.max_size = max_size
         self.random_state = np.random.randint(1, 99)
 

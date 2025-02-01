@@ -223,4 +223,3 @@ class VideoAugmentor():
 
         if verbose:
             print("Augmentation complete.")
-            
