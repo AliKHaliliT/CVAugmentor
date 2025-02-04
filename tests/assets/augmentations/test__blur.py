@@ -1,103 +1,42 @@
-import logging
-from typing import Optional, Union
-from PIL import Image, ImageFilter
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._blur import Blur
+from PIL import Image
 
 
-# Configure logging
-logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
+class TestBlur(unittest.TestCase):
+
+    def test_radius_wrong__value_value__error(self):
+
+        # Arrange
+        radius = "-1"
+
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Blur(radius=radius)
 
 
-class Blur:
+    def test_radius_wrong__type_type__error(self):
 
-    """
+        # Arrange
+        image = "-1"
 
-    Apply a blur effect to an image.
-    
-
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self, radius: Optional[Union[int, float]] = None) -> None:
-
-        """ 
-
-        Constructor of the Blur class.
-
-        
-        Parameters
-        ----------
-        radius : int or float, optional
-            Blur radius. The blur radius is the standard deviation of the Gaussian blur.
-            The default value is `None`. If `None`, a random blur radius will be used.
-
-            
-        Returns
-        -------
-        None.
-        
-        """
-
-        if radius is not None and not isinstance(radius, (int, float)):
-            raise ValueError(f"radius must either be an int or a float. Received: {radius} with type {type(radius)}")
-        
-        if radius > 5:
-            logging.warning("Radius should ideally be between 0 and 5.")
-        
-
-        self.radius = radius
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Blur()(image)
 
 
-    def _blur(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """ 
+        # Arrange
+        augmentor = Blur()
+        image = Image.new("RGB", (64, 32))
 
-        The blur operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        blurred_image : Image.Image
-            The blurred image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
+        # Assert
+        self.assertNotEqual(augmneted_image, image)
 
 
-        # Apply the Gaussian blur filter to the image and return it
-        return image.filter(ImageFilter.GaussianBlur((self.radius or np.random.randint(0, 5))))
-
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """ 
-
-        Perform the blur operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        blurred_image : Image.Image
-            The blurred image.
-
-        """
-
-
-        return self._blur(image)
+if __name__ == "__main__":
+    unittest.main()
