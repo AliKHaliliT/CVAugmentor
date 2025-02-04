@@ -17,10 +17,10 @@ class VideoAugmentor():
     
     Methods
     -------
-    apply_sequentially():
+    apply_sequentially()
         Applies each augmentation separately and saves individual results.
         
-    apply_in_batch():
+    apply_in_batch()
         Applies all augmentations in sequence to the same video and saves the final output.
 
     """

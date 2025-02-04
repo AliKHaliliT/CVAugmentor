@@ -5,7 +5,20 @@ from .components.pipeline._process_single import _process_single
 from .components.pipeline._process_batch import _process_batch
 
 
-class Pipeline():
+class Pipeline:
+
+    """
+
+    A class for handling data augmentation pipelines for images and videos.
+
+
+    Methods
+    -------
+    augment()
+        Applies augmentation to the given input data based on the specified process type and mode.
+
+    """
+
 
     def __init__(self) -> None:
 
