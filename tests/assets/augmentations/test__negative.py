@@ -1,87 +1,32 @@
-from PIL import Image, ImageOps
+import unittest
+from CVAugmentor.assets.augmentations._negative import Negative
+from PIL import Image, ImageChops
 
 
-class Negative:
+class TestNegative(unittest.TestCase):
 
-    """
+    def test_image_wrong__type_type__error(self):
 
-    Convert the image to negative. This operation converts the image to negative by inverting its pixel values.
+        # Arrange
+        image = "-1"
 
-    
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self) -> None:
-
-        """ 
-
-        Constructor of the Negative class.
-        
-        
-        Parameters
-        ----------
-        None.
-
-        
-        Returns
-        -------
-        None.
-        
-        """
-
-        pass
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Negative()(image)
 
 
-    def _negative(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """ 
+        # Arrange
+        augmentor = Negative()
+        image = Image.new("RGB", (64, 32))
 
-        The negative operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        negative_image : Image.Image
-            The negative image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        # Convert the image to negative by inverting the pixel values
-        return ImageOps.invert(image.convert("RGB"))
-
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """ 
-
-        Perform the negative operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        negative_image : Image.Image
-            The negative image.
-
-        """
-
-
-        return self._negative(image)
+if __name__ == "__main__":
+    unittest.main()

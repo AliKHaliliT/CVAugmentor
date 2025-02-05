@@ -46,8 +46,8 @@ class Cutout:
             raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
         
 
-        self.max_count = max_count or np.random.randint(1, 6)
         self.max_size = max_size
+        self.max_count = max_count if max_count is not None else np.random.randint(1, 6)
         self.random_state = np.random.randint(1, 99)
 
 
@@ -75,7 +75,7 @@ class Cutout:
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
         
 
-        self.max_size = self.max_size or np.random.RandomState(self.random_state).randint(1, min(image.size[0], image.size[1]) // 4)
+        self.max_size = self.max_size if self.max_size is not None else np.random.RandomState(self.random_state).randint(1, min(image.size[0], image.size[1]) // 4)
 
         img_array = np.array(image)
 

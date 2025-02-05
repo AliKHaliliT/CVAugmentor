@@ -1,105 +1,42 @@
-import logging
-from typing import Optional, Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._shear import Shear
+from PIL import Image, ImageChops
 
 
-# Configure logging
-logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
+class TestShear(unittest.TestCase):
+
+    def test_shear_wrong__value_value__error(self):
+
+        # Arrange
+        shear = "-1"
+
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Shear(shear=shear)
 
 
-class Shear:
+    def test_image_wrong__type_type__error(self):
 
-    """
+        # Arrange
+        image = "-1"
 
-    Shear an image along the x-axis and/or y-axis. The shearing means that the image is slanted along the axis.
-
-
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self, shear: Optional[tuple[Union[int, float], Union[int, float]]] = None) -> None:
-
-        """
-
-        Constructor of the Shear class.
-        
-
-        Parameters
-        ----------
-        shear : tuple, optional
-            Shear values for x and y axes. The default value is `None`.
-            If `None`, random shear values are generated.
-            
-
-        Returns
-        -------
-        None.
-
-        """
-
-        if shear is not None and (not isinstance(shear, tuple) or len(shear) != 2) and not (-1 <= shear[0] <= 1 and -1 <= shear[1] <= 1):
-            raise ValueError(f"shear must be a tuple of decimal values (x, y) between -1 and 1. Received: {shear} with type {type(shear)}")
-
-        if not (-0.5 <= shear[0] <= 0.5 and -0.5 <= shear[1] <= 0.5):
-            logging.warning("The optimal value for shear is between -0.5 and 0.5.")
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Shear()(image)
 
 
-        self.shear = shear
+    def test_output_image_augmented__image(self):
+
+        # Arrange
+        augmentor = Shear()
+        image = Image.new("RGB", (64, 32))
+
+        # Act
+        augmneted_image = augmentor(image)
+
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-    def _shear(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        The shearing operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        sheared_image : Image.Image
-            The sheared image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        shear = self.shear or (np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5))
-
-
-        return image.transform(image.size, Image.AFFINE, (1, shear[0], 0, shear[1], 1, 0))
-
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the shearing operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        sheared_image : Image.Image
-            The sheared image.
-
-        """
-
-
-        return self._shear(image)
+if __name__ == "__main__":
+    unittest.main()

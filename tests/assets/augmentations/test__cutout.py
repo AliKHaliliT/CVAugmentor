@@ -1,110 +1,52 @@
-from typing import Optional, Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._cutout import Cutout
+from PIL import Image, ImageChops
 
 
-class Cutout:
+class TestCutout(unittest.TestCase):
 
-    """
+    def test_max__size_wrong__value_value__error(self):
 
-    Cutout a random part of the image. This operation cuts out a random part of the image and replaces it with a black rectangle.
+        # Arrange
+        max_size = "-1"
 
-
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self, max_count: Optional[int] = None, 
-                 max_size: Optional[Union[int, float]] = None) -> None:
-
-        """ 
-
-        Constructor of the Cutout class.
-
-        
-        Parameters
-        ----------
-        max_count : int, optional
-            Maximum number of cutouts. The default value is `None`. If `None`, a random maximum count will be used.
-        
-        max_size : int or float, optional
-            Maximum size of the cutout. The default value is `None`. If `None`, a random maximum size will be used.
-            
-
-        Returns
-        -------
-        None.
-        
-        """
-
-        if max_count is not None and not isinstance(max_count, int):
-            raise ValueError(f"max_count must be an integer. Received: {max_count} with type {type(max_count)}")
-        if max_size is not None and not isinstance(max_size, (int, float)):
-            raise ValueError(f"max_size must either be an int or a float. Received: {max_size} with type {type(max_size)}")
-        
-
-        self.max_count = max_count
-        self.max_size = max_size
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Cutout(max_size=max_size)
 
 
-    def _cutout(self, image: Image.Image) -> Image.Image:
+    def test_max_count_wrong__value_value__error(self):
 
-        """ 
+        # Arrange
+        max_count = "-1"
 
-        The cutout operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        cutout_image : Image.Image
-            The cutout image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        max_size = self.max_size or np.random.randint(1, min(image.size[0], image.size[1]) // 4)
-
-        img_array = np.array(image)
-
-        for _ in range((self.max_count or np.random.randint(1, 6))):
-            y = np.random.randint(0, image.size[0] - max_size + 1)
-            x = np.random.randint(0, image.size[1] - max_size + 1)
-            img_array[x:x + max_size, y:y + max_size, :] = 0
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Cutout(max_count=max_count)
 
 
-        return Image.fromarray(img_array)
+    def test_image_wrong__type_type__error(self):
+
+        # Arrange
+        image = "-1"
+
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Cutout()(image)
 
 
-    def __call__(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """ 
+        # Arrange
+        augmentor = Cutout()
+        image = Image.new("RGB", (64, 32))
 
-        Perform the cutout operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        cutout_image : Image.Image
-            The cutout image.
-
-        """
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        return self._cutout(image)
+if __name__ == "__main__":
+    unittest.main()

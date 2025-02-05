@@ -39,7 +39,7 @@ class Saturation:
             raise ValueError(f"saturation_factor must either be an int or a float. Received: {saturation_factor} with type {type(saturation_factor)}")
 
 
-        self.saturation_factor = saturation_factor or np.random.uniform(0, 0.5)
+        self.saturation_factor = saturation_factor if saturation_factor is not None else np.random.uniform(0, 0.5)
 
 
     def _saturation(self, image: Image.Image) -> Image.Image:

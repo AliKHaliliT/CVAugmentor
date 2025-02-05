@@ -45,7 +45,7 @@ class Blur:
             raise ValueError(f"radius must either be an int or a float. Received: {radius} with type {type(radius)}")
     
         
-        self.radius = radius or np.random.randint(0, 5)
+        self.radius = radius if radius is not None else np.random.randint(0, 5)
 
         if self.radius > 5:
             logging.warning("Radius should ideally be between 0 and 5.")

@@ -1,104 +1,42 @@
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._flip import Flip
+from PIL import Image, ImageChops
 
 
-class Flip:
+class TestFlip(unittest.TestCase):
 
-    """
+    def test_flip__type_wrong__value_value__error(self):
 
-    Flip the image horizontally or vertically.
+        # Arrange
+        flip_type = "-1"
 
-
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self, flip_type: str = "vertical") -> None:
-
-        """
-
-        Constructor of the Flip class.
-
-        
-        Parameters
-        ----------
-        flip_type : str, optional
-            Type of flip. The default value is `"vertical"`.
-                The options are:
-                    `"horizontal"`
-                        Flip the image horizontally.
-                    `"vertical"`
-                        Flip the image vertically.
-
-        Returns
-        -------
-        None.
-
-        """
-
-        if flip_type not in ["horizontal", "vertical"]:
-            raise ValueError(f"flip_type must either be 'horizontal' or 'vertical'. Received: {flip_type} with type {type(flip_type)}")
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Flip(flip_type=flip_type)
 
 
-        self.flip_type = flip_type
+    def test_image_wrong__type_type__error(self):
+
+        # Arrange
+        image = "-1"
+
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Flip()(image)
 
 
-    def _flip(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """
+        # Arrange
+        augmentor = Flip()
+        image = Image.new("RGB", (64, 32))
 
-        The flip operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-        
-        Returns
-        -------
-        flipped_image : Image
-            The flipped image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        img = np.array(image)
-
-        if self.flip_type == "horizontal":
-            img = np.fliplr(img)
-        elif self.flip_type == "vertical":
-            img = np.flipud(img)
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        return Image.fromarray(img)
-    
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the flip operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-        
-        Returns
-        -------
-        flipped_image : Image
-            The flipped image.
-
-        """
-
-
-        return self._flip(image)
+if __name__ == "__main__":
+    unittest.main()

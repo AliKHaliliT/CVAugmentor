@@ -39,7 +39,7 @@ class Brightness:
             raise ValueError(f"brightness_factor must either be an int or a float. Received: {brightness_factor} with type {type(brightness_factor)}")
 
 
-        self.brightness_factor = brightness_factor or np.random.uniform(0, 0.5)
+        self.brightness_factor = brightness_factor if brightness_factor is not None else np.random.uniform(0, 0.5)
 
 
     def _brightness(self, image: Image.Image) -> Image.Image:

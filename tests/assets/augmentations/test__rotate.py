@@ -1,105 +1,42 @@
-from typing import Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._rotate import Rotate
+from PIL import Image, ImageChops
 
 
-class Rotate:
+class TestRotate(unittest.TestCase):
 
-    """
+    def test_angle_wrong__value_value__error(self):
 
-    Rotate an image by a definite or random angle.
+        # Arrange
+        angle = "-1"
 
-
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self, rotate_type: str = "definite", 
-                 angle: Union[int, float] = 90) -> None:
-
-        """
-
-        Constructor of the Rotate class.
-
-        
-        Parameters
-        ----------
-        rotate_type : str, optional
-            Type of rotation. The default value is `"definite"`.
-                The options are:
-                    `"definite"`
-                        Rotate the image by a fixed angle.
-                    `"random"`
-                        Rotate the image by a random angle.
-
-        angle : int or float, optional
-            Angle of rotation. The default value is `90`.
-
-            
-        Returns
-        -------
-        None.
-
-        """
-
-        if rotate_type not in ["definite", "random"]:
-            raise ValueError(f"rotate_type must either be 'definite' or 'random'. Received: {rotate_type} with type {type(rotate_type)}")
-        if not isinstance(angle, (int, float)):
-            raise ValueError(f"angle must be an integer or float. Received: {angle} with type {type(angle)}")
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Rotate(angle=angle)
 
 
-        self.rotate_type = rotate_type
-        self.angle = angle
+    def test_image_wrong__type_type__error(self):
+
+        # Arrange
+        image = "-1"
+
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Rotate()(image)
 
 
-    def _rotate(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """
+        # Arrange
+        augmentor = Rotate()
+        image = Image.new("RGB", (64, 32))
 
-        The rotation operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        rotated_image : Image.Image
-            The rotated image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        return image.rotate((self.angle or np.random.randint(-self.angle, self.angle)))
-
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the rotation operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        rotated_image : Image.Image
-            The rotated image.
-
-        """
-
-
-        return self._rotate(image)
+if __name__ == "__main__":
+    unittest.main()

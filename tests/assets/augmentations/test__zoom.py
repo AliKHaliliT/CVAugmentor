@@ -1,102 +1,42 @@
-from typing import Optional, Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._zoom import Zoom
+from PIL import Image, ImageChops
 
 
-class Zoom:
+class TestZoom(unittest.TestCase):
 
-    """
+    def test_zoom__size_wrong__value_value__error(self):
 
-    Zoom an image by a specified or a random size.
+        # Arrange
+        zoom_size = "-1"
 
-
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self, zoom_size: Optional[tuple[Union[int, float], Union[int, float]]] = None) -> None:
-
-        """
-
-        Constructor of the Zoom class.
-
-        
-        Parameters
-        ----------
-        zoom_size : tuple, optional
-            Size of the zoom as (width, height). The default value to `None`. If `None`, a random zoom size will be used.
-
-            
-        Returns
-        -------
-        None.
-
-        """
-
-        if zoom_size is not None and (not isinstance(zoom_size, tuple) or len(zoom_size) != 2 or any(x <= 0 for x in zoom_size)):
-            raise ValueError(f"zoom_size must be a tuple of length two woth positive numbers. Received: {zoom_size} with type {type(zoom_size)}")
-            
-
-        self.zoom_size = zoom_size
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Zoom(zoom_size=zoom_size)
 
 
-    def _zoom(self, image: Image.Image) -> Image.Image:
+    def test_image_wrong__type_type__error(self):
 
-        """
+        # Arrange
+        image = "-1"
 
-        The zoom operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Zoom()(image)
 
 
-        Returns
-        -------
-        zoomed_image : Image.Image
-            The zoomed image.
+    def test_output_image_augmented__image(self):
 
-        """
+        # Arrange
+        augmentor = Zoom()
+        image = Image.new("RGB", (64, 32))
 
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
+        # Act
+        augmneted_image = augmentor(image)
 
-        zoom_size = self.zoom_size or (
-            np.random.randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5),
-            np.random.randint(min(image.size[0], image.size[1]) // 2.5, min(image.size[0], image.size[1]) // 1.5)
-        )
-
-        x = np.random.randint(0, image.size[0] - zoom_size[0])
-        y = np.random.randint(0, image.size[1] - zoom_size[1])
-
-        
-        return (image.crop((x, y, x + zoom_size[0], y + zoom_size[1]))).resize((image.size[0], image.size[1]))
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the zoom operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-
-        Returns
-        -------
-        zoomed_image : Image.Image
-            The zoomed image.
-
-        """
-
-
-        return self._zoom(image)
+if __name__ == "__main__":
+    unittest.main()

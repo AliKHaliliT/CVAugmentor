@@ -1,112 +1,42 @@
-import logging
-from typing import Optional, Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._noise import Noise
+from PIL import Image, ImageChops
 
 
-# Configure logging
-logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
+class TestNoise(unittest.TestCase):
+
+    def test_intensity_wrong__value_value__error(self):
+
+        # Arrange
+        intensity = "-1"
+
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Noise(intensity=intensity)
 
 
-class Noise:
+    def test_image_wrong__type_type__error(self):
 
-    """
+        # Arrange
+        image = "-1"
 
-    Add noise to the image. This method adds noise to the image by multiplying the pixel values by a random number between -1 and 1.
-    It creates a noisy image that looks like the output from an analog TV with bad reception.
-
-
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self, intensity: Optional[Union[int, float]] = None) -> None:
-
-        """ 
-
-        Constructor of the Noise class.
-
-        
-        Parameters
-        ----------
-        intensity : int or float, optional
-            Noise intensity. The default value is `None`. If `None`, a random noise intensity will be used.
-
-            
-        Returns
-        -------
-        None.
-        
-        """
-
-        if intensity is not None and not isinstance(intensity, (int, float)):
-            raise ValueError(f"intensity must either be an int or a float. Received: {intensity} with type {type(intensity)}")
-        
-        if intensity < -1 or intensity > 1:
-            logging.warning("The optimal value for intensity is between -1 and 1.")
-        
-
-        self.intensity = intensity
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Noise()(image)
 
 
-    def _noise(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """ 
+        # Arrange
+        augmentor = Noise()
+        image = Image.new("RGB", (64, 32))
 
-        The noise operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        noised_image : Image.Image
-            The noised image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        intensity = self.intensity or np.random.uniform(-1, 1)
-
-        # Convert the image to a numpy array
-        img_array = np.array(image)
-        # Generate a noise array with the same dimensions as the image
-        noise = np.random.RandomState(42).rand(*img_array.shape) * intensity
-        # Add the noise to the pixel values of the image
-        noised_image = np.clip(img_array + noise * 255, 0, 255).astype(np.uint8)
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        return Image.fromarray(noised_image)
-
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """ 
-
-        Perform the noise operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        noised_image : Image.Image
-            The noised image.
-
-        """
-
-
-        return self._noise(image)
+if __name__ == "__main__":
+    unittest.main()

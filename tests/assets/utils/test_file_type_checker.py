@@ -1,38 +1,41 @@
-import mimetypes
+import unittest
+from CVAugmentor.assets.utils.file_type_checker import is_target_type
 
 
-def is_target_type(filename: str, target: str) -> bool:
+class TestIsTargetType(unittest.TestCase):
 
-    """
+    def test_filename_wrong__value_value__error(self):
 
-    Checks if the file is of the target type.
+        # Arrange
+        filename = None
 
-
-    Parameters
-    ----------
-    filename : str
-        Name of the file.
-
-    target : str
-        Target type.
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            is_target_type(filename=filename, target="image")
 
     
-    Returns
-    -------
-    bool
-        True if the file is of the target type, False otherwise.
+    def test_target_wrong__value_value__error(self):
 
-    """
+        # Arrange
+        target = None
 
-    if not isinstance(filename, str):
-        raise ValueError(f"filename must be a string. Received: {filename} with type {type(filename)}")
-    if not isinstance(target, str):
-        raise ValueError(f"target must be a string. Received: {target} with type {type(target)}")
-    
-
-    # Get the mime type
-    mime_type = mimetypes.guess_type(filename)[0]
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            is_target_type(filename="filename.jpg", target=target)
 
 
-    # Return True if the mime type is not None and starts with the target type
-    return bool(mime_type) and mime_type.startswith(f'{target}/')
+    def test_output_input__parameters_correct__boolean(self):
+
+        # Arrange
+        filename = "filename.jpg"
+        target = "image"
+        
+        # Act
+        target_type = is_target_type(filename=filename, target=target)
+            
+        # Assert
+        self.assertEqual(target_type, True)
+
+
+if __name__ == "__main__":
+    unittest.main()

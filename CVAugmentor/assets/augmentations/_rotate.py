@@ -39,7 +39,7 @@ class Rotate:
             raise ValueError(f"angle must be an integer or float. Received: {angle} with type {type(angle)}")
         
 
-        self.angle = angle or np.random.randint(-self.angle, self.angle)
+        self.angle = angle if angle is not None else np.random.randint(-self.angle, self.angle)
 
 
     def _rotate(self, image: Image.Image) -> Image.Image:

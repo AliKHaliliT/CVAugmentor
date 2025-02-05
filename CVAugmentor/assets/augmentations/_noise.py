@@ -47,7 +47,7 @@ class Noise:
 
         self.noise = None
         self.random_state = np.random.randint(1, 99)
-        self.intensity = intensity or np.random.uniform(-1, 1)
+        self.intensity = intensity if intensity is not None else np.random.uniform(-1, 1)
 
         if not -1 <= self.intensity <= 1:
             logging.warning("The optimal value for intensity is between -1 and 1.")

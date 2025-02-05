@@ -1,88 +1,32 @@
-from PIL import Image
+import unittest
+from CVAugmentor.assets.augmentations._grayscale import Grayscale
+from PIL import Image, ImageChops
 
 
-class Grayscale:
+class TestGrayscale(unittest.TestCase):
 
-    """
+    def test_image_wrong__type_type__error(self):
 
-    Convert an image to grayscale.
-    The image remains in RGB format for consistency with other methods.
+        # Arrange
+        image = "-1"
 
-
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self) -> None:
-
-        """
-
-        Constructor of the Grayscale class.
-
-        
-        Parameters
-        ----------
-        None.
-
-        
-        Returns
-        -------
-        None.
-
-        """
-
-        pass
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Grayscale()(image)
 
 
-    def _grayscale(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """
+        # Arrange
+        augmentor = Grayscale()
+        image = Image.new("RGB", (64, 32))
 
-        The grayscale conversion operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        grayscaled_image : Image.Image
-            The grayscaled image in RGB format.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        # Create a new image with 3 channels by copying the grayscale image (created using the RGB weighted method)
-        return Image.merge("RGB", (image.convert("L"),) * 3)
-    
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the grayscale conversion operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        grayscaled_image : Image.Image
-            The grayscaled image in RGB format.
-
-        """
-
-
-        return self._grayscale(image)
+if __name__ == "__main__":
+    unittest.main()

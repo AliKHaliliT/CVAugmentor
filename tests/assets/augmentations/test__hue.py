@@ -1,99 +1,42 @@
-from typing import Optional, Union
-from PIL import Image
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._hue import Hue
+from PIL import Image, ImageChops
 
 
-class Hue:
+class TestHue(unittest.TestCase):
 
-    """
+    def test_hue__shift_wrong__value_value__error(self):
 
-    Shift the hue of an image by a specified or random value.
+        # Arrange
+        hue_shift = "-1"
 
-    
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self, hue_shift: Optional[Union[int, float]] = None) -> None:
-
-        """
-        
-        Constructor of the Hue class.
-
-        
-        Parameters
-        ----------
-        hue_shift : int or float, optional
-            Hue shift value. The default value is `None`. If `None`, a random hue shift value will be used.
-            
-
-        Returns
-        -------
-        None.
-
-        """
-
-        if hue_shift is not None and not isinstance(hue_shift, (int, float)) and (hue_shift < -360 or hue_shift > 360):
-            raise ValueError(f"hue_shift must either be an int or a float between -360 and 360. Received: {hue_shift} with type {type(hue_shift)}")
-        
-
-        self.hue_shift = hue_shift
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Hue(hue_shift=hue_shift)
 
 
-    def _hue(self, image: Image.Image) -> Image.Image:
+    def test_image_wrong__type_type__error(self):
 
-        """
-        
-        The hue shift operation.
+        # Arrange
+        image = "-1"
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-            
-
-        Returns
-        -------
-        img_hued : Image.Image
-            The hue-shifted image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        h, s, v = image.convert("HSV").split()
-
-        h_data = (np.array(h) + (self.hue_shift or np.random.uniform(-360, 360))) % 256
-        h = Image.fromarray(h_data.astype("uint8"), mode='L')
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Hue()(image)
 
 
-        return Image.merge("HSV", (h, s, v)).convert("RGB")
+    def test_output_image_augmented__image(self):
+
+        # Arrange
+        augmentor = Hue()
+        image = Image.new("RGB", (64, 32))
+
+        # Act
+        augmneted_image = augmentor(image)
+
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-        
-        Perform the hue shift operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-            
-
-        Returns
-        -------
-        img_hued : Image.Image
-            The hue-shifted image.
-
-        """
-        
-
-        return self._hue_shift(image)
+if __name__ == "__main__":
+    unittest.main()

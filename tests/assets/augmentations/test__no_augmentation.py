@@ -1,87 +1,32 @@
-from PIL import Image
+import unittest
+from CVAugmentor.assets.augmentations._no_augmentation import NoAugmentation
+from PIL import Image, ImageChops
 
 
-class NoAugmentation:
+class TestNoAugmentation(unittest.TestCase):
 
-    """
-    
-    No augmentation. 
-    This can be used when you want to copy the image to the output folder without augmenting it.
+    def test_image_wrong__type_type__error(self):
 
+        # Arrange
+        image = "-1"
 
-    Usage
-    -----
-    The class instance must be called.
-    
-    """
-
-    def __init__(self) -> None:
-        
-        """
-
-        Constructor of the No Augmentation class.
-        
-        
-        Parameters
-        ----------
-        None.
-
-        
-        Returns
-        -------
-        None.
-        
-        """
-
-        pass
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            NoAugmentation()(image)
 
 
-    def _no_augmentation(self, image: Image.Image) -> Image.Image:
-            
-        """
+    def test_output_image_augmented__image(self):
 
-        The no augmentation operation.
+        # Arrange
+        augmentor = NoAugmentation()
+        image = Image.new("RGB", (64, 32))
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
+        # Act
+        augmneted_image = augmentor(image)
 
-
-        Returns
-        -------
-        image : Image.Image
-            The original image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-
-        return image
-    
-
-    def __call__(self, image: Image.Image) -> Image.Image:
-            
-        """
-
-        Perform the no augmentation operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
+        # Assert
+        self.assertFalse(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-        Returns
-        -------
-        image : Image.Image
-            The original image.
-
-        """
-
-
-        return self._no_augmentation(image)
+if __name__ == "__main__":
+    unittest.main()

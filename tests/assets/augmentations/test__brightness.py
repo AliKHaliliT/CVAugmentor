@@ -1,93 +1,42 @@
-from typing import Optional, Union
-from PIL import Image, ImageEnhance
-import numpy as np
+import unittest
+from CVAugmentor.assets.augmentations._brightness import Brightness
+from PIL import Image, ImageChops
 
 
-class Brightness:
+class TestBrightness(unittest.TestCase):
 
-    """
+    def test_brightness__factor_wrong__value_value__error(self):
 
-    Adjust the brightness of an image.
-    
+        # Arrange
+        brightness_factor = "-1"
 
-    Usage
-    -----
-    The class instance must be called.
-
-    """
-
-    def __init__(self, brightness_factor: Optional[Union[int, float]] = None) -> None:
-
-        """
-
-        Constructor of the Brightness class.
-
-        
-        Parameters
-        ----------
-        brightness_factor : int or float, optional
-            Brightness factor. The default value is `None`. If `None`, a random brightness factor will be used.
-
-            
-        Returns
-        -------
-        None.
-
-        """
-
-        if brightness_factor is not None and not isinstance(brightness_factor, (int, float)):
-            raise ValueError(f"brightness_factor must either be an int or a float. Received: {brightness_factor} with type {type(brightness_factor)}")
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            Brightness(brightness_factor=brightness_factor)
 
 
-        self.brightness_factor = brightness_factor
+    def test_image_wrong__type_type__error(self):
+
+        # Arrange
+        image = "-1"
+
+        # Act and Assert
+        with self.assertRaises(TypeError):
+            Brightness()(image)
 
 
-    def _brightness(self, image: Image.Image) -> Image.Image:
+    def test_output_image_augmented__image(self):
 
-        """
+        # Arrange
+        augmentor = Brightness()
+        image = Image.new("RGB", (64, 32))
 
-        The brightness adjustment operation.
+        # Act
+        augmneted_image = augmentor(image)
 
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        img_brightened : Image.Image
-            The brightness adjusted image.
-
-        """
-
-        if not isinstance(image, Image.Image):
-            raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-
-        
-        return ImageEnhance.Brightness(image).enhance(1 + (self.brightness_factor or np.random.uniform(0, 0.5)))
+        # Assert
+        self.assertIsNotNone(bool(ImageChops.difference(augmneted_image, image).getbbox()))
 
 
-    def __call__(self, image: Image.Image) -> Image.Image:
-
-        """
-
-        Perform the brightness adjustment operation.
-
-        
-        Parameters
-        ----------
-        image : Image.Image
-            The image to be augmented.
-
-            
-        Returns
-        -------
-        img_brightened : Image.Image
-            The brightness adjusted image.
-
-        """
-
-
-        return self._brightness(image)
+if __name__ == "__main__":
+    unittest.main()

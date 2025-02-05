@@ -1,32 +1,31 @@
-import re
+import unittest
+from CVAugmentor.assets.utils.sort_alphanumerically import sorted_alphanumerically
 
 
-def sorted_alphanumerically(input_list: list[str]) -> list[str]:
+class TestSortedAlphanumerically(unittest.TestCase):
 
-    """
+    def test_input__list_wrong__value_value__error(self):
 
-    Sorts a list alphanumerically.
+        # Arrange
+        input_list = None
 
-    
-    Parameters
-    ----------
-    input_list : list
-        The unordered list.
-
-    
-    Returns
-    -------
-    output_list : list
-        The sorted list. 
-
-    """
-
-    if not isinstance(input_list, list) or not all(isinstance(string, str) for string in input_list):
-        raise ValueError(f"input_list must be a list of strings. Received: {input_list} with type {type(input_list)}")
-    
-
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)] 
+        # Act and Assert
+        with self.assertRaises(ValueError):
+            sorted_alphanumerically(input_list=input_list)
 
 
-    return sorted(input_list, key=alphanum_key)
+    def test_output_input__list_correct__output__list(self):
+
+        # Arrange
+        input_list = ["0", "1", "10", "001"]
+        correct_output_list = ["0", "1", "001", "10"]
+        
+        # Act
+        output_list = sorted_alphanumerically(input_list=input_list)
+            
+        # Assert
+        self.assertEqual(output_list, correct_output_list)
+
+
+if __name__ == "__main__":
+    unittest.main()
