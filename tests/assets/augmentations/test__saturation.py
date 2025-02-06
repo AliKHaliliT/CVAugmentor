@@ -22,13 +22,13 @@ class TestSaturation(unittest.TestCase):
 
         # Act and Assert
         with self.assertRaises(TypeError):
-            Saturation()(image)
+            Saturation(1)(image)
 
 
     def test_output_image_augmented__image(self):
 
         # Arrange
-        augmentor = Saturation()
+        augmentor = Saturation(1)
         image = Image.new("RGB", (64, 32))
 
         # Act

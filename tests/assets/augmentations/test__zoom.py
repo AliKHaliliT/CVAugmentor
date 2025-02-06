@@ -22,13 +22,13 @@ class TestZoom(unittest.TestCase):
 
         # Act and Assert
         with self.assertRaises(TypeError):
-            Zoom()(image)
+            Zoom((10, 10))(image)
 
 
     def test_output_image_augmented__image(self):
 
         # Arrange
-        augmentor = Zoom()
+        augmentor = Zoom((10, 10))
         image = Image.new("RGB", (64, 32))
 
         # Act

@@ -22,13 +22,13 @@ class TestHue(unittest.TestCase):
 
         # Act and Assert
         with self.assertRaises(TypeError):
-            Hue()(image)
+            Hue(1)(image)
 
 
     def test_output_image_augmented__image(self):
 
         # Arrange
-        augmentor = Hue()
+        augmentor = Hue(1)
         image = Image.new("RGB", (64, 32))
 
         # Act

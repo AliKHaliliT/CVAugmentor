@@ -65,14 +65,11 @@ class Hue:
 
         if not isinstance(image, Image.Image):
             raise TypeError(f"image must be an instance of the PIL Image. Received: {image} with type {type(image)}")
-        
-        import warnings
-        warnings.warn(f"{self.hue_shift}")
-        
+
 
         h, s, v = image.convert("HSV").split()
 
-        h_data = (np.array(h) + self.hue_shift) % 256
+        h_data = np.mod(np.array(h, dtype=np.int16) + self.hue_shift, 256).astype("uint8")
         h = Image.fromarray(h_data.astype("uint8"), mode='L')
 
 
