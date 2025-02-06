@@ -4,21 +4,29 @@ CVAugmentor
 .. automodule:: CVAugmentor
     :members:
 
-.. automodule:: CVAugmentor.assets.main.pipeline
-    :members:
+.. toctree::
+    :caption: Main
+    :maxdepth: 1
 
-.. automodule:: CVAugmentor.assets.augmentations
-    :members:
+    rsts/main/pipeline
+
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :caption: Augmentations
+    :maxdepth: 1
 
-
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
+    rsts/augmentations/_blur
+    rsts/augmentations/_brightness
+    rsts/augmentations/_cutout
+    rsts/augmentations/_exposure
+    rsts/augmentations/_flip
+    rsts/augmentations/_grayscale
+    rsts/augmentations/_hue
+    rsts/augmentations/_negative
+    rsts/augmentations/_no_augmentation
+    rsts/augmentations/_noise
+    rsts/augmentations/_rotate
+    rsts/augmentations/_saturation
+    rsts/augmentations/_shear
+    rsts/augmentations/_zoom
+        

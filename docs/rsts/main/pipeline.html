@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; CVAugmentor  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Usage" href="../augmentations/_blur.html" />
+    <link rel="prev" title="CVAugmentor" href="../../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CVAugmentor
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#CVAugmentor.assets.main.pipeline.Pipeline.augment"><code class="docutils literal notranslate"><span class="pre">Pipeline.augment()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Augmentations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_blur.html"><code class="docutils literal notranslate"><span class="pre">Blur</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_brightness.html"><code class="docutils literal notranslate"><span class="pre">Brightness</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_cutout.html"><code class="docutils literal notranslate"><span class="pre">Cutout</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_exposure.html"><code class="docutils literal notranslate"><span class="pre">Exposure</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_flip.html"><code class="docutils literal notranslate"><span class="pre">Flip</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_grayscale.html"><code class="docutils literal notranslate"><span class="pre">Grayscale</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_hue.html"><code class="docutils literal notranslate"><span class="pre">Hue</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_negative.html"><code class="docutils literal notranslate"><span class="pre">Negative</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_noise.html"><code class="docutils literal notranslate"><span class="pre">Noise</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_rotate.html"><code class="docutils literal notranslate"><span class="pre">Rotate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_saturation.html"><code class="docutils literal notranslate"><span class="pre">Saturation</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_shear.html"><code class="docutils literal notranslate"><span class="pre">Shear</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../augmentations/_zoom.html"><code class="docutils literal notranslate"><span class="pre">Zoom</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CVAugmentor</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/rsts/main/pipeline.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <dl class="py class" id="module-CVAugmentor.assets.main.pipeline">
+<dt class="sig sig-object py" id="CVAugmentor.assets.main.pipeline.Pipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CVAugmentor.assets.main.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="headerlink" href="#CVAugmentor.assets.main.pipeline.Pipeline" title="Link to this definition"></a></dt>
+<dd><p>A class for handling data augmentation pipelines for images and videos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CVAugmentor.assets.main.pipeline.Pipeline.augment">
+<span class="sig-name descname"><span class="pre">augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aug_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.pipeline.Pipeline.augment" title="Link to this definition"></a></dt>
+<dd><p>Augments the input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_path</strong> (<em>str</em>) – Path to the input data.</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – Path to the output data.</p></li>
+<li><p><strong>target</strong> (<em>str</em>) – <dl class="simple">
+<dt>Target of the augmentation.</dt><dd><dl class="simple">
+<dt>The options are:</dt><dd><dl class="simple">
+<dt>”image”</dt><dd><p>Specifies that the target of the augmentation is an image.</p>
+</dd>
+<dt>”video”</dt><dd><p>Specifies that the target of the augmentation is a video.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>process_type</strong> (<em>str</em>) – <dl class="simple">
+<dt>Type of the augmentation.</dt><dd><dl class="simple">
+<dt>The options are:</dt><dd><dl class="simple">
+<dt>”single”</dt><dd><p>Single type means that the input and output paths are files.</p>
+</dd>
+<dt>”batch”</dt><dd><p>Batch type means that the input and output paths are directories.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>mode</strong> (<em>str</em>) – <dl class="simple">
+<dt>Mode of the augmentation.</dt><dd><dl class="simple">
+<dt>The options are:</dt><dd><dl class="simple">
+<dt>”sequential”</dt><dd><p>Sequential mode means that the augmentations will be applied one by one.
+This means that the data will be saved after each augmentation.</p>
+</dd>
+<dt>”singular”</dt><dd><p>Singular mode means that the augmentations will be applied all at once.
+This means that the data will be saved only after all augmentations were applied.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>augmentations</strong> (<em>dict</em>) – A dictionary of augmentations to apply. Keys are augmentation names, and values are the corresponding functions.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the overall progress of the augmentation process. The default value is <cite>False</cite>.
+This is only applicable with the <cite>process_type=”batch”</cite>. In <cite>process_type=”single”</cite>, <cite>aug_verbose</cite> must be used.</p></li>
+<li><p><strong>aug_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the progress of the augmentation process. The default value is <cite>False</cite>.</p></li>
+<li><p><strong>warn_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the warnings. The default value is <cite>True</cite>.</p></li>
+<li><p><strong>random_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – When set to <cite>True</cite>, it resets the states of the augmentations. The default value is <cite>False</cite>.
+This means that for any parameters that were randomly selected, new random values will be assigned.
+This functionality is particularly useful when augmenting a dataset where you want each sample to undergo the same augmentation process but with varying random behavior.
+However, you should only enable this option (<cite>True</cite>) if your augmentation dictionary contains unspecified parameters and this functionality is absolutely necessary.
+Otherwise, setting it to <cite>True</cite> may introduce unnecessary overhead.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../index.html" class="btn btn-neutral float-left" title="CVAugmentor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../augmentations/_blur.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ali Khalili Tazehkandgheshlagh.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
