@@ -3,17 +3,10 @@
 
 ### User Defined ###
 # Ignore specified folders
-test/
 local_util_resources/
 _build/
 _static/
 _templates/
-
-# Ignore specified files
-conf.py
-index.rst
-make.bat
-Makefile
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
