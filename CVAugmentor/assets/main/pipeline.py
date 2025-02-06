@@ -11,12 +11,6 @@ class Pipeline:
 
     A class for handling data augmentation pipelines for images and videos.
 
-
-    Methods
-    -------
-    augment()
-        Applies augmentation to the given input data based on the specified process type and mode.
-
     """
 
 
