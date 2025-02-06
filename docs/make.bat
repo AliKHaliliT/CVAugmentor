@@ -1,35 +1,21 @@
-@ECHO OFF
+@echo off
+setlocal
 
-pushd %~dp0
+:: Set the directory where the batch file is being run from
+set BUILD_DIR=%CD%\_build
 
-REM Command file for Sphinx documentation
+:: Create the build directory if it doesn't exist
+if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 
-if "%SPHINXBUILD%" == "" (
-	set SPHINXBUILD=sphinx-build
-)
-set SOURCEDIR=.
-set BUILDDIR=docs
+:: Run Sphinx build command
+sphinx-build -b html . "%BUILD_DIR%\html"
 
-if "%1" == "" goto help
+:: Move the HTML contents to the current directory
+xcopy /e /i /h "%BUILD_DIR%\html\*" "%CD%\" > nul
 
-%SPHINXBUILD% >NUL 2>NUL
-if errorlevel 9009 (
-	echo.
-	echo.The 'sphinx-build' command was not found. Make sure you have Sphinx
-	echo.installed, then set the SPHINXBUILD environment variable to point
-	echo.to the full path of the 'sphinx-build' executable. Alternatively you
-	echo.may add the Sphinx directory to PATH.
-	echo.
-	echo.If you don't have Sphinx installed, grab it from
-	echo.https://www.sphinx-doc.org/
-	exit /b 1
-)
+:: Clean up the build directory
+rd /s /q "%BUILD_DIR%"
 
-%SPHINXBUILD% -b html %SOURCEDIR% docs %SPHINXOPTS% %O%
-goto end
+echo Documentation has been built and moved to the current directory.
 
-:help
-%SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-
-:end
-popd
+endlocal
