@@ -1,0 +1,18 @@
+How to read the tests: S/S/R (Subject, Scenario, Result)
+
+
+Read ->
+```
+When,
+Testing subject,
+Given some input/act/...,
+We should get some output.
+```
+
+Example: 
+test_activation_wrong__value_value__error: test is a default prefix. So this test would read:
+
+When,
+Testing activation,
+Given a wrong value,
+We should get a value error.
