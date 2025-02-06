@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CVAugmentor &mdash; CVAugmentor  documentation</title>
-      <link rel="stylesheet" href="static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
-        <script src="static/jquery.js"></script>
-        <script src="static/underscore.js"></script>
-        <script src="static/doctools.js"></script>
-    <script src="static/js/theme.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -41,7 +42,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">CVAugmentor</a></li>
+<li><a class="reference internal" href="#">CVAugmentor</a><ul>
+<li><a class="reference internal" href="#CVAugmentor.assets.main.pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li><a class="reference internal" href="#CVAugmentor.assets.main.pipeline.Pipeline.augment"><code class="docutils literal notranslate"><span class="pre">Pipeline.augment()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
         </div>
@@ -69,19 +76,20 @@
            <div itemprop="articleBody">
              
   <section id="module-CVAugmentor">
-<span id="cvaugmentor"></span><h1>CVAugmentor<a class="headerlink" href="#module-CVAugmentor" title="Permalink to this headline"></a></h1>
+<span id="cvaugmentor"></span><h1>CVAugmentor<a class="headerlink" href="#module-CVAugmentor" title="Link to this heading"></a></h1>
 <p>The CVAugmentor Augmentation Package.</p>
 <p>CVAugmentor is a python package for augmenting image and video files. It provides a number of utilities that aid augmentation in a automated manner. The aim of the package is to make augmentation easier.
 The package is built on top of the OpenCV and Pillow libraries.</p>
-<span class="target" id="module-CVAugmentor.pipeline"></span><dl class="py class">
-<dt class="sig sig-object py" id="CVAugmentor.pipeline.Pipeline">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CVAugmentor.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="headerlink" href="#CVAugmentor.pipeline.Pipeline" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.pipeline.Pipeline.augment">
-<span class="sig-name descname"><span class="pre">augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aug_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CVAugmentor.pipeline.Pipeline.augment" title="Permalink to this definition"></a></dt>
+<dl class="py class" id="module-CVAugmentor.assets.main.pipeline">
+<dt class="sig sig-object py" id="CVAugmentor.assets.main.pipeline.Pipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CVAugmentor.assets.main.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="headerlink" href="#CVAugmentor.assets.main.pipeline.Pipeline" title="Link to this definition"></a></dt>
+<dd><p>A class for handling data augmentation pipelines for images and videos.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CVAugmentor.assets.main.pipeline.Pipeline.augment">
+<span class="sig-name descname"><span class="pre">augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aug_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.pipeline.Pipeline.augment" title="Link to this definition"></a></dt>
 <dd><p>Augments the input data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_path</strong> (<em>str</em>) – Path to the input data.</p></li>
 <li><p><strong>output_path</strong> (<em>str</em>) – Path to the output data.</p></li>
@@ -101,9 +109,9 @@ The package is built on top of the OpenCV and Pillow libraries.</p>
 <li><p><strong>process_type</strong> (<em>str</em>) – <dl class="simple">
 <dt>Type of the augmentation.</dt><dd><dl class="simple">
 <dt>The options are:</dt><dd><dl class="simple">
-<dt>”batch”</dt><dd><p>Batch type means that the input and output paths are directories.</p>
-</dd>
 <dt>”single”</dt><dd><p>Single type means that the input and output paths are files.</p>
+</dd>
+<dt>”batch”</dt><dd><p>Batch type means that the input and output paths are directories.</p>
 </dd>
 </dl>
 </dd>
@@ -126,14 +134,19 @@ This means that the data will be saved only after all augmentations were applied
 </dd>
 </dl>
 </p></li>
-<li><p><strong>augmentations</strong> (<em>dict</em>) – Dict of augmentations to be applied to the data.
-The keys are the names of the augmentations and the values are the augmentations themselves.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the overall progress of the augmentation process. The default is False.</p></li>
-<li><p><strong>aug_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the progress of the augmentation process. The default is False.</p></li>
-<li><p><strong>warn_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the warnings. The default is False.</p></li>
+<li><p><strong>augmentations</strong> (<em>dict</em>) – A dictionary of augmentations to apply. Keys are augmentation names, and values are the corresponding functions.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the overall progress of the augmentation process. The default value is <cite>False</cite>.
+This is only applicable with the <cite>process_type=”batch”</cite>. In <cite>process_type=”single”</cite>, <cite>aug_verbose</cite> must be used.</p></li>
+<li><p><strong>aug_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the progress of the augmentation process. The default value is <cite>False</cite>.</p></li>
+<li><p><strong>warn_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, prints the warnings. The default value is <cite>True</cite>.</p></li>
+<li><p><strong>random_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – When set to <cite>True</cite>, it resets the states of the augmentations. The default value is <cite>False</cite>.
+This means that for any parameters that were randomly selected, new random values will be assigned.
+This functionality is particularly useful when augmenting a dataset where you want each sample to undergo the same augmentation process but with varying random behavior.
+However, you should only enable this option (<cite>True</cite>) if your augmentation dictionary contains unspecified parameters and this functionality is absolutely necessary.
+Otherwise, setting it to <cite>True</cite> may introduce unnecessary overhead.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None.</p>
 </dd>
 </dl>
@@ -141,415 +154,7 @@ The keys are the names of the augmentations and the values are the augmentations
 
 </dd></dl>
 
-<span class="target" id="module-CVAugmentor.assets.main.augmentations_class"></span><dl class="py class">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CVAugmentor.assets.main.augmentations_class.</span></span><span class="sig-name descname"><span class="pre">Augmentations</span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations" title="Permalink to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>Class containing the image augmentations.</dt><dd><dl class="simple">
-<dt>The augmentations include:</dt><dd><p>no_augmentation,
-flip,
-zoom,
-rotate,
-shear,
-grayscale,
-hue,
-saturation,
-brightness,
-exposure,
-blur,
-noise,
-cutout,
-negative.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.blur">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">blur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.blur" title="Permalink to this definition"></a></dt>
-<dd><p>Blur the image. The blur radius is the standard deviation of the Gaussian blur.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>radius</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Blur radius. The default is None. If None, a random blur radius is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>blur_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.brightness">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">brightness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brightness_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.brightness" title="Permalink to this definition"></a></dt>
-<dd><p>Adjust the brightness of the image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>brightness_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Brightness factor. The default is None. If None, a random brightness factor is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>brightness_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.cutout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cutout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.cutout" title="Permalink to this definition"></a></dt>
-<dd><p>Cutout a random part of the image. This method cuts out a random part of the image and replaces it with a black rectangle.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>max_size</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Maximum size of the cutout. The default is None. If None, a random maximum size is generated.</p></li>
-<li><p><strong>max_count</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of cutouts. The default is None. If None, a random maximum count is generated.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>cutout_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.exposure">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exposure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exposure_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.exposure" title="Permalink to this definition"></a></dt>
-<dd><p>Adjust the exposure of the image. The exposure means the amount of light that reaches the image sensor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>exposure_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Exposure factor. The default is None. If None, a random exposure factor is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>exposure_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.flip">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flip_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vertical'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.flip" title="Permalink to this definition"></a></dt>
-<dd><p>Flip the image horizontally or vertically.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>flip_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>Type of flip. The default is “vertical”.</dt><dd><dl class="simple">
-<dt>The options are:</dt><dd><dl class="simple">
-<dt>”horizontal”</dt><dd><p>Flip the image horizontally</p>
-</dd>
-<dt>”vertical”</dt><dd><p>Flip the image vertically</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>flip_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.grayscale">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grayscale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.grayscale" title="Permalink to this definition"></a></dt>
-<dd><p>Convert the image to grayscale.
-Note that the grayscale conversion is keeping the image in RGB format in order to be consistent with the other methods.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>None.</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>grayscale_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.hue">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hue_shift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.hue" title="Permalink to this definition"></a></dt>
-<dd><p>Shift the hue of the image. Hue is the color of the image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>hue_shift</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Hue shift value. The default is None. If None, a random hue shift value is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>hue_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.negative">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">negative</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.negative" title="Permalink to this definition"></a></dt>
-<dd><p>Convert the image to negative. This method converts the image to negative by inverting the pixel values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>None.</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>negative_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.no_augmentation">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">no_augmentation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.no_augmentation" title="Permalink to this definition"></a></dt>
-<dd><p>No augmentation.
-This can be used when you want to copy the image to the output folder without augmenting it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>None.</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>no_augmentation_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.noise">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intensity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.noise" title="Permalink to this definition"></a></dt>
-<dd><p>Add noise to the image. This method adds noise to the image by multiplying the pixel values by a random number between -1 and 1.
-It creates a noisy image that looks like the output from an analog TV with bad reception.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>intensity</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Noise intensity. The default is None. If None, a random noise intensity is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>noise_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.rotate">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'definite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">90</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.rotate" title="Permalink to this definition"></a></dt>
-<dd><p>Rotate the image by a definite angle or a random angle.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rotate_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>Type of rotation. The default is “definite”.</dt><dd><dl class="simple">
-<dt>The options are:</dt><dd><dl class="simple">
-<dt>”definite”</dt><dd><p>Rotate the image by a definite angle</p>
-</dd>
-<dt>”random”</dt><dd><p>Rotate the image by a random angle</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>angle</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional if rotate_type is &quot;random&quot;</em>) – Angle of rotation. The default is 90.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>rotate_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.saturation">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">saturation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saturation_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.saturation" title="Permalink to this definition"></a></dt>
-<dd><p>Adjust the saturation of the image. The stauration means the intensity of the colors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>saturation_factor</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Saturation factor. The default is None. If None, a random saturation factor is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>saturation_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.shear">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shear</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.shear" title="Permalink to this definition"></a></dt>
-<dd><p>Shear the image. The shearing means that the image is slanted along the x-axis and/or y-axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>shear</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shear values. The default is None. If None, a random shear value is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>shear_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="CVAugmentor.assets.main.augmentations_class.Augmentations.zoom">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">zoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zoom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#CVAugmentor.assets.main.augmentations_class.Augmentations.zoom" title="Permalink to this definition"></a></dt>
-<dd><p>Zoom the image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>zoom_size</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size of the zoom. The default is None. If None, a random zoom size is generated.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><strong>zoom_wrapper</strong> –</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>image<span class="classifier">Image.Image</span></dt><dd><p>The image to be augmented.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<div class="toctree-wrapper compound">
+<div class="toctree-wrapper compound" id="module-CVAugmentor.assets.augmentations">
 </div>
 </section>
 
