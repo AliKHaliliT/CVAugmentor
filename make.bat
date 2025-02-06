@@ -3,7 +3,7 @@ REM Batch file to build Sphinx documentation
 
 REM Set the paths
 set SOURCE_DIR=.
-set BUILD_DIR=_build
+set BUILD_DIR=docs
 
 REM Check if Sphinx is installed
 sphinx-build --version >nul 2>&1
@@ -25,4 +25,3 @@ if errorlevel 1 (
 )
 
 echo Sphinx build completed successfully.
-pause
