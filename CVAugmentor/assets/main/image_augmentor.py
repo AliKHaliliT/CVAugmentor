@@ -117,19 +117,14 @@ class ImageAugmentor():
 
         # Applying the augmentation
         for name, augmentation in tqdm(iterable=augmentations.items(),
-                                       desc="Applying augmentations",
-                                       unit="augmentation",
-                                       ncols=100,
+                                       desc="Applying augmentation" if len(augmentations.items()) == 1 else "Applying augmentations",
+                                       unit="augmentation" if len(augmentations.items()) == 1 else "augmentations",
                                        dynamic_ncols=True,
                                        disable=not verbose):
             
             augmentation(Image.open(image_path)).save(
                 f"{os.path.splitext(output_path)[0]}_{name}{os.path.splitext(output_path)[1]}"
             )
-
-
-        if verbose:
-            print("Augmentation complete.")
 
 
     def apply_in_batch(self, 
@@ -170,16 +165,11 @@ class ImageAugmentor():
 
         # Applying the augmentations
         for augmentation in tqdm(iterable=augmentations.values(),
-                                 desc="Applying augmentations",
-                                 unit="augmentation",
-                                 ncols=100,
+                                 desc="Applying augmentation" if len(augmentations.items()) == 1 else "Applying augmentations",
+                                 unit="augmentation" if len(augmentations.items()) == 1 else "augmentations",
                                  dynamic_ncols=True,
                                  disable=not verbose):
             
             image = augmentation(image)
 
         image.save(output_path)
-
-
-        if verbose:
-            print("Augmentation complete.")

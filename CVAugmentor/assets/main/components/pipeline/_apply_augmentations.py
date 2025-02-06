@@ -8,7 +8,9 @@ def _apply_augmentation(mode: str,
                         input_file_path: str, 
                         output_file_path: str, 
                         augmentations: dict[str, Callable[..., None]], 
-                        aug_verbose: bool) -> None:
+                        aug_verbose: bool,
+                        target: str,
+                        process_type: str) -> None:
     
     """
     
@@ -42,6 +44,22 @@ def _apply_augmentation(mode: str,
     aug_verbose : bool, optional
         If True, prints the progress of the augmentation process. The default value is `False`.
 
+    target : str
+        Target of the augmentation.
+            The options are:
+                "image"
+                    Specifies that the target of the augmentation is an image.
+                "video"
+                    Specifies that the target of the augmentation is a video.
+
+    process_type : str
+        Type of the augmentation.
+            The options are:
+                "single"
+                    Single type means that the input and output paths are files.
+                "batch"
+                    Batch type means that the input and output paths are directories.
+
     
     Returns
     -------
@@ -52,4 +70,10 @@ def _apply_augmentation(mode: str,
     if mode == "sequential":
         augmentor.apply_sequentially(input_file_path, output_file_path, augmentations, aug_verbose)
     elif mode == "singular":
-        augmentor.apply_in_batch(input_file_path, output_file_path, augmentations, aug_verbose)
+        if target == "image":
+            augmentor.apply_in_batch(input_file_path, output_file_path, augmentations, aug_verbose)
+        elif target == "video":
+            if process_type == "single":
+                augmentor.apply_in_batch(input_file_path, output_file_path, augmentations, aug_verbose)
+            elif process_type == "batch":
+                augmentor.apply_in_batch(input_file_path, output_file_path, augmentations, aug_verbose, leave=True)

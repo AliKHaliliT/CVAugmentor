@@ -17,7 +17,8 @@ def _process_batch(input_path: str,
                    augmentor: Union[ImageAugmentor, VideoAugmentor],
                    augmentations: dict[str, Callable[..., None]], 
                    aug_verbose: bool,
-                   random_state: bool) -> None:
+                   random_state: bool,
+                   process_type: str) -> None:
     
     """
     
@@ -31,6 +32,7 @@ def _process_batch(input_path: str,
 
     verbose : bool, optional
         If True, prints the overall progress of the augmentation process. The default value is `False`.
+        This is only applicable with the `process_type="batch"`. In `process_type="single"`, `aug_verbose` must be used.
 
     target : str
         Target of the augmentation.
@@ -72,6 +74,14 @@ def _process_batch(input_path: str,
         However, you should only enable this option (`True`) if your augmentation dictionary contains unspecified parameters. 
         Otherwise, setting it to `True` may introduce unnecessary overhead.
 
+    process_type : str
+        Type of the augmentation.
+            The options are:
+                "single"
+                    Single type means that the input and output paths are files.
+                "batch"
+                    Batch type means that the input and output paths are directories.
+
     
     Returns
     -------
@@ -81,8 +91,7 @@ def _process_batch(input_path: str,
 
     for input_file in tqdm(iterable=sorted_alphanumerically(os.listdir(input_path)), 
                             desc="Overall progress", 
-                            unit="videos", 
-                            ncols=100,
+                            unit=f"{target}" if len(os.listdir(input_path)) == 1 else f"{target}s", 
                             unit_scale=True,
                             dynamic_ncols=True,
                             disable=not verbose):
@@ -96,7 +105,7 @@ def _process_batch(input_path: str,
         output_file_path = os.path.join(output_path, input_file)
 
 
-        _apply_augmentation(mode, augmentor, input_file_path, output_file_path, augmentations, aug_verbose)
+        _apply_augmentation(mode, augmentor, input_file_path, output_file_path, augmentations, aug_verbose, target, process_type)
 
 
         if random_state:
