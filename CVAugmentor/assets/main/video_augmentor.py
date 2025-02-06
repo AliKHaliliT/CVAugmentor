@@ -14,15 +14,6 @@ class VideoAugmentor():
     It processes an input video using a set of augmentation functions, either sequentially or in a batch. 
     Augmentations are provided as a dictionary, where keys are names and values are callable functions.
 
-    
-    Methods
-    -------
-    apply_sequentially()
-        Applies each augmentation separately and saves individual results.
-        
-    apply_in_batch()
-        Applies all augmentations in sequence to the same video and saves the final output.
-
     """
 
     def __init__(self) -> None:
