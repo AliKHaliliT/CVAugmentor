@@ -122,9 +122,8 @@ class VideoAugmentor():
 
 
         for name, augmentation in tqdm(iterable=augmentations.items(), 
-                                       desc="Applying augmentations", 
-                                       unit="augmentation", 
-                                       ncols=100,
+                                       desc="Applying augmentation" if len(augmentations.items()) == 1 else "Applying augmentations",
+                                       unit="augmentation" if len(augmentations.items()) == 1 else "augmentations",
                                        dynamic_ncols=True,
                                        disable=not verbose):
 
@@ -149,16 +148,13 @@ class VideoAugmentor():
         video.release()
 
 
-        if verbose:
-            print("Augmentation complete.")
-
-
     # Defining the augment method
     def apply_in_batch(self, 
                        video_path: str, 
                        output_path: str, 
                        augmentations: dict[str, Callable], 
-                       verbose: Optional[bool] = False) -> None:
+                       verbose: Optional[bool] = False,
+                       leave: Optional[bool] = False) -> None:
         
         """
 
@@ -179,6 +175,8 @@ class VideoAugmentor():
         verbose : bool, optional
             Whether to display progress during the process. The default value is `False`.
 
+        leave : bool, optional
+            Whether to clean up the progress bar. The default value is `False`.
             
         Returns
         -------
@@ -204,9 +202,9 @@ class VideoAugmentor():
         for _ in tqdm(iterable=range(total_frames), 
                       desc="Processing video", 
                       unit="frame", 
-                      ncols=100,
                       dynamic_ncols=True,
-                      disable=not verbose):
+                      disable=not verbose,
+                      leave=not leave):
             
             ret, frame = video.read()
             if not ret:
@@ -219,7 +217,3 @@ class VideoAugmentor():
 
         video.release()
         writer.release()
-
-
-        if verbose:
-            print("Augmentation complete.")

@@ -12,7 +12,8 @@ def _process_single(input_path: str,
                     mode: str, 
                     augmentor: Union[ImageAugmentor, VideoAugmentor], 
                     augmentations: dict[str, Callable[..., None]], 
-                    aug_verbose: bool) -> None:
+                    aug_verbose: bool,
+                    process_type: str) -> None:
     
     """
     
@@ -54,6 +55,14 @@ def _process_single(input_path: str,
     aug_verbose : bool, optional
         If True, prints the progress of the augmentation process. The default value is `False`.
 
+    process_type : str
+        Type of the augmentation.
+            The options are:
+                "single"
+                    Single type means that the input and output paths are files.
+                "batch"
+                    Batch type means that the input and output paths are directories.
+
     
     Returns
     -------
@@ -69,4 +78,4 @@ def _process_single(input_path: str,
         raise ValueError(f"The GIF format is not supported.")
     
     
-    _apply_augmentation(mode, augmentor, input_path, output_path, augmentations, aug_verbose)
+    _apply_augmentation(mode, augmentor, input_path, output_path, augmentations, aug_verbose, target, process_type)

@@ -95,6 +95,7 @@ class Pipeline:
 
         verbose : bool, optional
             If True, prints the overall progress of the augmentation process. The default value is `False`.
+            This is only applicable with the `process_type="batch"`. In `process_type="single"`, `aug_verbose` must be used.
 
         aug_verbose : bool, optional
             If True, prints the progress of the augmentation process. The default value is `False`.
@@ -190,6 +191,7 @@ class Pipeline:
 
         verbose : bool, optional
             If True, prints the overall progress of the augmentation process. The default value is `False`.
+            This is only applicable with the `process_type="batch"`. In `process_type="single"`, `aug_verbose` must be used.
 
         aug_verbose : bool, optional
             If True, prints the progress of the augmentation process. The default value is `False`.
@@ -230,7 +232,8 @@ class Pipeline:
                             mode, 
                             augmentor, 
                             augmentations, 
-                            aug_verbose)
+                            aug_verbose,
+                            process_type)
         elif process_type == "batch":
             _process_batch(input_path, 
                            verbose,
@@ -241,4 +244,5 @@ class Pipeline:
                            augmentor, 
                            augmentations, 
                            aug_verbose,
-                           random_state)
+                           random_state,
+                           process_type)
