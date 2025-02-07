@@ -31,7 +31,7 @@ jobs:
     - name: Merge main into gh-pages
       run: |
         git checkout gh-pages
-        git merge origin/main --allow-unrelated-histories --no-edit
+        git merge origin/main --allow-unrelated-histories -X theirs --no-edit || true
 
     - name: Set up Python 3.12.8
       uses: actions/setup-python@v3
