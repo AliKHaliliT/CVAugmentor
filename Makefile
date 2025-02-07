@@ -1,22 +1,22 @@
-# Define the build directory
-BUILD_DIR := $(CURDIR)/_build
+# Makefile for building Sphinx documentation
 
-# Default target
-all: build
+# Set the paths
+SOURCE_DIR := .
+BUILD_DIR := docs
 
-# Create the build directory if it doesn't exist
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+# Check if Sphinx is installed
+check_sphinx:
+	@command -v sphinx-build >/dev/null 2>&1 || { echo "Sphinx is not installed. Please install it using 'pip install sphinx'."; exit 1; }
 
-# Run Sphinx build command
-build: $(BUILD_DIR)
-	sphinx-build -b html . $(BUILD_DIR)/html
-	cp -r $(BUILD_DIR)/html/* $(CURDIR)/
-	rm -rf $(BUILD_DIR)
+# Run the Sphinx build command
+build: check_sphinx
+	@echo "Building Sphinx documentation..."
+	sphinx-build -b html $(SOURCE_DIR) $(BUILD_DIR)
 
-# Clean up the build directory
-clean:
-	rm -rf $(BUILD_DIR)
-
-# Phony targets
-.PHONY: all build clean
+# Check if the build was successful
+	@if [ $$? -eq 0 ]; then \
+		echo "Sphinx build completed successfully"; \
+	else \
+		echo "Sphinx build failed."; \
+		exit 1; \
+	fi
