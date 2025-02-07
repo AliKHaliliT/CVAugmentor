@@ -1,4 +1,6 @@
 import os
+from CVAugmentor.assets.utils.sort_alphanumerically import sorted_alphanumerically
+
 
 def generate_rst_files(directory, output_dir):
     # Ensure the output directory exists
@@ -8,7 +10,7 @@ def generate_rst_files(directory, output_dir):
     rst_filenames = []
 
     # Iterate over all files in the directory
-    for filename in os.listdir(directory):
+    for filename in sorted_alphanumerically(os.listdir(directory)):
         if filename.endswith(".py") and filename != "__init__.py":
             # Remove the .py extension to get the module name
             module_name = filename[:-3]
