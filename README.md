@@ -2,6 +2,7 @@
 <div align="center" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
     <img src="https://img.shields.io/github/license/AliKHaliliT/CVAugmentor" alt="License">
     <img src="https://img.shields.io/pypi/v/CVAugmentor" alt="PyPI Version">
+    <img src="https://github.com/AliKHaliliT/CVAugmentor/actions/workflows/tests.yml/badge.svg" alt="tests">
 </div>
 <div align="center" style="display: flex; gap: 10px; flex-wrap: wrap;">
     <img src="https://img.shields.io/pypi/dm/CVAugmentor" alt="PyPI Downloads">
