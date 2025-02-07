@@ -5,9 +5,22 @@ from CVAugmentor import Pipeline
 
 ## Define the augmentations
 augmentations = {
-    "zoom": aug.Zoom(),
+    "blur": aug.Blur(2.5),
+    "brightness": aug.Brightness(0.25),
+    "cutout": aug.Cutout(max_size=64, max_count=6),
+    "expsure": aug.Exposure(0.3),
     "flip": aug.Flip(),
+    "grayscale": aug.Grayscale(),
+    "hue": aug.Hue(-360),
+    "negative": aug.Negative(),
+    "no_augmentation": aug.NoAugmentation(),
+    "noise": aug.Noise(0.4),
+    "rotate": aug.Rotate(),
+    "saturation": aug.Saturation(0.5),
+    "shear": aug.Shear((0.2, 0.2)),
+    "zoom": aug.Zoom(),
 }
+
 
 ## Create a Pipeline object
 p = Pipeline()
@@ -29,9 +42,22 @@ from CVAugmentor import Pipeline
 
 ## Define the augmentations
 augmentations = {
-    "zoom": aug.Zoom(),
+    "blur": aug.Blur(2.5),
+    "brightness": aug.Brightness(0.25),
+    "cutout": aug.Cutout(max_size=64, max_count=6),
+    "expsure": aug.Exposure(0.3),
     "flip": aug.Flip(),
+    "grayscale": aug.Grayscale(),
+    "hue": aug.Hue(-360),
+    "negative": aug.Negative(),
+    "no_augmentation": aug.NoAugmentation(),
+    "noise": aug.Noise(0.4),
+    "rotate": aug.Rotate(),
+    "saturation": aug.Saturation(0.5),
+    "shear": aug.Shear((0.2, 0.2)),
+    "zoom": aug.Zoom(),
 }
+
 
 ## Create a Pipeline object
 p = Pipeline()
@@ -68,6 +94,7 @@ augmentations = {
     "shear": aug.Shear(),
     "zoom": aug.Zoom(),
 }
+
 
 ## Create a Pipeline object
 p = Pipeline()
@@ -106,6 +133,7 @@ augmentations = {
     "shear": aug.Shear(),
     "zoom": aug.Zoom(),
 }
+
 
 ## Create a Pipeline object
 p = Pipeline()
