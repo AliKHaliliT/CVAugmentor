@@ -2,9 +2,9 @@
 <div align="center" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
     <img src="https://img.shields.io/github/license/AliKHaliliT/CVAugmentor" alt="License">
     <img src="https://img.shields.io/pypi/v/CVAugmentor" alt="PyPI Version">
-    <img src="https://img.shields.io/pypi/dm/CVAugmentor" alt="PyPI Downloads">
 </div>
 <div align="center" style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <img src="https://img.shields.io/pypi/dm/CVAugmentor" alt="PyPI Downloads">
     <a href="https://pepy.tech/projects/cvaugmentor">
         <img src="https://static.pepy.tech/badge/cvaugmentor" alt="PyPI Downloads">
     </a>
