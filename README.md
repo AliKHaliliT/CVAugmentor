@@ -22,20 +22,20 @@ CVAugmentor is a Python package designed for augmenting images and videos, makin
 
 Available augmentations are:
 
-- no_augmentation
-- flip
-- zoom
-- rotate
-- shear
-- grayscale
-- hue
-- saturation
-- brightness
-- exposure
-- blur
-- noise
-- cutout
-- negative
+- Blur
+- Brightness
+- Cutout
+- Exposure
+- Flip
+- Grayscale
+- Hue
+- Negative
+- NoAugmentation
+- Noise
+- Rotate
+- Saturation
+- Shear
+- Zoom
 
 ## Installation
 
