@@ -40,8 +40,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install sphinx-rtd-theme  # Install the Sphinx Read the Docs theme
+        pip install sphinx-rtd-theme
         
     - name: Build documentation
       run: |

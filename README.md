@@ -52,7 +52,9 @@ cd CVAugmentor
 pip install .
 ```
 ## Usage
-For a comprehensive guide on how to use the package, please refer to the [documentation](https://alikhalilit.github.io/CVAugmentor/).
+For a comprehensive guide on how to use the package, please refer to the [documentation](https://alikhalilit.github.io/CVAugmentor/). 
+
+The documentation is kept up-to-date and is automatically generated whenever a change is made to the package through the GitHub Actions workflow.
 
 The provided pipeline should be sufficient for most use cases:
 ```python
