@@ -50,6 +50,7 @@ Alternatively, you can install it manually by cloning the repository and running
 ```bash
 git clone git@github.com:AliKHaliliT/CVAugmentor.git  # With SSH
 cd CVAugmentor
+pip install -r requirements.txt
 pip install .
 ```
 ## Usage
