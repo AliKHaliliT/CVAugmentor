@@ -3,12 +3,14 @@
     <img src="https://img.shields.io/github/license/AliKHaliliT/CVAugmentor" alt="License">
     <img src="https://img.shields.io/pypi/v/CVAugmentor" alt="PyPI Version">
     <img src="https://img.shields.io/pypi/dm/CVAugmentor" alt="PyPI Downloads">
-    <img src="https://img.shields.io/codecov/c/github/AliKHaliliT/CVAugmentor" alt="Coverage">
-    <img src="https://img.shields.io/github/last-commit/AliKHaliliT/CVAugmentor" alt="Last Commit">
-    <img src="https://img.shields.io/github/issues/AliKHaliliT/CVAugmentor" alt="Open Issues">
+</div>
+<br/>
+<div align="center" style="display: flex; gap: 10px; flex-wrap: wrap;">
     <a href="https://pepy.tech/projects/cvaugmentor">
         <img src="https://static.pepy.tech/badge/cvaugmentor" alt="PyPI Downloads">
     </a>
+    <img src="https://img.shields.io/github/last-commit/AliKHaliliT/CVAugmentor" alt="Last Commit">
+    <img src="https://img.shields.io/github/issues/AliKHaliliT/CVAugmentor" alt="Open Issues">
 </div>
 <br/>
 <div align="center">
