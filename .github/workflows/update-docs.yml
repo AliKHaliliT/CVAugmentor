@@ -8,6 +8,10 @@ on:
 jobs:
   update-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
+      pages: write 
+      id-token: write
 
     steps:
     - name: Checkout the code
@@ -28,7 +32,6 @@ jobs:
       run: |
         git checkout gh-pages
         git merge origin/main --allow-unrelated-histories --no-edit
-      
 
     - name: Set up Python 3.12.8
       uses: actions/setup-python@v3
@@ -37,6 +40,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        pip install -r requirements.txt
         pip install sphinx-rtd-theme  # Install the Sphinx Read the Docs theme
         
     - name: Build documentation
