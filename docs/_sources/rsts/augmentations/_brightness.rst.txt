@@ -1,3 +1,6 @@
+Brightness
+==========
+
 .. automodule:: CVAugmentor.assets.augmentations._brightness
     :members:
     :private-members:

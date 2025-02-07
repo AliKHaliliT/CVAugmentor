@@ -10,7 +10,7 @@ CVAugmentor
 
     rsts/main/pipeline
 
-
+    
 .. toctree::
     :caption: Augmentations
     :maxdepth: 1
@@ -23,10 +23,9 @@ CVAugmentor
     rsts/augmentations/_grayscale
     rsts/augmentations/_hue
     rsts/augmentations/_negative
-    rsts/augmentations/_no_augmentation
     rsts/augmentations/_noise
+    rsts/augmentations/_no_augmentation
     rsts/augmentations/_rotate
     rsts/augmentations/_saturation
     rsts/augmentations/_shear
     rsts/augmentations/_zoom
-        

@@ -1,3 +1,6 @@
+Exposure
+========
+
 .. automodule:: CVAugmentor.assets.augmentations._exposure
     :members:
     :private-members:

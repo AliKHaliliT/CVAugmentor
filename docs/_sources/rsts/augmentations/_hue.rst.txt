@@ -1,3 +1,6 @@
+Hue
+===
+
 .. automodule:: CVAugmentor.assets.augmentations._hue
     :members:
     :private-members:

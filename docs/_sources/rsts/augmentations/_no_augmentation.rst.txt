@@ -1,3 +1,6 @@
+No Augmentation
+===============
+
 .. automodule:: CVAugmentor.assets.augmentations._no_augmentation
     :members:
     :private-members:

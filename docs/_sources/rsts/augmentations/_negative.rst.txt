@@ -1,3 +1,6 @@
+Negative
+========
+
 .. automodule:: CVAugmentor.assets.augmentations._negative
     :members:
     :private-members:

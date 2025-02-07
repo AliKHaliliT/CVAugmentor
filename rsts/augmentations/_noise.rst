@@ -1,3 +1,6 @@
+Noise
+=====
+
 .. automodule:: CVAugmentor.assets.augmentations._noise
     :members:
     :private-members:

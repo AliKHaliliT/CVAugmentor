@@ -1,3 +1,6 @@
+Grayscale
+=========
+
 .. automodule:: CVAugmentor.assets.augmentations._grayscale
     :members:
     :private-members:

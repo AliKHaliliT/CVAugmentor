@@ -1,3 +1,6 @@
+Saturation
+==========
+
 .. automodule:: CVAugmentor.assets.augmentations._saturation
     :members:
     :private-members:

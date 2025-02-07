@@ -1,3 +1,6 @@
+Shear
+=====
+
 .. automodule:: CVAugmentor.assets.augmentations._shear
     :members:
     :private-members:

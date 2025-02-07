@@ -1,3 +1,6 @@
+Cutout
+======
+
 .. automodule:: CVAugmentor.assets.augmentations._cutout
     :members:
     :private-members:

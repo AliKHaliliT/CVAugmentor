@@ -1,3 +1,6 @@
+Blur
+====
+
 .. automodule:: CVAugmentor.assets.augmentations._blur
     :members:
     :private-members:

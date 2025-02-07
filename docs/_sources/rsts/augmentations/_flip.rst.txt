@@ -1,3 +1,6 @@
+Flip
+====
+
 .. automodule:: CVAugmentor.assets.augmentations._flip
     :members:
     :private-members:

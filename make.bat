@@ -5,6 +5,23 @@ REM Set the paths
 set SOURCE_DIR=.
 set BUILD_DIR=docs
 
+REM Check if Python is installed
+python --version >nul 2>&1
+if errorlevel 1 (
+    echo Python is not installed. Please install it first.
+    exit /b 1
+)
+
+REM Run the augmentations_rst_generator.py script
+echo Running augmentations_rst_generator.py...
+python augmentations_rst_generator.py
+
+REM Check if the script ran successfully
+if errorlevel 1 (
+    echo augmentations_rst_generator.py failed.
+    exit /b 1
+)
+
 REM Check if Sphinx is installed
 sphinx-build --version >nul 2>&1
 if errorlevel 1 (
