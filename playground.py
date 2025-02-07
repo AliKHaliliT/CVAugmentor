@@ -3,7 +3,7 @@ from CVAugmentor import Augmentations as aug
 from CVAugmentor import Pipeline
 
 
-## Define the augmentations
+# Define the augmentations
 augmentations = {
     "blur": aug.Blur(2.5),
     "brightness": aug.Brightness(0.25),
@@ -22,10 +22,10 @@ augmentations = {
 }
 
 
-## Create a Pipeline object
+# Create a Pipeline object
 p = Pipeline()
 
-## Augment the image
+# Augment the image
 p.augment(input_path="local_util_resources/samples/images/0.png", 
           output_path="local_util_resources/experiments/single_image/0.png", 
           target="image", 
@@ -40,7 +40,7 @@ from CVAugmentor import Augmentations as aug
 from CVAugmentor import Pipeline
 
 
-## Define the augmentations
+# Define the augmentations
 augmentations = {
     "blur": aug.Blur(2.5),
     "brightness": aug.Brightness(0.25),
@@ -59,10 +59,10 @@ augmentations = {
 }
 
 
-## Create a Pipeline object
+# Create a Pipeline object
 p = Pipeline()
 
-## Augment the video
+# Augment the video
 p.augment(input_path="local_util_resources/samples/videos/0.mp4", 
           output_path="local_util_resources/experiments/single_video/0.mp4", 
           target="video", 
@@ -77,7 +77,7 @@ from CVAugmentor import Augmentations as aug
 from CVAugmentor import Pipeline
 
 
-## Define the augmentations
+# Define the augmentations
 augmentations = {
     "blur": aug.Blur(),
     "brightness": aug.Brightness(),
@@ -96,10 +96,10 @@ augmentations = {
 }
 
 
-## Create a Pipeline object
+# Create a Pipeline object
 p = Pipeline()
 
-## Augment the images
+# Augment the images
 p.augment(input_path="local_util_resources/samples/images", 
           output_path="local_util_resources/experiments/multi_image", 
           target="image", 
@@ -116,7 +116,7 @@ from CVAugmentor import Augmentations as aug
 from CVAugmentor import Pipeline
 
 
-## Define the augmentations
+# Define the augmentations
 augmentations = {
     "blur": aug.Blur(),
     "brightness": aug.Brightness(),
@@ -135,10 +135,10 @@ augmentations = {
 }
 
 
-## Create a Pipeline object
+# Create a Pipeline object
 p = Pipeline()
 
-## Augment the videos
+# Augment the videos
 p.augment(input_path="local_util_resources/samples/videos", 
           output_path="local_util_resources/experiments/multi_video", 
           target="video", 
