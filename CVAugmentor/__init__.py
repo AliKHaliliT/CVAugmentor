@@ -5,7 +5,6 @@ The CVAugmentor Augmentation Package.
 
 CVAugmentor is a Python package designed for augmenting images and videos, making it easier to enhance and modify visual data for computer vision tasks. 
 It provides a collection of utilities that automate transformations such as flipping, rotation, scaling, color adjustments, and more.
-The package is built on top of the OpenCV and Pillow libraries.
 
 """
 from .assets.main.pipeline import Pipeline
