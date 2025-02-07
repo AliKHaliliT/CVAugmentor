@@ -1,0 +1,51 @@
+name: Update Docs
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    - name: Set up Git configuration
+      run: |
+        git config --global user.email "ali.khalili.t98@gmail.com"
+        git config --global user.name "Ali Khalili Tazehkandgheshlagh"
+        
+    - name: Checkout gh-pages branch
+      run: |
+        git fetch origin gh-pages
+        git checkout gh-pages
+        git pull origin gh-pages
+
+    - name: Merge main into gh-pages
+      run: |
+        git checkout gh-pages
+        git merge origin/main --no-edit
+
+    - name: Set up Python 3.12.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.12.8
+
+    - name: Install dependencies
+      run: |
+        pip install sphinx-rtd-theme  # Install the Sphinx Read the Docs theme
+        
+    - name: Build documentation
+      run: |
+        make build  # This will run the 'build' target from your Makefile
+
+    - name: Push changes to gh-pages
+      run: |
+        git add -A
+        git commit -m "Update docs"
+        git push origin gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
