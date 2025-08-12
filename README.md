@@ -5,7 +5,7 @@
     <img src="https://github.com/AliKHaliliT/CVAugmentor/actions/workflows/tests.yml/badge.svg" alt="tests">
 </div>
 <div align="center" style="display: flex; gap: 10px; flex-wrap: wrap;">
-    <img src="https://img.shields.io/pypi/dm/CVAugmentor" alt="PyPI Downloads">
+    <a href="https://pepy.tech/projects/cvaugmentor"><img src="https://static.pepy.tech/badge/cvaugmentor/month" alt="PyPI Downloads"></a>
     <a href="https://pepy.tech/projects/cvaugmentor">
         <img src="https://static.pepy.tech/badge/cvaugmentor" alt="PyPI Downloads">
     </a>
