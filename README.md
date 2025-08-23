@@ -14,7 +14,7 @@
 </div>
 <br/>
 <div align="center">
-  <img src="util_resources/readme/readme.png" alt="CVAugmentorAugmentations">
+  <img src="https://github.com/AliKHaliliT/CVAugmentor/blob/main/util_resources/readme/readme.png?raw=true" alt="CVAugmentorAugmentations">
 </div>
 <br/>
 
