@@ -1,0 +1,22 @@
+# Line endings are repository policy, not a per-machine setting.
+* text=auto
+
+# Scripts that run on Linux (containers, CI) must always check out LF.
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows script formats must always check out CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Common binary formats; never diff or normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.mo binary
+*.db binary

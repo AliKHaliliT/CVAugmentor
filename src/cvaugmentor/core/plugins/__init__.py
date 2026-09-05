@@ -1,0 +1,1 @@
+from cvaugmentor.core.plugins.entry_points import PLUGIN_GROUP, load_entry_point_augmentations

@@ -1,32 +1,139 @@
 [build-system]
-requires = ["setuptools>=75.8.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
-name = "CVAugmentor"
-version = "1.1.2"
+name = "cvaugmentor"
+version = "2.0.0"
 description = "A package for augmenting images and videos for computer vision tasks"
 readme = "README.md"
+requires-python = ">=3.14"
+license = "MIT"
 authors = [
-    {name = "Ali Khalili Tazehkandgheshlagh", email = "ali.khalili.t98@gmail.com"}
+    { name = "Ali Khalili Tazehkandgheshlagh", email = "ali.khalili.t98@gmail.com" },
 ]
-license = {text = "MIT"}
-requires-python = ">=3.12.8"
-
+keywords = [
+    "augmentation",
+    "computer-vision",
+    "image-processing",
+    "video-processing",
+    "dataset",
+    "clean-architecture",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Typing :: Typed",
+]
 dependencies = [
-    "colorama==0.4.6",
-    "numpy==2.2.2",
-    "opencv-python==4.11.0.86",
-    "Pillow==11.1.0",
-    "tqdm==4.67.1",
+    "numpy>=2",
+    "opencv-python>=4.11",
+    "pillow>=11",
+    "pydantic>=2",
+    "tqdm>=4.67",
 ]
+
+[dependency-groups]
+dev = [
+    "hypothesis",
+    "pytest",
+    "ruff",
+    "mypy",
+    "import-linter",
+    "types-tqdm",
+]
+
+[project.scripts]
+cvaugmentor = "cvaugmentor.facade.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/AliKHaliliT/CVAugmentor"
+Repository = "https://github.com/AliKHaliliT/CVAugmentor"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["CVAugmentor*"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/cvaugmentor"]
 
-[project.optional-dependencies]
-dev = ["unittest"]
+[tool.isort]
+known_first_party = ["cvaugmentor"]
+src_paths = ["src", "tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+# The D codes check docstring presence only, never format, because the docstring rhythm is
+# the house's own; the shape rules live in the README's Conventions section. PGH keeps every
+# ignore honest: a suppression names the exact code it silences, never a blanket.
+select = ["E", "F", "B", "UP", "Q", "PGH", "PERF", "C4", "S", "RET504", "D101", "D102", "D103", "D107"]
+# The credential heuristics read any suggestive string as a possible secret, so they
+# cannot decide their own question and may not gate. They leave the gating selection and
+# run as advice instead, through `ruff check --select S105,S106 .`; decision 0025 carries
+# the principle and AGENTS.md states what a warning obliges.
+ignore = ["E501", "S105", "S106"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+# A port's stub is a one-line signature; its documentation lives on each implementation.
+"src/cvaugmentor/domain/interfaces/*.py" = ["D102"]
+# Suites document themselves through case names and assertions (see docs/CONVENTIONS.md).
+# A suite asserts for a living, and its fixtures carry throwaway credentials by design.
+"tests/**" = ["D101", "D102", "D103", "D107", "S101"]
+
+# import-linter machine-checks the Dependency Rule the same way ESLint carries the client
+# style's layer rule. Locating the portions imports the package root once, which the
+# library-citizenship rule (no import-time side effects) makes safe; everything after that
+# is parsed rather than executed.
+[tool.importlinter]
+# The layer directories are bare namespace packages by convention, so they are listed as
+# portions; a single "cvaugmentor" root would make grimp skip every directory with no __init__.py.
+root_packages = [
+    "cvaugmentor.adapters",
+    "cvaugmentor.core",
+    "cvaugmentor.domain",
+    "cvaugmentor.facade",
+    "cvaugmentor.services",
+]
+# External packages must be in the graph for a contract to forbid an SDK by name.
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "The core stays inside the ports"
+type = "forbidden"
+source_modules = ["cvaugmentor.domain", "cvaugmentor.services"]
+forbidden_modules = [
+    "cvaugmentor.facade",
+    "cvaugmentor.adapters",
+    "PIL",
+    "cv2",
+    "numpy",
+    "tqdm",
+]
+
+[[tool.importlinter.contracts]]
+name = "The Dependency Rule points one way"
+type = "layers"
+layers = ["cvaugmentor.facade", "cvaugmentor.services", "cvaugmentor.domain"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+plugins = ["pydantic.mypy"]
+implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = "cv2.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# A deprecation warning is a removal notice at least two releases early, so it gates here
+# rather than scrolling past unread. Any exception is a named ignore for one specific
+# message with a reason beside it, never a blanket.
+filterwarnings = ["error"]

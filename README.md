@@ -1,236 +1,197 @@
-# CVAugmentor 
-<div align="center" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-    <img src="https://img.shields.io/github/license/AliKHaliliT/CVAugmentor" alt="License">
-    <img src="https://img.shields.io/pypi/v/CVAugmentor" alt="PyPI Version">
-    <img src="https://github.com/AliKHaliliT/CVAugmentor/actions/workflows/tests.yml/badge.svg" alt="tests">
-</div>
-<div align="center" style="display: flex; gap: 10px; flex-wrap: wrap;">
-    <a href="https://pepy.tech/projects/cvaugmentor"><img src="https://static.pepy.tech/badge/cvaugmentor/month" alt="PyPI Downloads"></a>
-    <a href="https://pepy.tech/projects/cvaugmentor">
-        <img src="https://static.pepy.tech/badge/cvaugmentor" alt="PyPI Downloads">
-    </a>
-    <img src="https://img.shields.io/github/last-commit/AliKHaliliT/CVAugmentor" alt="Last Commit">
-    <img src="https://img.shields.io/github/issues/AliKHaliliT/CVAugmentor" alt="Open Issues">
-</div>
-<br/>
+# CVAugmentor
+
 <div align="center">
-  <img src="https://github.com/AliKHaliliT/CVAugmentor/blob/main/util_resources/readme/readme.png?raw=true" alt="CVAugmentorAugmentations">
+
+![License](https://img.shields.io/github/license/AliKHaliliT/CVAugmentor) ![PyPI Version](https://img.shields.io/pypi/v/CVAugmentor) ![CI](https://github.com/AliKHaliliT/CVAugmentor/actions/workflows/ci.yml/badge.svg) ![Monthly Downloads](https://static.pepy.tech/badge/cvaugmentor/month) ![Total Downloads](https://static.pepy.tech/badge/cvaugmentor) ![Last Commit](https://img.shields.io/github/last-commit/AliKHaliliT/CVAugmentor) ![Open Issues](https://img.shields.io/github/issues/AliKHaliliT/CVAugmentor)
+
+![The augmentations CVAugmentor ships](https://github.com/AliKHaliliT/CVAugmentor/blob/main/util_resources/readme/readme.png?raw=true)
+
 </div>
-<br/>
 
-CVAugmentor is a Python package designed for augmenting images and videos, making it easier to enhance and modify visual data for computer vision tasks. It provides a collection of utilities that automate transformations such as flipping, rotation, scaling, color adjustments, and more.
+Augment images and videos for computer vision tasks, from one file or a whole directory.
 
-Available augmentations are:
+CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `2b38e75b78c54ec8e097a5fba0e3c527b0f64a59`.
 
-- Blur
-- Brightness
-- Cutout
-- Exposure
-- Flip
-- Grayscale
-- Hue
-- Negative
-- NoAugmentation
-- Noise
-- Rotate
-- Saturation
-- Shear
-- Zoom
+## The Philosophy: Why Does This Exist?
 
-## Installation
+Augmentation code rots in a particular way. It starts as a handful of Pillow calls, then grows a video path that re-implements them, then grows a batch path that re-implements that, and each new medium multiplies the places a transformation has to be taught about. The result is a library where a bug in colour handling exists in three copies and gets fixed in one.
 
-This package is built with **Python 3.12.8**.
+CVAugmentor answers that by refusing to let the imaging libraries reach the logic that walks the work. An augmentation is a transformation of one frame and knows nothing about files, directories, or video. The runner walks media and augmentations and cannot decode a pixel, because nothing in it may import Pillow, OpenCV, NumPy, or tqdm; the import contracts in `pyproject.toml` check that on every run rather than trusting it. So a still and a video differ in one adapter, the codec, and in nothing else. Fifteen augmentations and two media kinds cost fifteen plus two pieces of code rather than thirty.
 
-The simplest way to install it is via pip. Run the following command:
+The same boundary is what makes the package safe to embed. It reads no environment at import, configures no logging on your behalf, holds no global mutable state, and keeps its own random draws out of NumPy's global generator.
+
+## The Domain: Why Augmentation Demands This
+
+Augmenting a dataset looks like a loop and turns out not to be one, because the awkward requirements all live in the corners.
+
+- **A video must stay coherent.** A blur radius drawn per frame produces a video that crawls. So a random parameter is drawn once per instance and held, and a placement that depends on frame size is derived from a held seed, which is why every frame of one video is treated identically while two videos differ.
+- **A dataset must vary.** The opposite requirement holds across files, so `PipelineConfig(random_state=True)` redraws every augmentation between items in a batch.
+- **The two modes are genuinely different jobs.** Writing fifteen variants of one image and writing one image with fifteen effects stacked on it read the same in a call and share almost no code path, so `sequential` and `singular` are named and separated rather than inferred.
+- **One bad file must not cost a dataset.** A directory of ten thousand images with one truncated PNG in it should not lose the other 9,999, so a failure is recorded against its item and the walk continues unless you ask it to halt.
+- **A frame is too expensive to convert twice.** The core never touches pixel data, so frames cross it as opaque handles rather than being marshalled into a neutral representation and back.
+
+---
+
+## Core Architectural Pillars
+
+CVAugmentor enforces the **Dependency Rule**: inner layers (Business Logic) must not depend on outer layers (Public Surface, Codecs, IO).
+
+1. **Ports & Adapters (Dependency Inversion)**
+   The orchestration service (`AugmentationRunner`) depends only on pure Python `Protocols` (`IAugmentation`, `IMediaCodec`, `IProgressSink`, `IWorkspace`). The `PipelineBuilder` injects concrete implementations at construction time, and every one is checked against its Protocol there.
+2. **The Opaque Frame**
+   Pixels cross the core as a handle nothing inside it reads, so the Dependency Rule holds without a conversion at every boundary. The suites carry plain strings where production carries images, which is the same property paying for itself in tests.
+3. **Strict Translators**
+   Domain objects never leak through the public surface. A finished pass is translated into the facade's `AugmentationReport` before a caller sees it.
+4. **Decoupled Exceptions**
+   Business logic raises pure Python exceptions (`MediaReadError`, `UnsupportedMediaError`, `DuplicateAugmentationError`). Nothing in the domain imports a framework or an SDK.
+5. **Library Citizenship**
+   No global mutable state, no environment reads at import time, a `NullHandler` on the package logger, an immutable `PipelineConfig`, curated `__init__` exports, and a `py.typed` marker.
+
+---
+
+## Project Structure
+
+```text
+CVAugmentor/
+├── src/
+│   └── cvaugmentor/            # The installable package
+│       ├── facade/             # Public surface (Pipeline, PipelineBuilder, CLI, reports, translators)
+│       ├── core/               # Package-wide infrastructure (Config, Logging, Plugins)
+│       ├── domain/             # Absolute source of truth (Interfaces, Domain Schemas, Exceptions)
+│       ├── adapters/           # Concrete implementations (Augmentations, Codecs, Progress, Workspace)
+│       └── services/           # Business logic orchestration (the AugmentationRunner walk)
+│
+├── docs/                       # Technical documentation (the annotated map lives at docs/ARCHITECTURE.md)
+├── scripts/                    # Tracked repository tooling (the docs audit)
+├── tests/                      # Automated test suite mirroring the src structure
+├── AGENTS.md                   # Agent entry point and the documentation index
+├── CHANGELOG.md                # What each release changes for the people who install it
+├── STATE.md                    # Living project state
+└── pyproject.toml              # PEP 621 metadata, hatchling build backend, entry points
+```
+
+---
+
+## Key Features
+
+- **Fifteen Augmentations:** Blur, Brightness, Cutout, Exposure, Flip, Grayscale, Hue, Negative, NoAugmentation, Noise, Rotate, Saturation, Shear, Translation, and Zoom.
+- **Images and Video Through One Pipeline:** The same augmentations apply to a still or to every frame of a video, and a long video is decoded lazily rather than held in memory.
+- **Two Application Modes:** `sequential` writes one output per augmentation, and `singular` chains them all into one.
+- **Single File or Whole Directory:** A batch walks a directory in the order a person counting filenames expects, skipping what is not the medium you asked for.
+- **Guarded Fluent Builder:** `PipelineBuilder` validates every injected implementation against its `Protocol` at wiring time, so a misconfiguration fails at build rather than midway through a dataset.
+- **Reports Rather Than Silence:** Every pass returns an `AugmentationReport` naming what was written and what was skipped.
+- **Plugin Entry Points:** Third parties can ship augmentations via the `cvaugmentor.augmentations` entry-point group, with per-plugin failure isolation.
+- **Modern Packaging:** src layout, PEP 621 metadata, PEP 561 `py.typed`, PEP 735 dev dependency group, and a console script plus `python -m` execution.
+
+---
+
+## Getting Started
+
+This package is built with **Python 3.14**.
+
+### 1. Installation
+
 ```bash
 pip install CVAugmentor
 ```
 
-Alternatively, you can install it manually by cloning the repository and running the installation. Use the following steps:
+Or from a clone:
+
 ```bash
-git clone git@github.com:AliKHaliliT/CVAugmentor.git
+git clone https://github.com/AliKHaliliT/CVAugmentor.git
 cd CVAugmentor
-pip install -r requirements.txt
-pip install .
+pip install -e .
 ```
-## Usage
-For a comprehensive guide on how to use the package, please refer to the [documentation](https://alikhalilit.github.io/CVAugmentor/). 
 
-The documentation is kept up-to-date and is automatically generated whenever a change is made to the package through the GitHub Actions workflow.
+### 2. Augmenting One Image
 
-The provided pipeline should be sufficient for most use cases:
+Each augmentation is written on its own, named by the label it was registered under.
+
 ```python
-from CVAugmentor import Pipeline
+from cvaugmentor import PipelineBuilder
+from cvaugmentor import augmentations as aug
 
+pipeline = (
+    PipelineBuilder()
+    .with_augmentations(
+        aug.Blur(2.5),
+        aug.Brightness(0.25),
+        aug.Cutout(max_size=64, max_count=6),
+        aug.Flip(),
+        aug.Translation((25, -10)),
+    )
+    .build()
+)
 
-p = Pipeline()
+report = pipeline.augment("samples/0.png", "output/0.png", "image", "single", "sequential")
+print(report.total_written, "files written")
 ```
 
-If you require custom functionality, you can also import the augmentations directly:
+### 3. Augmenting a Directory of Videos
+
+Here every augmentation is chained into one output per video, and each video gets its own random draw.
+
 ```python
-from CVAugmentor.assets.augmentations._blur import Blur
+from cvaugmentor import PipelineBuilder, PipelineConfig
+from cvaugmentor import augmentations as aug
 
+pipeline = (
+    PipelineBuilder()
+    .with_augmentations(aug.Hue(), aug.Saturation(), aug.Noise())
+    .with_config(PipelineConfig(verbose=True, augmentation_verbose=True, random_state=True))
+    .build()
+)
 
-blur_instance = Blur()
+report = pipeline.augment("samples/videos", "output/videos", "video", "batch", "singular")
+
+for item in report.items:
+    print(item.source, "->", item.written or item.skipped_reason)
 ```
 
-### Examples
-#### Single Image Augmentation
+### 4. From the Command Line
+
+```bash
+cvaugmentor --list
+cvaugmentor samples/0.png output/0.png --all
+cvaugmentor samples/videos output/videos --target video --process batch --mode singular --augmentation flip
+```
+
+### 5. Running the Same Augmentation Twice
+
+Labels name the output file, so pass one explicitly to register an augmentation more than once.
+
 ```python
-from CVAugmentor import Augmentations as aug
-from CVAugmentor import Pipeline
-
-
-# Define the augmentations
-augmentations = {
-    "blur": aug.Blur(2.5),
-    "brightness": aug.Brightness(0.25),
-    "cutout": aug.Cutout(max_size=64, max_count=6),
-    "expsure": aug.Exposure(0.3),
-    "flip": aug.Flip(),
-    "grayscale": aug.Grayscale(),
-    "hue": aug.Hue(-360),
-    "negative": aug.Negative(),
-    "no_augmentation": aug.NoAugmentation(),
-    "noise": aug.Noise(0.4),
-    "rotate": aug.Rotate(),
-    "saturation": aug.Saturation(0.5),
-    "shear": aug.Shear((0.2, 0.2)),
-    "zoom": aug.Zoom(),
-}
-
-
-# Create a Pipeline object
-p = Pipeline()
-
-# Augment the image
-p.augment(input_path="local_util_resources/samples/images/0.png", 
-          output_path="local_util_resources/experiments/single_image/0.png", 
-          target="image", 
-          process_type="single", 
-          mode="sequential", 
-          augmentations=augmentations, 
-          aug_verbose=True)
+pipeline = (
+    PipelineBuilder()
+    .with_augmentation(aug.Blur(1.0), label="blur_soft")
+    .with_augmentation(aug.Blur(5.0), label="blur_hard")
+    .build()
+)
 ```
 
-#### Single Video Augmentation
+### 6. Shipping a Third-Party Augmentation
+
+Expose an `IAugmentation` implementation from your own package, then opt in during construction.
+
+```toml
+[project.entry-points."cvaugmentor.augmentations"]
+my_augmentation = "my_package.augmentations:MyAugmentation"
+```
+
 ```python
-from CVAugmentor import Augmentations as aug
-from CVAugmentor import Pipeline
-
-
-# Define the augmentations
-augmentations = {
-    "blur": aug.Blur(2.5),
-    "brightness": aug.Brightness(0.25),
-    "cutout": aug.Cutout(max_size=64, max_count=6),
-    "expsure": aug.Exposure(0.3),
-    "flip": aug.Flip(),
-    "grayscale": aug.Grayscale(),
-    "hue": aug.Hue(-360),
-    "negative": aug.Negative(),
-    "no_augmentation": aug.NoAugmentation(),
-    "noise": aug.Noise(0.4),
-    "rotate": aug.Rotate(),
-    "saturation": aug.Saturation(0.5),
-    "shear": aug.Shear((0.2, 0.2)),
-    "zoom": aug.Zoom(),
-}
-
-
-# Create a Pipeline object
-p = Pipeline()
-
-# Augment the video
-p.augment(input_path="local_util_resources/samples/videos/0.mp4", 
-          output_path="local_util_resources/experiments/single_video/0.mp4", 
-          target="video", 
-          process_type="single", 
-          mode="singular", 
-          augmentations=augmentations, 
-          aug_verbose=True)
+pipeline = PipelineBuilder().with_discovered_augmentations().build()
 ```
 
-#### Augmenting Multiple Images
-```python
-from CVAugmentor import Augmentations as aug
-from CVAugmentor import Pipeline
+---
 
+## Conventions
 
-# Define the augmentations
-augmentations = {
-    "blur": aug.Blur(),
-    "brightness": aug.Brightness(),
-    "cutout": aug.Cutout(),
-    "expsure": aug.Exposure(),
-    "flip": aug.Flip(),
-    "grayscale": aug.Grayscale(),
-    "hue": aug.Hue(),
-    "negative": aug.Negative(),
-    "no_augmentation": aug.NoAugmentation(),
-    "noise": aug.Noise(),
-    "rotate": aug.Rotate(),
-    "saturation": aug.Saturation(),
-    "shear": aug.Shear(),
-    "zoom": aug.Zoom(),
-}
+The project's conventions live in one place, the rulebook at [docs/CONVENTIONS.md](docs/CONVENTIONS.md). It holds the documentation system (a vendor-neutral [AGENTS.md](AGENTS.md) as the agent entry point and the single index of every document, [STATE.md](STATE.md) as the living project state, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) as the current map, and immutable decision records under [docs/decisions/](docs/decisions/) as the reasoning behind every settled choice), the docstring convention in its code-level section, and the prose law in its Prose section. That file is normative and must not be modified; the rationale behind the system itself is recorded in [its founding decision record](docs/decisions/0001-adopt-the-documentation-system.md).
 
+The rulebook is owned at the style level. A project built from this template never changes it locally, and an improvement discovered while refactoring against the template is not kept as a private advantage; [AGENTS.md](AGENTS.md) describes the upstream report that carries it back to the template, where it is verified and, if it holds, adopted for every project that follows the style.
 
-# Create a Pipeline object
-p = Pipeline()
-
-# Augment the images
-p.augment(input_path="local_util_resources/samples/images", 
-          output_path="local_util_resources/experiments/multi_image", 
-          target="image", 
-          process_type="batch", 
-          mode="singular", 
-          augmentations=augmentations, 
-          verbose=True, 
-          warn_verbose=True,
-          random_state=True)
-```
-
-#### Augmenting Multiple Videos
-```python
-from CVAugmentor import Augmentations as aug
-from CVAugmentor import Pipeline
-
-
-# Define the augmentations
-augmentations = {
-    "blur": aug.Blur(),
-    "brightness": aug.Brightness(),
-    "cutout": aug.Cutout(),
-    "expsure": aug.Exposure(),
-    "flip": aug.Flip(),
-    "grayscale": aug.Grayscale(),
-    "hue": aug.Hue(),
-    "negative": aug.Negative(),
-    "no_augmentation": aug.NoAugmentation(),
-    "noise": aug.Noise(),
-    "rotate": aug.Rotate(),
-    "saturation": aug.Saturation(),
-    "shear": aug.Shear(),
-    "zoom": aug.Zoom(),
-}
-
-
-# Create a Pipeline object
-p = Pipeline()
-
-# Augment the videos
-p.augment(input_path="local_util_resources/samples/videos", 
-          output_path="local_util_resources/experiments/multi_video", 
-          target="video", 
-          process_type="batch", 
-          mode="singular", 
-          augmentations=augmentations, 
-          verbose=True, 
-          aug_verbose=True,
-          warn_verbose=True,
-          random_state=True)
-```
+---
 
 ## License
+
 This work is under an [MIT](https://choosealicense.com/licenses/mit/) License.

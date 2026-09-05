@@ -1,0 +1,1 @@
+from cvaugmentor.adapters.workspace.local_workspace import LocalWorkspace

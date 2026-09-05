@@ -1,0 +1,58 @@
+name: CI
+
+# Runs the five commands AGENTS.md documents, so a rule the configuration claims to enforce
+# is actually enforced rather than remembered. The last step builds the wheel and imports it
+# from a scratch environment, because an editable install never exercises packaging, so a
+# broken build configuration would otherwise pass every other gate.
+# Actions ride major-version tags so a child of this template starts current; pin them to commit digests when your threat model warrants hardening.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Record immutability is checked against history, so the clone cannot be shallow.
+          fetch-depth: 0
+      - name: Em dash budget, two per file
+        run: |
+          git grep -PIno "\x{2014}" -- . > em-dashes.tmp || true
+          awk -F: '{count[$1]++} END {bad = 0; for (f in count) if (count[f] > 2) { printf "%s carries %d em dashes; the budget is two per file\n", f, count[f]; bad = 1 }; exit bad}' em-dashes.tmp
+          rm em-dashes.tmp
+      - name: Prose heuristics, advisory
+        continue-on-error: true
+        run: |
+          if git grep -inE "paradigm shift|game.changer|ever-evolving|cutting.edge|\bdelve|\btapestry\b|\bsupercharge|\btransformative\b|\bmultifaceted\b|\bmeticulous\b|\bparamount\b|\bembark\b|it.s worth noting|at the end of the day|in today.s world|let.s dive|going forward|a testament to|marks a pivotal|plays a vital role|experts agree|studies show|widely regarded as" -- . ":(exclude)*.github*" ":(exclude)*docs/CONVENTIONS.md" ":(exclude)*docs/decisions/*" ":(exclude)*docs/claims/*" ":(exclude)treasury"; then
+            echo "Inflated vocabulary or weasel attribution in living prose; the verdict is review's."
+            exit 1
+          fi
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install --group dev
+      - name: Docs
+        run: python scripts/audit_docs.py
+      - name: Lint
+        run: ruff check . && lint-imports
+      - name: Credential heuristics, advisory
+        continue-on-error: true
+        run: ruff check --select S105,S106 .
+      - name: Type-check
+        run: mypy src tests
+      - name: Test
+        run: pytest
+      - name: Package
+        run: |
+          python -m pip install build
+          python -m build
+          python -m venv "$RUNNER_TEMP/wheel-check"
+          "$RUNNER_TEMP/wheel-check/bin/python" -m pip install dist/*.whl
+          "$RUNNER_TEMP/wheel-check/bin/python" -c "import importlib, tomllib; importlib.import_module(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])"
