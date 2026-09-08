@@ -33,7 +33,7 @@ jobs:
       - name: Spelling, advisory
         continue-on-error: true
         run: |
-          if ! pipx run codespell==2.4.3 --skip ".git,node_modules,.hypothesis,__pycache__,dist,package-lock.json,*.svg,*.png,*.ico,*.woff,*.woff2,*.map,treasury,decisions,claims,reviews,upstream,inherited,mockServiceWorker.js" --ignore-words-list "accreting,afterall,paeth" .; then
+          if ! pipx run codespell==2.4.3 --skip ".git,node_modules,.hypothesis,__pycache__,dist,package-lock.json,*.svg,*.png,*.ico,*.woff,*.woff2,*.map,treasury,decisions,claims,reviews,inherited,mockServiceWorker.js" --ignore-words-list "accreting,afterall,paeth" .; then
             echo "Misspellings in living prose or code; correct each, or name a domain term in the ignore list."
             exit 1
           fi

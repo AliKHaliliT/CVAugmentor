@@ -1,6 +1,6 @@
 # 0042. Give the upstream report a place and a defect class
 
-Status: Accepted
+Status: Superseded by 0047
 Date: 2026-09-07
 
 ## Context

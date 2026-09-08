@@ -1,6 +1,6 @@
 # 0044. Resolve open upstream entries at re-alignment and name no project in the report
 
-Status: Accepted
+Status: Superseded by 0047
 Date: 2026-09-07
 
 ## Context

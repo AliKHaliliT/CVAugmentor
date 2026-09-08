@@ -51,6 +51,13 @@ DATED_RECORD_NAME = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$")
 # own carried whole in a project built from it, keeping the template's numbers so the two
 # sequences never meet. A template has no inherited folder.
 NUMBERED_RECORD_FOLDERS = ("decisions", "inherited")
+# The upstream file a project built from the template carries: one Open section, entries dated by
+# heading with a kind, a pin, and four labeled parts, expiring on the same horizon as STATE.
+UPSTREAM_ENTRY = re.compile(r"^### (\d{4}-\d{2}-\d{2}) (.+)$", re.MULTILINE)
+UPSTREAM_KIND = re.compile(r"^Kind: (improvement|defect)$", re.MULTILINE)
+UPSTREAM_PIN = re.compile(r"^Pin: [0-9a-f]{7,40}$", re.MULTILINE)
+UPSTREAM_PARTS = ("**What it is", "**How the work surfaced it", "**Records checked")
+UPSTREAM_WHY = ("**Why it is believed better", "**What was worked around")
 FENCE = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
 DOTTED_MODULE = re.compile(r"[a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+")
 TREE_FILE = re.compile(r"[A-Za-z0-9_\-]+(?:\.[A-Za-z0-9_\-]+)+")
@@ -236,7 +243,7 @@ def check_docs_zone(problems: list[str]) -> None:
             problems.append(f"docs/{f.name}: not registered in the AGENTS.md index")
         if not f.stem.replace("-", "").isupper():
             problems.append(f"docs/{f.name}: organic documents are UPPERCASE markdown")
-        if f.name not in ("ARCHITECTURE.md", "CONVENTIONS.md", "BASELINE.md"):
+        if f.name not in ("ARCHITECTURE.md", "CONVENTIONS.md", "BASELINE.md", "UPSTREAM.md"):
             lines = f.read_text(encoding="utf-8").count("\n") + 1
             if lines > BUDGET_LINES:
                 problems.append(f"docs/{f.name}: {lines} lines against the {BUDGET_LINES}-line budget; split by fission")
@@ -280,6 +287,41 @@ def check_docs_zone(problems: list[str]) -> None:
             problems.append(
                 f"{path}: a file below a docs/ subfolder is a dated record named YYYY-MM-DD-short-kebab-title.md; "
                 f"a living document is a flat UPPERCASE file at the top of docs/"
+            )
+
+
+def check_upstream(problems: list[str]) -> None:
+    """The upstream file's schema and horizon, where a project carries one."""
+    path = ROOT / "docs/UPSTREAM.md"
+    if not path.exists():
+        return
+    text = path.read_text(encoding="utf-8")
+    if "## Open" not in text:
+        problems.append("docs/UPSTREAM.md: no ## Open section")
+        return
+    body = text.split("## Open", 1)[1]
+    entries = list(UPSTREAM_ENTRY.finditer(body))
+    if not entries and "Nothing open." not in body:
+        problems.append("docs/UPSTREAM.md: Open holds entries or the words Nothing open.")
+    if entries and "Nothing open." in body:
+        problems.append("docs/UPSTREAM.md: says Nothing open. beside open entries")
+    today = date.today()
+    for index, entry in enumerate(entries):
+        end = entries[index + 1].start() if index + 1 < len(entries) else len(body)
+        chunk = body[entry.end():end]
+        label = f"docs/UPSTREAM.md: entry {entry.group(1)} {entry.group(2)[:40]}"
+        if not UPSTREAM_KIND.search(chunk):
+            problems.append(f"{label}: no Kind line reading improvement or defect")
+        if not UPSTREAM_PIN.search(chunk):
+            problems.append(f"{label}: no Pin line naming the template commit")
+        problems.extend(f"{label}: part {part}** missing" for part in UPSTREAM_PARTS if part not in chunk)
+        if not any(why in chunk for why in UPSTREAM_WHY):
+            problems.append(f"{label}: neither Why it is believed better nor What was worked around")
+        age = (today - datetime.strptime(entry.group(1), "%Y-%m-%d").date()).days
+        if age > HORIZON_DAYS:
+            problems.append(
+                f"{label}: past the {HORIZON_DAYS}-day horizon; re-verify against the template and re-date,"
+                " or make it the project's own decision and delete it"
             )
 
 
@@ -592,6 +634,7 @@ def main() -> int:
     problems: list[str] = []
     check_documents(problems)
     check_docs_zone(problems)
+    check_upstream(problems)
     check_rooms(problems)
     held = check_layout(problems)
     check_import_graph(problems)

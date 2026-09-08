@@ -10,7 +10,7 @@
 
 Augment images and videos for computer vision tasks, from one file or a whole directory.
 
-CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `ba37107a9b373936f58e971aaa293d8111e82c63`.
+CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `175e7fa47b6480d2cd2def8e43a42943be2633f5`.
 
 ## The Philosophy: Why Does This Exist?
 

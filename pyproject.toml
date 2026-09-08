@@ -128,6 +128,7 @@ source_modules = ["cvaugmentor.domain", "cvaugmentor.services"]
 forbidden_modules = [
     "cvaugmentor.facade",
     "cvaugmentor.adapters",
+    # Stack binding: this project's imaging and compression libraries, kept out of the core by name.
     "PIL",
     "cv2",
     "numpy",
@@ -144,8 +145,9 @@ python_version = "3.14"
 strict = true
 implicit_reexport = true
 
-# Both accelerators are optional at runtime and neither ships type information, so the
-# checker is told they may be absent rather than every call site carrying an ignore.
+# Stack binding: this project's two accelerators ship no types.
+# Both are optional at runtime and neither ships type information, so the checker is told
+# they may be absent rather than every call site carrying an ignore.
 [[tool.mypy.overrides]]
 module = ["cv2.*", "isal.*"]
 ignore_missing_imports = true
