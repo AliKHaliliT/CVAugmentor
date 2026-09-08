@@ -10,7 +10,7 @@
 
 ## Deferred
 
-- The NumPy fallbacks are covered by resolving the accelerator to None rather than by running on a machine that genuinely lacks OpenCV, so the musl and Windows-on-ARM paths are verified by substitution and not in place (2026-09-08).
+- The fallback CI job runs the NumPy paths with no extras installed, but only on glibc x86-64, so musl and Windows-on-ARM are still covered by inference from the wheel table rather than by a run (2026-09-08).
 
 ## Blocked
 
