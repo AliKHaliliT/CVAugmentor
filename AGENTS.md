@@ -4,7 +4,7 @@ CVAugmentor is an installable Python package that augments images and videos for
 
 ## Commands
 
-- Install (editable): `pip install -e .` (Python 3.14+; add the tooling with `pip install --group dev`; if an import fails after the tree moves, check where the editable install points with `pip list` before debugging code)
+- Install (editable): `pip install -e ".[fast,video]"` (Python 3.14+; add the tooling with `pip install --group dev`; a bare `pip install -e .` is also supported and runs the NumPy fallbacks, so develop against both; if an import fails after the tree moves, check where the editable install points with `pip list` before debugging code)
 - Run the CLI: `cvaugmentor input.png output.png --all` lists what it wrote, and `python -m cvaugmentor --list` names every built-in augmentation
 - Test: `pytest`
 - Lint: `ruff check . && lint-imports` (ruff checks style and docstring presence; import-linter checks the Dependency Rule)
@@ -36,6 +36,12 @@ silenced with a suppression comment to make a run look clean. The advisory check
 - All prose must read as if a person wrote it. Never write the clause-colon splice, a sentence shaped as claim, colon, elaboration; in prose a colon may only introduce a list, a quote, or a label. The softer language-model tells (balanced semicolon antitheses, triadic lists, not-X-but-Y reversals) are fine one at a time and forbidden stacked, so allow at most one flourish per paragraph and keep the rest plain declarative sentences. No tool can judge these, so they are held in review, agent and human alike. The full catalog of tells, the vocabulary, and the portability test live in the rulebook's Prose section ([docs/CONVENTIONS.md](docs/CONVENTIONS.md#prose)).
 - Every tracked byte is public prose. Confidential facts, private repository names, deployment details, and the description of what was withheld and why never enter a tracked file or a commit message, even in a private repository, because visibility can flip and history is permanent. Such context goes to the untracked `LOCAL.md` at the root (see [docs/BASELINE.md](docs/BASELINE.md)); read it when it exists, create it when first needed, and when unsure whether a fact is sensitive, ask the owner instead of recording it.
 - Read [STATE.md](STATE.md) before starting work, and sweep it before starting anything new, deleting every entry that describes finished work and re-verifying or deleting any entry the tree no longer confirms. Its entries are claims to verify, not facts. Completing work deletes its entry in the same change, never adds a narration of the landing, and every change ends with a sweep for entries it completed or invalidated.
+
+## The two paths
+
+Every accelerated operation has a NumPy fallback, because OpenCV and ISA-L publish no wheel for Windows on ARM or for musl distributions and are therefore optional ([decision 0053](docs/decisions/0053-declare-the-accelerators-optional-and-fall-back-in-code.md)). Two obligations follow, and both are easy to forget because the machine you are working on almost certainly has the accelerators installed.
+
+A new operation reaches OpenCV only through `core/acceleration.opencv()`, never by importing `cv2`, and it works when that returns `None`. A suite covering it exercises both paths, by resolving the accelerator to `None` for one of them, since a fallback nothing executes is a fallback that does not work. The two paths agree within one level per channel rather than exactly, and that tolerance is pinned in the suites with its reason recorded ([decision 0054](docs/decisions/0054-pin-a-tolerance-between-the-two-paths-not-equality.md)). A wider gap is a defect.
 
 ## The delivery gate
 

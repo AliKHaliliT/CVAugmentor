@@ -1,6 +1,6 @@
 import numpy as np
-from PIL import Image, ImageFilter
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels, blur
 from cvaugmentor.core.logging import get_logger
 from cvaugmentor.domain.schemas.media import Frame
 
@@ -13,14 +13,16 @@ class Blur:
 
     """
 
-    Softens a frame with a Gaussian kernel.
+    Softens a frame with three box passes.
 
 
     Usage
     -----
-    The radius is the standard deviation of the kernel, and an unspecified one
-    is drawn once per instance, so every frame of a video is softened by the
-    same amount.
+    The radius is the standard deviation the softening approximates, and an
+    unspecified one is drawn once per instance, so every frame of a video is
+    softened by the same amount. Three box passes converge on a Gaussian and
+    cost the same at every radius, which is the construction Pillow's own
+    Gaussian blur uses underneath.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -95,15 +97,11 @@ class Blur:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        return frame.filter(ImageFilter.GaussianBlur(self.radius))
+        return blur(as_pixels(frame), self.radius)
 
 
     def reseed(self) -> None:

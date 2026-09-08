@@ -1,7 +1,6 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
-
-from pydantic import BaseModel, ConfigDict
 
 from cvaugmentor.domain.schemas.media import MediaKind
 
@@ -9,7 +8,8 @@ ApplyMode = Literal["sequential", "singular"]
 ProcessType = Literal["single", "batch"]
 
 
-class AugmentationJob(BaseModel):
+@dataclass(frozen=True, slots=True)
+class AugmentationJob:
 
     """
 
@@ -41,5 +41,3 @@ class AugmentationJob(BaseModel):
     kind: MediaKind
     process_type: ProcessType
     mode: ApplyMode
-
-    model_config = ConfigDict(frozen=True)

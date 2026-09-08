@@ -1,5 +1,5 @@
-from PIL import Image, ImageOps
-
+from cvaugmentor.adapters.augmentations.frames import as_pixels
+from cvaugmentor.core.acceleration import opencv
 from cvaugmentor.domain.schemas.media import Frame
 
 
@@ -13,7 +13,8 @@ class Negative:
     Usage
     -----
     Inversion is its own opposite, so applying this augmentation twice returns
-    the frame it started from.
+    the frame it started from. Subtracting each byte from 255 is exact at every
+    level, so the accelerated and the fallback paths agree to the bit.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -47,15 +48,16 @@ class Negative:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
+        pixels = as_pixels(frame)
+        accelerated = opencv()
+        if accelerated is not None:
+            return accelerated.bitwise_not(pixels)
 
-
-        return ImageOps.invert(frame.convert("RGB"))
+        return 255 - pixels
 
 
     def reseed(self) -> None:

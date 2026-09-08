@@ -1,7 +1,8 @@
-from pydantic import BaseModel, ConfigDict, Field
+from dataclasses import dataclass
 
 
-class PipelineConfig(BaseModel):
+@dataclass(frozen=True, slots=True)
+class PipelineConfig:
 
     """
 
@@ -10,8 +11,8 @@ class PipelineConfig(BaseModel):
 
     Usage
     -----
-    This model is a plain, frozen value object. As a library, the pipeline
-    never reads environment variables or files at import time; the embedding
+    This is a plain, frozen value object. As a library, the pipeline never
+    reads environment variables or files at import time; the embedding
     application decides where values come from and passes them in explicitly.
     ```python
     from cvaugmentor import PipelineConfig
@@ -19,12 +20,46 @@ class PipelineConfig(BaseModel):
     config = PipelineConfig(verbose=True, random_state=True)
     ```
 
+
+    Attributes
+    ----------
+    verbose : bool
+        Whether the walk across a batch reports its progress.
+
+    augmentation_verbose : bool
+        Whether the work inside one medium reports its progress.
+
+    warn_verbose : bool
+        Whether skipped inputs are reported on the package logger.
+
+    random_state : bool
+        Whether every augmentation redraws its unspecified parameters between
+        batch items.
+
+    halt_on_error : bool
+        Whether one unreadable medium aborts a batch instead of being recorded
+        as skipped.
+
+    workers : int | None
+        How many threads encode outputs at once. None lets the runner size the
+        pool from the machine, and 1 keeps every write on the calling thread.
+
     """
 
-    verbose: bool = Field(default=False, description="Whether the walk across a batch reports its progress")
-    augmentation_verbose: bool = Field(default=False, description="Whether the work inside one medium reports its progress")
-    warn_verbose: bool = Field(default=True, description="Whether skipped inputs are reported on the package logger")
-    random_state: bool = Field(default=False, description="Whether every augmentation redraws its unspecified parameters between batch items")
-    halt_on_error: bool = Field(default=False, description="Whether one unreadable medium aborts a batch instead of being recorded as skipped")
+    verbose: bool = False
+    augmentation_verbose: bool = False
+    warn_verbose: bool = True
+    random_state: bool = False
+    halt_on_error: bool = False
+    workers: int | None = None
 
-    model_config = ConfigDict(frozen=True)
+    def __post_init__(self) -> None:
+
+        """
+
+        Rejects a worker count no pool could be built from.
+
+        """
+
+        if self.workers is not None and self.workers < 1:
+            raise ValueError(f"workers must be at least 1, or None to size the pool automatically. Received: {self.workers} with type {type(self.workers)}")

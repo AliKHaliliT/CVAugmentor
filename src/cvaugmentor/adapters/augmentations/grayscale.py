@@ -1,5 +1,4 @@
-from PIL import Image
-
+from cvaugmentor.adapters.augmentations.frames import as_pixels, grayscale
 from cvaugmentor.domain.schemas.media import Frame
 
 
@@ -14,6 +13,8 @@ class Grayscale:
     -----
     All three channels are set to the same luminance, so the result keeps the
     shape every other augmentation expects and can be chained after this one.
+    The luminance is the BT.601 one the codecs already agree on, weighted in
+    integers so nothing rounds twice.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -47,15 +48,11 @@ class Grayscale:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        return Image.merge("RGB", (frame.convert("L"),) * 3)
+        return grayscale(as_pixels(frame))
 
 
     def reseed(self) -> None:

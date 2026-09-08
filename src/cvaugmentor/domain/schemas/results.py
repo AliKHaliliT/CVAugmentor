@@ -1,12 +1,12 @@
+from dataclasses import dataclass, field
 from pathlib import Path
-
-from pydantic import BaseModel, ConfigDict, Field
 
 from cvaugmentor.domain.schemas.jobs import ApplyMode
 from cvaugmentor.domain.schemas.media import MediaKind
 
 
-class ItemOutcome(BaseModel):
+@dataclass(frozen=True, slots=True)
+class ItemOutcome:
 
     """
 
@@ -27,10 +27,8 @@ class ItemOutcome(BaseModel):
     """
 
     source: Path
-    written: list[Path] = Field(default_factory=list)
+    written: list[Path] = field(default_factory=list)
     skipped_reason: str | None = None
-
-    model_config = ConfigDict(frozen=True)
 
     @property
     def was_skipped(self) -> bool:
@@ -44,7 +42,8 @@ class ItemOutcome(BaseModel):
         return self.skipped_reason is not None
 
 
-class JobResult(BaseModel):
+@dataclass(frozen=True, slots=True)
+class JobResult:
 
     """
 
@@ -66,9 +65,7 @@ class JobResult(BaseModel):
 
     kind: MediaKind
     mode: ApplyMode
-    outcomes: list[ItemOutcome] = Field(default_factory=list)
-
-    model_config = ConfigDict(frozen=True)
+    outcomes: list[ItemOutcome] = field(default_factory=list)
 
     @property
     def written(self) -> list[Path]:

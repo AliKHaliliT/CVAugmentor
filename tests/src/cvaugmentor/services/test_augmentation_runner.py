@@ -124,12 +124,32 @@ def test_sequential_mode_writes_one_output_per_augmentation_named_by_its_label()
     assert result.written == [Path("out_flip.png"), Path("out_blur.png")]
 
 
-def test_sequential_mode_reads_the_untouched_medium_once_per_augmentation() -> None:
-    runner, codec, _ = build_runner(ScriptedAugmentation("one"), ScriptedAugmentation("two"))
+def test_sequential_mode_reads_a_still_once_and_hands_every_augmentation_the_same_frame() -> None:
+    # Thirteen of fourteen decodes are waste on a still, and every augmentation is
+    # read-only, which the catalog suite asserts separately (see decision 0052).
+    first, second = ScriptedAugmentation("one"), ScriptedAugmentation("two")
+    runner, codec, _ = build_runner(first, second)
 
     runner.run(job(mode="sequential"))
 
-    assert codec.reads == [Path("in.png"), Path("in.png")]
+    assert codec.reads == [Path("in.png")]
+    assert first.applied == ["frame"]
+    assert second.applied == ["frame"]
+
+
+def test_sequential_mode_reads_a_moving_medium_again_for_every_augmentation() -> None:
+    # A stream of frames is a one-shot iterator, so sharing it would starve every
+    # augmentation after the first.
+    codec = FakeCodec(kind="video", frames=("one", "two", "three"))
+    runner, _, _ = build_runner(ScriptedAugmentation("a"), ScriptedAugmentation("b"), codec=codec)
+
+    runner.run(job(kind="video", source="in.mp4", destination="out.mp4", mode="sequential"))
+
+    assert codec.reads == [Path("in.mp4"), Path("in.mp4")]
+    assert [frames for _, frames in codec.writes] == [
+        ["one+a", "two+a", "three+a"],
+        ["one+b", "two+b", "three+b"],
+    ]
 
 
 def test_a_batch_walks_every_entry_the_workspace_lists() -> None:
@@ -211,7 +231,7 @@ def test_no_augmentation_redraws_when_the_random_state_is_left_off() -> None:
     assert augmentation.reseeds == 0
 
 
-def test_the_progress_unit_names_one_item_so_tqdm_renders_its_rate_correctly() -> None:
+def test_the_progress_unit_names_one_item_so_a_sink_renders_its_rate_correctly() -> None:
     workspace = FakeWorkspace(entries=[Path("dir/a.mp4")])
     codec = FakeCodec(kind="video", frames=("one", "two"))
     runner, _, progress = build_runner(ScriptedAugmentation(),

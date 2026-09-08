@@ -1,6 +1,6 @@
 import numpy as np
-from PIL import Image, ImageEnhance
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels, curve
 from cvaugmentor.domain.schemas.media import Frame
 
 FACTOR_RANGE = (0.0, 0.5)
@@ -17,7 +17,8 @@ class Brightness:
     -----
     The factor is an offset from the frame as it is, so 0 leaves it alone,
     a positive factor lightens it, and -1 takes it to black. An unspecified
-    factor is drawn once per instance.
+    factor is drawn once per instance. The scaling collapses into a 256-entry
+    table, which is built once per draw rather than per frame.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -90,22 +91,18 @@ class Brightness:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        return ImageEnhance.Brightness(frame).enhance(1 + self.brightness_factor)
+        return curve(self._table, as_pixels(frame))
 
 
     def reseed(self) -> None:
 
         """
 
-        Redraws the factor when none was specified.
+        Redraws the factor when none was specified, and rebuilds its table.
 
 
         Parameters
@@ -126,8 +123,9 @@ class Brightness:
 
         if self._requested_factor is not None:
             self.brightness_factor = float(self._requested_factor)
-            return None
+        else:
+            self.brightness_factor = float(self._rng.uniform(*FACTOR_RANGE))
 
-        self.brightness_factor = float(self._rng.uniform(*FACTOR_RANGE))
+        self._table = np.clip(np.arange(256) * (1.0 + self.brightness_factor), 0, 255).astype(np.uint8)
 
         return None

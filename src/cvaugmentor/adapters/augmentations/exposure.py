@@ -1,6 +1,6 @@
 import numpy as np
-from PIL import Image
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels, curve
 from cvaugmentor.core.logging import get_logger
 from cvaugmentor.domain.schemas.media import Frame
 
@@ -20,7 +20,9 @@ class Exposure:
     -----
     Every channel is multiplied by the factor and clipped back into range, so
     1 leaves the frame alone while a large factor blows the highlights out. An
-    unspecified factor is drawn once per instance.
+    unspecified factor is drawn once per instance. The multiplication is the
+    same for every pixel, so it collapses into a 256-entry table that is built
+    once per draw rather than per frame.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -96,24 +98,18 @@ class Exposure:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        exposed = np.clip(np.asarray(frame, dtype=np.float32) * self.exposure_factor, 0, 255)
-
-        return Image.fromarray(exposed.astype(np.uint8))
+        return curve(self._table, as_pixels(frame))
 
 
     def reseed(self) -> None:
 
         """
 
-        Redraws the factor when none was specified.
+        Redraws the factor when none was specified, and rebuilds its table.
 
 
         Parameters
@@ -134,8 +130,9 @@ class Exposure:
 
         if self._requested_factor is not None:
             self.exposure_factor = float(self._requested_factor)
-            return None
+        else:
+            self.exposure_factor = float(self._rng.uniform(*FACTOR_RANGE))
 
-        self.exposure_factor = float(self._rng.uniform(*FACTOR_RANGE))
+        self._table = np.clip(np.arange(256) * self.exposure_factor, 0, 255).astype(np.uint8)
 
         return None

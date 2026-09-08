@@ -1,4 +1,7 @@
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+import os
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import nullcontext
 from pathlib import Path
 
 from cvaugmentor.core.config import PipelineConfig
@@ -7,7 +10,8 @@ from cvaugmentor.domain.exceptions import AugmentationException, UnsupportedMedi
 from cvaugmentor.domain.interfaces import (IAugmentation, IMediaCodec, IProgressSink,
                                            IWorkspace)
 from cvaugmentor.domain.schemas.jobs import AugmentationJob
-from cvaugmentor.domain.schemas.media import Frame, MediaKind, MediaStream
+from cvaugmentor.domain.schemas.media import (Frame, MediaKind, MediaProperties,
+                                              MediaStream)
 from cvaugmentor.domain.schemas.results import ItemOutcome, JobResult
 
 logger = get_logger("services.augmentation")
@@ -135,13 +139,34 @@ class AugmentationRunner:
                             len(sources),
                             self._config.verbose and job.process_type == "batch")
 
-        for source in walked:
-            outcomes.append(self._augment_one(codec, job, source))
-            if self._config.random_state:
-                for augmentation in self._augmentations.values():
-                    augmentation.reseed()
+        # Encoding dominates a sequential-mode pass and every codec here releases the GIL
+        # while it compresses, so the writes are the one place threads pay (see decision
+        # 0052). One pool serves the whole job, and a worker count of one skips it outright.
+        with self._pool() as pool:
+            for source in walked:
+                outcomes.append(self._augment_one(codec, job, source, pool))
+                if self._config.random_state:
+                    for augmentation in self._augmentations.values():
+                        augmentation.reseed()
 
         return JobResult(kind=job.kind, mode=job.mode, outcomes=outcomes)
+
+
+    def _pool(self) -> ThreadPoolExecutor | nullcontext[None]:
+
+        """
+
+        The write pool for one job, or a no-op context when threads are not wanted.
+
+        """
+
+        workers = self._config.workers
+        if workers is None:
+            workers = min(8, max(1, (os.cpu_count() or 1)))
+        if workers == 1 or len(self._augmentations) < 2:
+            return nullcontext()
+
+        return ThreadPoolExecutor(max_workers=min(workers, len(self._augmentations)))
 
 
     def _sources(self, job: AugmentationJob) -> list[Path]:
@@ -158,7 +183,7 @@ class AugmentationRunner:
         return self._workspace.list_entries(job.source)
 
 
-    def _augment_one(self, codec: IMediaCodec, job: AugmentationJob, source: Path) -> ItemOutcome:
+    def _augment_one(self, codec: IMediaCodec, job: AugmentationJob, source: Path, pool: ThreadPoolExecutor | None) -> ItemOutcome:
 
         """
 
@@ -173,7 +198,7 @@ class AugmentationRunner:
 
         try:
             if job.mode == "sequential":
-                written = self._apply_separately(codec, source, destination)
+                written = self._apply_separately(codec, source, destination, pool)
             else:
                 written = [self._apply_together(codec, job.kind, source, destination)]
         except AugmentationException as error:
@@ -223,30 +248,78 @@ class AugmentationRunner:
         return destination
 
 
-    def _apply_separately(self, codec: IMediaCodec, source: Path, destination: Path) -> list[Path]:
+    def _apply_separately(self, codec: IMediaCodec, source: Path, destination: Path, pool: ThreadPoolExecutor | None) -> list[Path]:
 
         """
 
         Applies each augmentation to the untouched medium and writes one output apiece.
 
+        Each task owns one augmentation instance and one output path, so no two threads
+        reach the same augmentation and none of them shares a decoded frame. The pool
+        preserves submission order, which keeps the written list in the order registered.
+
         """
 
-        written: list[Path] = []
+        # A still is decoded once and the frame is shared, because thirteen of fourteen
+        # decodes are otherwise pure waste and the augmentations are all read-only, which
+        # the catalog suite asserts. A moving medium hands out a one-shot iterator that no
+        # amount of sharing survives, so each of its outputs reads the file again.
+        probe = codec.read(source)
+        single = probe.properties.frame_count == 1
+        shared = next(probe.frames, None) if single else None
+        # A moving medium's probe left its iterator untouched, so the first output consumes
+        # that stream instead of opening the file a second time.
+        spare: MediaStream | None = None if single else probe
 
-        labelled = self._walk(list(self._augmentations.items()),
-                              "Applying augmentations",
-                              "augmentation",
-                              len(self._augmentations),
-                              self._config.augmentation_verbose)
+        tasks: list[Callable[[], Path]] = []
+        for label, augmentation in self._augmentations.items():
+            tasks.append(self._one_output(codec, source, destination, label, augmentation,
+                                          probe.properties, shared, spare))
+            spare = None
 
-        for label, augmentation in labelled:
-            target = destination.with_name(f"{destination.stem}_{label}{destination.suffix}")
-            stream = codec.read(source)
-            augmented = (augmentation.apply(frame) for frame in stream.frames)
-            codec.write(target, MediaStream(properties=stream.properties, frames=augmented))
-            written.append(target)
+        finished = (task() for task in tasks) if pool is None else pool.map(lambda task: task(), tasks)
 
-        return written
+        return list(self._walk(finished,
+                               "Applying augmentations",
+                               "augmentation",
+                               len(tasks),
+                               self._config.augmentation_verbose))
+
+
+    def _one_output(self,
+                    codec: IMediaCodec,
+                    source: Path,
+                    destination: Path,
+                    label: str,
+                    augmentation: IAugmentation,
+                    properties: MediaProperties,
+                    shared: Frame | None,
+                    spare: MediaStream | None) -> Callable[[], Path]:
+
+        """
+
+        A thunk applying one augmentation to the medium and writing its output.
+
+        """
+
+        target = destination.with_name(f"{destination.stem}_{label}{destination.suffix}")
+
+        def write_one() -> Path:
+            if shared is not None:
+                frames: Iterator[Frame] = iter([shared])
+                measurements = properties
+            elif spare is not None:
+                frames = spare.frames
+                measurements = spare.properties
+            else:
+                stream = codec.read(source)
+                frames = stream.frames
+                measurements = stream.properties
+            augmented = (augmentation.apply(frame) for frame in frames)
+            codec.write(target, MediaStream(properties=measurements, frames=augmented))
+            return target
+
+        return write_one
 
 
     def _apply_all(self, frame: Frame, tracked: bool) -> Frame:

@@ -1,8 +1,13 @@
-from PIL import Image
+import numpy as np
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels
+from cvaugmentor.core.acceleration import opencv
 from cvaugmentor.domain.schemas.media import Frame
 
 FLIP_TYPES = ("horizontal", "vertical")
+# OpenCV reads a flip code rather than an axis: zero mirrors about the x axis, which is the
+# top-to-bottom flip, and a positive code mirrors about the y axis.
+FLIP_CODES = {"horizontal": 1, "vertical": 0}
 
 
 class Flip:
@@ -16,7 +21,9 @@ class Flip:
     -----
     A horizontal flip mirrors left to right, and a vertical flip mirrors top to
     bottom. The axis is a choice rather than a draw, so a flipped video stays
-    flipped the same way for its whole length.
+    flipped the same way for its whole length. A mirror reorders bytes and
+    resamples nothing, so the accelerated and the fallback paths agree to the
+    bit.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -84,18 +91,21 @@ class Flip:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
+        pixels = as_pixels(frame)
+        accelerated = opencv()
+        if accelerated is not None:
+            return accelerated.flip(pixels, FLIP_CODES[self.flip_type])
 
-
+        # A NumPy mirror is a stride trick that hands back a view rather than a frame, and
+        # a view is not something a codec downstream can write, so the copy is taken here.
         if self.flip_type == "horizontal":
-            return frame.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+            return np.ascontiguousarray(pixels[:, ::-1])
 
-        return frame.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        return np.ascontiguousarray(pixels[::-1])
 
 
     def reseed(self) -> None:

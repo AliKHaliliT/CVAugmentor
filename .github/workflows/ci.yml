@@ -36,7 +36,7 @@ jobs:
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .
+          python -m pip install -e ".[fast,video]"
           python -m pip install --group dev
       - name: Docs
         run: python scripts/audit_docs.py
@@ -56,3 +56,25 @@ jobs:
           python -m venv "$RUNNER_TEMP/wheel-check"
           "$RUNNER_TEMP/wheel-check/bin/python" -m pip install dist/*.whl
           "$RUNNER_TEMP/wheel-check/bin/python" -c "import importlib, tomllib; importlib.import_module(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])"
+
+  # The accelerators are optional, so the path taken without them is executed here rather
+  # than merely asserted about in-process. This job installs no extras at all, which is
+  # what a user on Alpine or on Windows for ARM gets.
+  fallback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install without the accelerators
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install --group dev
+      - name: Confirm neither accelerator resolved
+        run: |
+          python -c "import cv2" && exit 1 || true
+          python -c "from cvaugmentor.core.acceleration import report; r = report(); assert r['opencv'] is None, r; assert r['deflate'] == 'zlib', r; print(r)"
+      - name: Test
+        run: pytest

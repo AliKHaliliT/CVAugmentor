@@ -1,5 +1,4 @@
-from PIL import Image
-
+from cvaugmentor.adapters.augmentations.frames import as_pixels
 from cvaugmentor.domain.schemas.media import Frame
 
 
@@ -14,7 +13,9 @@ class NoAugmentation:
     -----
     In sequential mode this writes an unaltered copy alongside the augmented
     ones, which is how a dataset keeps its originals beside its variants
-    without a separate copy step.
+    without a separate copy step. The frame is still validated on the way
+    through, so a carrier no other augmentation would accept is refused here
+    too rather than reaching an encoder.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -48,15 +49,11 @@ class NoAugmentation:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        return frame
+        return as_pixels(frame)
 
 
     def reseed(self) -> None:

@@ -1,6 +1,7 @@
 import numpy as np
-from PIL import Image, ImageEnhance
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels, grayscale
+from cvaugmentor.core.acceleration import opencv
 from cvaugmentor.domain.schemas.media import Frame
 
 FACTOR_RANGE = (0.0, 0.5)
@@ -16,7 +17,10 @@ class Saturation:
     Usage
     -----
     The factor is an offset from the frame as it is, so 0 leaves it alone and
-    -1 drains it to gray. An unspecified factor is drawn once per instance.
+    -1 drains it to gray. An unspecified factor is drawn once per instance. The
+    frame is blended against its own grayscale and extrapolated past it, which
+    is the operation Pillow's colour enhancement always was; going through hue
+    instead would quantise it to 180 levels and lose colour the blend keeps.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -89,15 +93,21 @@ class Saturation:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
+        pixels = as_pixels(frame)
+        grey = grayscale(pixels)
+        weight = 1.0 + self.saturation_factor
 
+        accelerated = opencv()
+        if accelerated is not None:
+            return accelerated.addWeighted(pixels, weight, grey, 1.0 - weight, 0.0)
 
-        return ImageEnhance.Color(frame).enhance(1 + self.saturation_factor)
+        deepened = grey.astype(np.float32) + (pixels.astype(np.float32) - grey) * weight
+
+        return np.clip(deepened, 0, 255).astype(np.uint8)
 
 
     def reseed(self) -> None:

@@ -31,22 +31,40 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Image Processing",
     "Typing :: Typed",
 ]
+# NumPy is the compute substrate and Pillow is the codec floor, and both publish wheels
+# for every platform this package targets. The accelerators are optional because OpenCV
+# publishes none for Windows on ARM or for musl distributions, and a hard requirement
+# there turns a pip install into a source build that cannot succeed (see decision 0053).
 dependencies = [
     "numpy>=2",
-    "opencv-python>=4.11",
     "pillow>=11",
-    "pydantic>=2",
-    "tqdm>=4.67",
+]
+
+[project.optional-dependencies]
+# The fast paths. OpenCV carries the accelerated operations and ISA-L the accelerated
+# deflate; without either, the adapters fall back to NumPy and stdlib zlib and stay correct.
+fast = [
+    "opencv-python-headless>=4.11",
+    "isal>=1.7",
+]
+# Video has no fallback, because OpenCV is the only video codec here.
+video = [
+    "opencv-python-headless>=4.11",
+]
+all = [
+    "cvaugmentor[fast,video]",
 ]
 
 [dependency-groups]
+# The accelerators are deliberately absent here. CI installs them for the accelerated job
+# and withholds them for the fallback job, so both paths are executed rather than one being
+# executed and the other asserted about (see decision 0053).
 dev = [
     "hypothesis",
     "pytest",
     "ruff",
     "mypy",
     "import-linter",
-    "types-tqdm",
 ]
 
 [project.scripts]
@@ -113,7 +131,7 @@ forbidden_modules = [
     "PIL",
     "cv2",
     "numpy",
-    "tqdm",
+    "isal",
 ]
 
 [[tool.importlinter.contracts]]
@@ -124,11 +142,12 @@ layers = ["cvaugmentor.facade", "cvaugmentor.services", "cvaugmentor.domain"]
 [tool.mypy]
 python_version = "3.14"
 strict = true
-plugins = ["pydantic.mypy"]
 implicit_reexport = true
 
+# Both accelerators are optional at runtime and neither ships type information, so the
+# checker is told they may be absent rather than every call site carrying an ignore.
 [[tool.mypy.overrides]]
-module = "cv2.*"
+module = ["cv2.*", "isal.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

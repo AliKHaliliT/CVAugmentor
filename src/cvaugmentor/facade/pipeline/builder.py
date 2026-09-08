@@ -1,5 +1,5 @@
-from cvaugmentor.adapters.media import OpenCvVideoCodec, PillowImageCodec
-from cvaugmentor.adapters.progress import TqdmProgressSink
+from cvaugmentor.adapters.media import ArrayImageCodec, OpenCvVideoCodec
+from cvaugmentor.adapters.progress import TerminalProgressSink
 from cvaugmentor.adapters.workspace import LocalWorkspace
 from cvaugmentor.core.config import PipelineConfig
 from cvaugmentor.core.plugins import load_entry_point_augmentations
@@ -25,8 +25,8 @@ class PipelineBuilder:
     a directory. Each augmentation is registered under a label, which names the
     file it writes in sequential mode; pass one explicitly to run the same
     augmentation twice with different settings. Anything not provided falls
-    back to the defaults, which are the Pillow and OpenCV codecs, the local
-    filesystem, a tqdm progress sink, and a default PipelineConfig.
+    back to the defaults, which are this package's own array codecs, the local
+    filesystem, a terminal progress sink, and a default PipelineConfig.
     ```python
     from cvaugmentor import PipelineBuilder, PipelineConfig
     from cvaugmentor import augmentations as aug
@@ -351,10 +351,10 @@ class PipelineBuilder:
             raise PipelineConfigurationError("A pipeline needs at least one augmentation. Register one before building")
 
 
-        defaults: dict[MediaKind, IMediaCodec] = {"image": PillowImageCodec(), "video": OpenCvVideoCodec()}
+        defaults: dict[MediaKind, IMediaCodec] = {"image": ArrayImageCodec(), "video": OpenCvVideoCodec()}
         runner = AugmentationRunner(codecs=list((defaults | self._codecs).values()),
                                     workspace=self._workspace if self._workspace is not None else LocalWorkspace(),
-                                    progress=self._progress if self._progress is not None else TqdmProgressSink(),
+                                    progress=self._progress if self._progress is not None else TerminalProgressSink(),
                                     augmentations=self._augmentations,
                                     config=self._config if self._config is not None else PipelineConfig())
 

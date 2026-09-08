@@ -10,7 +10,7 @@
 
 ## Deferred
 
-- Nothing deferred.
+- The NumPy fallbacks are covered by resolving the accelerator to None rather than by running on a machine that genuinely lacks OpenCV, so the musl and Windows-on-ARM paths are verified by substitution and not in place (2026-09-08).
 
 ## Blocked
 

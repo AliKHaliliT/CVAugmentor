@@ -1,11 +1,10 @@
 import numpy as np
-from PIL import Image
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels
 from cvaugmentor.domain.schemas.media import Frame
 
 COUNT_RANGE = (1, 6)
 SIZE_DIVISOR = 4
-SEED_LIMIT = 2**32
 
 
 class Cutout:
@@ -17,10 +16,10 @@ class Cutout:
 
     Usage
     -----
-    Every square is drawn from one seeded generator, so a count above one
-    really does place that many squares in different spots, and a video of one
-    size loses the same squares on every frame. An unspecified size is scaled
-    to the frame it lands on.
+    Every square's position is drawn once per redraw and kept as a fraction of
+    the room it has, so a count above one really does place that many squares
+    in different spots, and a video of one size loses the same squares on every
+    frame. An unspecified size is scaled to the frame it lands on.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -72,7 +71,6 @@ class Cutout:
         self.max_size = max_size
         self._requested_count = max_count
         self._rng = np.random.default_rng()
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
         self.reseed()
 
 
@@ -98,30 +96,29 @@ class Cutout:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
-
-
-        rng = np.random.default_rng(self._seed)
-        channels = np.array(frame)
-        height, width = channels.shape[0], channels.shape[1]
+        pixels = as_pixels(frame)
+        height, width = pixels.shape[0], pixels.shape[1]
 
         if self.max_size is not None:
             side = self.max_size
         else:
-            side = int(rng.integers(1, max(min(width, height) // SIZE_DIVISOR, 2)))
+            # The draw is held as a fraction rather than a pixel count, because the frame it
+            # will be scaled against is not known until one arrives.
+            side = 1 + int(self._size_fraction * (max(min(width, height) // SIZE_DIVISOR, 2) - 1))
         side = min(side, width, height)
 
-        for _ in range(self.max_count):
-            top = int(rng.integers(0, height - side + 1))
-            left = int(rng.integers(0, width - side + 1))
-            channels[top:top + side, left:left + side] = 0
+        # A copy, because a caller's frame is the caller's, and the black is written into it.
+        punched = pixels.copy()
+        for down, across in self._placements:
+            top = int(down * (height - side + 1))
+            left = int(across * (width - side + 1))
+            punched[top:top + side, left:left + side] = 0
 
-        return Image.fromarray(channels)
+        return punched
 
 
     def reseed(self) -> None:
@@ -147,12 +144,12 @@ class Cutout:
 
         """
 
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
-
         if self._requested_count is not None:
             self.max_count = self._requested_count
-            return None
+        else:
+            self.max_count = int(self._rng.integers(*COUNT_RANGE))
 
-        self.max_count = int(self._rng.integers(*COUNT_RANGE))
+        self._size_fraction = float(self._rng.random())
+        self._placements: list[tuple[float, float]] = [(float(down), float(across)) for down, across in self._rng.random((self.max_count, 2))]
 
         return None

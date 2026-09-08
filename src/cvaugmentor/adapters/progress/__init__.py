@@ -1,1 +1,1 @@
-from cvaugmentor.adapters.progress.tqdm_sink import TqdmProgressSink
+from cvaugmentor.adapters.progress.terminal_sink import TerminalProgressSink

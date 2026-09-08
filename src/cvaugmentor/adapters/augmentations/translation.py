@@ -1,6 +1,8 @@
-import numpy as np
-from PIL import Image
+import math
 
+import numpy as np
+
+from cvaugmentor.adapters.augmentations.frames import as_pixels
 from cvaugmentor.core.logging import get_logger
 from cvaugmentor.domain.schemas.media import Frame
 
@@ -22,7 +24,10 @@ class Translation:
     The two values are pixel offsets, positive x sliding the frame right and
     positive y sliding it down. The canvas does not move, so whatever slides
     off the edge is lost and black fills in behind it. An unspecified pair is
-    drawn once per instance.
+    drawn once per instance. Taking the nearest source pixel, which is the
+    sampling Pillow's own transform defaulted to, lands every offset on a whole
+    pixel, so the slide is a block copy into a black canvas and nothing is
+    resampled at any offset.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -98,19 +103,32 @@ class Translation:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
+        pixels = as_pixels(frame)
+        height, width = pixels.shape[0], pixels.shape[1]
 
+        # The offsets are read from output pixel back to source pixel, which is the
+        # direction Pillow's matrix read and why a positive offset subtracts. Pillow
+        # sampled at the centre of the output pixel and truncated, and the nearest source
+        # pixel of an output pixel at x is therefore x - ceil(offset - 0.5) whatever the
+        # offset is, so a fractional offset is a whole-pixel slide too and no interpolation
+        # is owed at any offset. The slide is then the overlap block copied into black,
+        # which resamples nothing and reads each byte once.
+        slide_x = math.ceil(self.translate[0] - 0.5)
+        slide_y = math.ceil(self.translate[1] - 0.5)
+        span_x = max(width - abs(slide_x), 0)
+        span_y = max(height - abs(slide_y), 0)
 
-        # PIL reads an affine matrix backwards, from output pixel to source pixel, so the
-        # offsets are negated to make a positive value slide the frame the way it reads.
-        matrix = (1, 0, -self.translate[0], 0, 1, -self.translate[1])
+        slid = np.zeros(pixels.shape, np.uint8)
+        if span_x and span_y:
+            into_x, from_x = max(slide_x, 0), max(-slide_x, 0)
+            into_y, from_y = max(slide_y, 0), max(-slide_y, 0)
+            slid[into_y:into_y + span_y, into_x:into_x + span_x] = pixels[from_y:from_y + span_y, from_x:from_x + span_x]
 
-        return frame.transform(frame.size, Image.Transform.AFFINE, matrix)
+        return slid
 
 
     def reseed(self) -> None:

@@ -1,13 +1,14 @@
 import numpy as np
-from PIL import Image
+import numpy.typing as npt
 
+from cvaugmentor.adapters.augmentations.frames import as_pixels
 from cvaugmentor.core.logging import get_logger
 from cvaugmentor.domain.schemas.media import Frame
 
 logger = get_logger("adapters.augmentations")
 
 INTENSITY_RANGE = (-1.0, 1.0)
-SEED_LIMIT = 2**32
+FULL_RANGE = 255.0
 
 
 class Noise:
@@ -19,9 +20,10 @@ class Noise:
 
     Usage
     -----
-    The seed is drawn once per instance rather than the noise itself, so every
-    frame of a video of one size receives the same speckle and the result does
-    not crawl between frames.
+    The speckle is drawn once for the first frame's size rather than once per
+    frame, so every frame of a video of one size receives the same speckle and
+    the result does not crawl between frames. The draw comes from this
+    instance's own generator, so nothing another thread does moves it.
     ```python
     from cvaugmentor import augmentations as aug
 
@@ -67,7 +69,7 @@ class Noise:
 
         self._requested_intensity = intensity
         self._rng = np.random.default_rng()
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
+        self._speckle: npt.NDArray[np.float32] | None = None
         self.reseed()
 
         if not INTENSITY_RANGE[0] <= self.intensity <= INTENSITY_RANGE[1]:
@@ -96,19 +98,18 @@ class Noise:
         Raises
         ------
         TypeError
-            If `frame` is not a PIL image.
+            If `frame` is not an HxWx3 uint8 array in RGB order.
 
         """
 
-        if not isinstance(frame, Image.Image):
-            raise TypeError(f"frame must be an instance of the PIL Image. Received: {frame} with type {type(frame)}")
+        pixels = as_pixels(frame)
 
+        if self._speckle is None or self._speckle.shape != pixels.shape:
+            self._speckle = self._rng.random(pixels.shape, dtype=np.float32)
 
-        channels = np.asarray(frame, dtype=np.float32)
-        speckle = np.random.default_rng(self._seed).random(channels.shape, dtype=np.float32)
-        speckled = np.clip(channels + speckle * self.intensity * 255, 0, 255)
-
-        return Image.fromarray(speckled.astype(np.uint8))
+        # The sum promotes to float32 into a buffer of its own, so the frame that arrived is
+        # read and never written.
+        return np.clip(pixels + self._speckle * (self.intensity * FULL_RANGE), 0.0, FULL_RANGE).astype(np.uint8)
 
 
     def reseed(self) -> None:
@@ -134,7 +135,7 @@ class Noise:
 
         """
 
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
+        self._speckle = None
 
         if self._requested_intensity is not None:
             self.intensity = float(self._requested_intensity)

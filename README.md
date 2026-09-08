@@ -74,6 +74,8 @@ CVAugmentor/
 
 ## Key Features
 
+- **Roughly Ten Times Faster Than 1.x:** One 1920x1080 image through fifteen augmentations went from 4716 ms to 453 ms, and eight of them from 38.1 s to 3.7 s. The output is still lossless PNG.
+- **Runs Everywhere, Accelerates Where It Can:** NumPy and Pillow are the only hard requirements and both ship wheels for every target, so a plain install never fails. OpenCV and Intel ISA-L are optional and simply make it faster.
 - **Fifteen Augmentations:** Blur, Brightness, Cutout, Exposure, Flip, Grayscale, Hue, Negative, NoAugmentation, Noise, Rotate, Saturation, Shear, Translation, and Zoom.
 - **Images and Video Through One Pipeline:** The same augmentations apply to a still or to every frame of a video, and a long video is decoded lazily rather than held in memory.
 - **Two Application Modes:** `sequential` writes one output per augmentation, and `singular` chains them all into one.
@@ -91,6 +93,16 @@ This package is built with **Python 3.14**.
 
 ### 1. Installation
 
+Install it with the accelerators, which is the recommended form and the one video needs:
+
+```bash
+pip install "CVAugmentor[fast,video]"
+```
+
+A plain install works too, and works on every platform NumPy and Pillow reach, including
+Alpine and Windows on ARM. It runs the NumPy fallbacks, which are about four times faster
+than 1.x rather than about ten, and it cannot process video:
+
 ```bash
 pip install CVAugmentor
 ```
@@ -100,8 +112,16 @@ Or from a clone:
 ```bash
 git clone https://github.com/AliKHaliliT/CVAugmentor.git
 cd CVAugmentor
-pip install -e .
+pip install -e ".[fast,video]"
 ```
+
+**On what the extras change.** `numpy` and `pillow` are the only hard requirements, so a
+plain install never fails over a missing wheel. `fast` adds OpenCV for the operations and
+Intel ISA-L for compression, and `video` adds OpenCV, which is the only video codec here.
+Where an accelerator is absent the adapters fall back to NumPy and the standard library and
+keep every image format. The two paths agree within one level per channel rather than
+exactly, because OpenCV's vectorised colour kernel rounds differently from its own scalar
+formula, so a dataset built with the extras and one built without are not byte-identical.
 
 ### 2. Augmenting One Image
 
