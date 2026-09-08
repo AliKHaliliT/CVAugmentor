@@ -14,4 +14,4 @@
 
 ## Blocked
 
-- Re-alignment to Keel commit 8367603 is analysed and waiting on the owner's ruling on record numbering, because the template's new records claim 0042 to 0044 and this project's own records already hold 0042 to 0055 (2026-09-08).
+- Nothing blocked.

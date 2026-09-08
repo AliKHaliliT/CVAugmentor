@@ -47,6 +47,10 @@ LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 STATE_DATE = re.compile(r"\((\d{4}-\d{2}-\d{2})\)")
 RECORD_NAME = re.compile(r"^\d{4}-[a-z0-9-]+\.md$")
 DATED_RECORD_NAME = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$")
+# The numbered record folders: decisions/, this project's own, and inherited/, the template's
+# own carried whole in a project built from it, keeping the template's numbers so the two
+# sequences never meet. A template has no inherited folder.
+NUMBERED_RECORD_FOLDERS = ("decisions", "inherited")
 FENCE = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
 DOTTED_MODULE = re.compile(r"[a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+")
 TREE_FILE = re.compile(r"[A-Za-z0-9_\-]+(?:\.[A-Za-z0-9_\-]+)+")
@@ -236,23 +240,32 @@ def check_docs_zone(problems: list[str]) -> None:
             lines = f.read_text(encoding="utf-8").count("\n") + 1
             if lines > BUDGET_LINES:
                 problems.append(f"docs/{f.name}: {lines} lines against the {BUDGET_LINES}-line budget; split by fission")
-    decisions = docs / "decisions"
-    if decisions.is_dir():
+    for folder_name in NUMBERED_RECORD_FOLDERS:
+        records = docs / folder_name
+        if not records.is_dir():
+            continue
+        # Numbers are unique within a folder and never compared across the two, which is the
+        # point of the split; a duplicate in the inherited folder means the copy is no longer
+        # the template's folder.
+        advice = (
+            "renumber the newer record" if folder_name == "decisions"
+            else "recopy the folder whole from the template"
+        )
         numbers: dict[str, str] = {}
-        for f in sorted(decisions.glob("*.md")):
+        for f in sorted(records.glob("*.md")):
             if not RECORD_NAME.match(f.name):
-                problems.append(f"docs/decisions/{f.name}: records are named NNNN-short-kebab-title.md")
+                problems.append(f"docs/{folder_name}/{f.name}: records are named NNNN-short-kebab-title.md")
                 continue
             num = f.name[:4]
             if num in numbers:
                 problems.append(
-                    f"docs/decisions/: {numbers[num]} and {f.name} share the number {num}; renumber the newer record"
+                    f"docs/{folder_name}/: {numbers[num]} and {f.name} share the number {num}; {advice}"
                 )
             numbers[num] = f.name
-    # Below the top level, docs/ holds record folders only: decisions/ with its numbered
-    # records, and dated folders such as briefings or progress reports, each registered by
-    # its own row. A living document belongs at the top as a flat UPPERCASE file, where the
-    # naming and budget rules can see it, so anything else below a subfolder fails.
+    # Below the top level, docs/ holds record folders only: the numbered folders above, and
+    # dated folders such as briefings or progress reports, each registered by its own row. A
+    # living document belongs at the top as a flat UPPERCASE file, where the naming and budget
+    # rules can see it, so anything else below a subfolder fails.
     for path in tracked_files():
         if not path.startswith("docs/") or path.startswith("docs/decisions/"):
             continue
@@ -263,7 +276,7 @@ def check_docs_zone(problems: list[str]) -> None:
         folder = "/".join(path.split("/")[:2])
         if f"({folder}/)" not in agents:
             problems.append(f"{path}: {folder}/ has no row in the AGENTS.md index; a subfolder of docs/ is a registered record folder or it does not exist")
-        if not DATED_RECORD_NAME.match(path.rsplit("/", 1)[-1]):
+        if folder != "docs/inherited" and not DATED_RECORD_NAME.match(path.rsplit("/", 1)[-1]):
             problems.append(
                 f"{path}: a file below a docs/ subfolder is a dated record named YYYY-MM-DD-short-kebab-title.md; "
                 f"a living document is a flat UPPERCASE file at the top of docs/"

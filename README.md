@@ -10,7 +10,7 @@
 
 Augment images and videos for computer vision tasks, from one file or a whole directory.
 
-CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `2b38e75b78c54ec8e097a5fba0e3c527b0f64a59`.
+CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `ba37107a9b373936f58e971aaa293d8111e82c63`.
 
 ## The Philosophy: Why Does This Exist?
 
@@ -206,7 +206,7 @@ pipeline = PipelineBuilder().with_discovered_augmentations().build()
 
 ## Conventions
 
-The project's conventions live in one place, the rulebook at [docs/CONVENTIONS.md](docs/CONVENTIONS.md). It holds the documentation system (a vendor-neutral [AGENTS.md](AGENTS.md) as the agent entry point and the single index of every document, [STATE.md](STATE.md) as the living project state, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) as the current map, and immutable decision records under [docs/decisions/](docs/decisions/) as the reasoning behind every settled choice), the docstring convention in its code-level section, and the prose law in its Prose section. That file is normative and must not be modified; the rationale behind the system itself is recorded in [its founding decision record](docs/decisions/0001-adopt-the-documentation-system.md).
+The project's conventions live in one place, the rulebook at [docs/CONVENTIONS.md](docs/CONVENTIONS.md). It holds the documentation system (a vendor-neutral [AGENTS.md](AGENTS.md) as the agent entry point and the single index of every document, [STATE.md](STATE.md) as the living project state, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) as the current map, and immutable decision records under [docs/decisions/](docs/decisions/) as the reasoning behind every settled choice), the docstring convention in its code-level section, and the prose law in its Prose section. That file is normative and must not be modified; the rationale behind the system itself is recorded in [its founding decision record](docs/inherited/0001-adopt-the-documentation-system.md).
 
 The rulebook is owned at the style level. A project built from this template never changes it locally, and an improvement discovered while refactoring against the template is not kept as a private advantage; [AGENTS.md](AGENTS.md) describes the upstream report that carries it back to the template, where it is verified and, if it holds, adopted for every project that follows the style.
 

@@ -30,6 +30,13 @@ jobs:
             echo "Inflated vocabulary or weasel attribution in living prose; the verdict is review's."
             exit 1
           fi
+      - name: Spelling, advisory
+        continue-on-error: true
+        run: |
+          if ! pipx run codespell==2.4.3 --skip ".git,node_modules,.hypothesis,__pycache__,dist,package-lock.json,*.svg,*.png,*.ico,*.woff,*.woff2,*.map,treasury,decisions,claims,reviews,upstream,inherited,mockServiceWorker.js" --ignore-words-list "accreting,afterall,paeth" .; then
+            echo "Misspellings in living prose or code; correct each, or name a domain term in the ignore list."
+            exit 1
+          fi
       - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
