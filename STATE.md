@@ -14,4 +14,4 @@
 
 ## Blocked
 
-- GitHub Pages still names the deleted gh-pages branch as its source and must be turned off in the repository settings, which no command in this tree can reach (2026-09-05).
+- Nothing blocked.
