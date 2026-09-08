@@ -19,11 +19,15 @@ class Cutout:
     Every square's position is drawn once per redraw and kept as a fraction of
     the room it has, so a count above one really does place that many squares
     in different spots, and a video of one size loses the same squares on every
-    frame. An unspecified size is scaled to the frame it lands on.
+    frame. An unspecified size is scaled to the frame it lands on. Passing a
+    seed fixes every draw this instance makes, including the ones a later
+    redraw asks for, so a dataset built from unspecified settings can be built
+    again.
     ```python
     from cvaugmentor import augmentations as aug
 
     punched = aug.Cutout(max_size=64, max_count=6).apply(frame)
+    repeatable = aug.Cutout(seed=7)
     ```
 
     """
@@ -33,7 +37,7 @@ class Cutout:
     max_count: int
 
 
-    def __init__(self, max_size: int | None = None, max_count: int | None = None) -> None:
+    def __init__(self, max_size: int | None = None, max_count: int | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -49,6 +53,10 @@ class Cutout:
         max_count : int | None, optional
             How many squares to punch. Drawn from [1, 5] when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -58,7 +66,8 @@ class Cutout:
         Raises
         ------
         ValueError
-            If `max_size` or `max_count` is not a positive integer.
+            If `max_size` or `max_count` is not a positive integer, or `seed`
+            is not a non-negative integer.
 
         """
 
@@ -66,11 +75,15 @@ class Cutout:
             raise ValueError(f"max_size must be a positive integer. Received: {max_size} with type {type(max_size)}")
         if max_count is not None and (not isinstance(max_count, int) or max_count < 1):
             raise ValueError(f"max_count must be a positive integer. Received: {max_count} with type {type(max_count)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self.max_size = max_size
         self._requested_count = max_count
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
 

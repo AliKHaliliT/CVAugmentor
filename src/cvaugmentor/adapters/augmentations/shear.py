@@ -68,11 +68,15 @@ class Shear:
     whatever slides off the canvas is lost to black. An unspecified pair is
     drawn once per instance. The slant takes the nearest source pixel rather
     than blending its neighbours, which is the sampling Pillow's own transform
-    defaulted to and what keeps a slanted edge as hard as it started.
+    defaulted to and what keeps a slanted edge as hard as it started. Passing
+    a seed fixes every draw this instance makes, including the ones a later
+    redraw asks for, so a dataset built from unspecified settings can be built
+    again.
     ```python
     from cvaugmentor import augmentations as aug
 
     slanted = aug.Shear((0.2, 0.2)).apply(frame)
+    repeatable = aug.Shear(seed=7)
     ```
 
     """
@@ -82,7 +86,7 @@ class Shear:
     shear: tuple[float, float]
 
 
-    def __init__(self, shear: tuple[int | float, int | float] | None = None) -> None:
+    def __init__(self, shear: tuple[int | float, int | float] | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -95,6 +99,10 @@ class Shear:
             The slant along x and y, each between -1 and 1. Drawn from
             [-0.5, 0.5] when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -104,7 +112,8 @@ class Shear:
         Raises
         ------
         ValueError
-            If `shear` is not a pair of numbers within [-1, 1].
+            If `shear` is not a pair of numbers within [-1, 1], or `seed` is
+            not a non-negative integer.
 
         """
 
@@ -113,10 +122,14 @@ class Shear:
                 raise ValueError(f"shear must be a tuple of two numbers. Received: {shear} with type {type(shear)}")
             if not all(isinstance(value, (int, float)) and -SHEAR_LIMIT <= value <= SHEAR_LIMIT for value in shear):
                 raise ValueError(f"shear values must be numbers between -{SHEAR_LIMIT} and {SHEAR_LIMIT}. Received: {shear}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_shear = shear
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
         if not all(DRAW_RANGE[0] <= value <= DRAW_RANGE[1] for value in self.shear):

@@ -27,11 +27,14 @@ class Translation:
     drawn once per instance. Taking the nearest source pixel, which is the
     sampling Pillow's own transform defaulted to, lands every offset on a whole
     pixel, so the slide is a block copy into a black canvas and nothing is
-    resampled at any offset.
+    resampled at any offset. Passing a seed fixes every draw this instance
+    makes, including the ones a later redraw asks for, so a dataset built from
+    unspecified settings can be built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     slid = aug.Translation((25, -10)).apply(frame)
+    repeatable = aug.Translation(seed=7)
     ```
 
     """
@@ -41,7 +44,7 @@ class Translation:
     translate: tuple[float, float]
 
 
-    def __init__(self, translate: tuple[int | float, int | float] | None = None) -> None:
+    def __init__(self, translate: tuple[int | float, int | float] | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -53,6 +56,10 @@ class Translation:
         translate : tuple[int | float, int | float] | None, optional
             The offset along x and y in pixels. Drawn from [-50, 50] when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -62,7 +69,8 @@ class Translation:
         Raises
         ------
         ValueError
-            If `translate` is not a pair of numbers.
+            If `translate` is not a pair of numbers, or `seed` is not a
+            non-negative integer.
 
         """
 
@@ -71,10 +79,14 @@ class Translation:
                 raise ValueError(f"translate must be a tuple of two numbers. Received: {translate} with type {type(translate)}")
             if not all(isinstance(value, (int, float)) for value in translate):
                 raise ValueError(f"translate values must be numbers. Received: {translate}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_translate = translate
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
         if not all(abs(value) <= ADVISED_LIMIT for value in self.translate):

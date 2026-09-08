@@ -17,6 +17,12 @@ LUMINANCE = np.array([4899, 9617, 1868], np.uint32)
 LUMINANCE_SHIFT = 14
 LUMINANCE_HALF = 1 << (LUMINANCE_SHIFT - 1)
 
+# The range a drawn seed is taken from, for an augmentation whose effect depends on a frame
+# size it cannot know until one arrives. Drawing the seed once and building a generator from
+# it per frame keeps an instance's state independent of how many frames it has already seen,
+# which a generator shared with apply would not (see decision 0057).
+SEED_LIMIT = 2**32
+
 
 def as_pixels(frame: Frame) -> Pixels:
 

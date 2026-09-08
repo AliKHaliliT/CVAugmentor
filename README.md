@@ -176,7 +176,21 @@ cvaugmentor samples/0.png output/0.png --all
 cvaugmentor samples/videos output/videos --target video --process batch --mode singular --augmentation flip
 ```
 
-### 5. Running the Same Augmentation Twice
+### 5. Rebuilding the Same Dataset
+
+An augmentation left without a setting draws one. Pass a seed to fix every draw it makes,
+including the redraws `random_state` asks for between items, and the pass replays.
+
+```python
+pipeline = (
+    PipelineBuilder()
+    .with_augmentations(aug.Blur(seed=7), aug.Hue(seed=8), aug.Noise(seed=9))
+    .with_config(PipelineConfig(random_state=True))
+    .build()
+)
+```
+
+### 6. Running the Same Augmentation Twice
 
 Labels name the output file, so pass one explicitly to register an augmentation more than once.
 
@@ -189,7 +203,7 @@ pipeline = (
 )
 ```
 
-### 6. Shipping a Third-Party Augmentation
+### 7. Shipping a Third-Party Augmentation
 
 Expose an `IAugmentation` implementation from your own package, then opt in during construction.
 

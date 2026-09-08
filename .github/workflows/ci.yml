@@ -64,21 +64,21 @@ jobs:
           "$RUNNER_TEMP/wheel-check/bin/python" -m pip install dist/*.whl
           "$RUNNER_TEMP/wheel-check/bin/python" -c "import importlib, tomllib; importlib.import_module(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])"
 
-  # The accelerators are optional, so the path taken without them is executed here rather
-  # than merely asserted about in-process. This job installs no extras at all, which is
-  # what a user on Alpine or on Windows for ARM gets.
-  fallback:
+  # The accelerators publish no musl wheel, so this job runs the suite on the platform the
+  # fallback exists for, where they genuinely cannot be installed rather than where they were
+  # removed by hand. It replaces a job that withheld the extras on glibc, which proved less.
+  # Only the test tools are installed, because the linters already ran above and a dev tool
+  # without a musl wheel would break a job whose question is whether the fallback works.
+  musl:
     runs-on: ubuntu-latest
+    container: python:3.14-alpine
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.14"
-      - name: Install without the accelerators
+      - name: Install, no extras available on this platform
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e .
-          python -m pip install --group dev
+          python -m pip install pytest hypothesis
       - name: Confirm neither accelerator resolved
         run: |
           python -c "import cv2" && exit 1 || true

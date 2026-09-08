@@ -110,11 +110,14 @@ class Hue:
     frame's own bytes untouched. An unspecified shift is drawn once per
     instance. The rotation runs through a float32 HSV either way, because the
     8-bit one holds half a degree per level and would move a pixel even where
-    the shift is nothing.
+    the shift is nothing. Passing a seed fixes every draw this instance makes,
+    including the ones a later redraw asks for, so a dataset built from
+    unspecified settings can be built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     shifted = aug.Hue(-120).apply(frame)
+    repeatable = aug.Hue(seed=7)
     ```
 
     """
@@ -124,7 +127,7 @@ class Hue:
     hue_shift: float
 
 
-    def __init__(self, hue_shift: int | float | None = None) -> None:
+    def __init__(self, hue_shift: int | float | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -137,6 +140,10 @@ class Hue:
             The rotation in degrees, between -360 and 360. Drawn from that
             range when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -146,7 +153,8 @@ class Hue:
         Raises
         ------
         ValueError
-            If `hue_shift` is not a number, or falls outside [-360, 360].
+            If `hue_shift` is not a number or falls outside [-360, 360], or
+            `seed` is not a non-negative integer.
 
         """
 
@@ -154,10 +162,14 @@ class Hue:
             raise ValueError(f"hue_shift must be a number. Received: {hue_shift} with type {type(hue_shift)}")
         if hue_shift is not None and not -SHIFT_LIMIT <= hue_shift <= SHIFT_LIMIT:
             raise ValueError(f"hue_shift must fall between -{SHIFT_LIMIT} and {SHIFT_LIMIT}. Received: {hue_shift} with type {type(hue_shift)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_shift = hue_shift
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
 

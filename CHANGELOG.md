@@ -22,6 +22,7 @@ A full rewrite onto a Hexagonal Architecture. Every entry under Removed or Chang
 
 - `Translation`, an augmentation that slides a frame across its own canvas. Positive values move it right and down.
 - The `fast` extra, carrying OpenCV and Intel ISA-L. With it a pass runs about ten times faster than 1.x; without it, about four, on the same lossless output.
+- An optional `seed` on every augmentation that draws a setting, ten of the fifteen. It fixes every draw the instance makes, including the ones a redraw between batch items asks for, so a dataset built from unspecified settings can be built again. The five that draw nothing do not take one.
 - `PipelineConfig.workers`, which sizes the pool that encodes outputs. `None` sizes it from the machine, and `1` keeps every write on the calling thread.
 - This package's own PNG codec, used for reading the PNGs it wrote and for writing every PNG. It encodes a 1920x1080 frame in roughly 43 ms against Pillow's 300 ms at the same setting, and its files read back through Pillow and OpenCV unchanged.
 - A command-line interface. `cvaugmentor input.png output.png --all` augments from a shell, and `--list` names every built-in augmentation.

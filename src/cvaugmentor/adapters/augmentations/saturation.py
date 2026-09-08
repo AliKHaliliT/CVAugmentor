@@ -21,10 +21,14 @@ class Saturation:
     frame is blended against its own grayscale and extrapolated past it, which
     is the operation Pillow's colour enhancement always was; going through hue
     instead would quantise it to 180 levels and lose colour the blend keeps.
+    Passing a seed fixes every draw this instance makes, including the ones
+    a later redraw asks for, so a dataset built from unspecified settings
+    can be built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     saturated = aug.Saturation(0.5).apply(frame)
+    repeatable = aug.Saturation(seed=7)
     ```
 
     """
@@ -34,7 +38,7 @@ class Saturation:
     saturation_factor: float
 
 
-    def __init__(self, saturation_factor: int | float | None = None) -> None:
+    def __init__(self, saturation_factor: int | float | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -47,6 +51,10 @@ class Saturation:
             The offset applied to the frame's colour intensity. Drawn from
             [0, 0.5] when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -56,7 +64,8 @@ class Saturation:
         Raises
         ------
         ValueError
-            If `saturation_factor` is not a number, or is below -1.
+            If `saturation_factor` is not a number or is below -1, or `seed`
+            is not a non-negative integer.
 
         """
 
@@ -64,10 +73,14 @@ class Saturation:
             raise ValueError(f"saturation_factor must be a number. Received: {saturation_factor} with type {type(saturation_factor)}")
         if saturation_factor is not None and saturation_factor < -1:
             raise ValueError(f"saturation_factor must not be below -1. Received: {saturation_factor} with type {type(saturation_factor)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_factor = saturation_factor
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
 

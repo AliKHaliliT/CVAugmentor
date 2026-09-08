@@ -1,4 +1,5 @@
 import importlib
+import inspect
 import pkgutil
 from collections.abc import Callable
 from types import ModuleType
@@ -274,3 +275,69 @@ def test_shear_lands_whole_rows_where_the_sample_point_sits_on_a_boundary(values
     steps = np.diff(offsets)
 
     assert set(steps.tolist()) <= {0, 1, -1}, "an offset sequence must advance by at most one pixel per row"
+
+
+# The seed exists so a dataset built from unspecified settings can be built again. It is
+# read off the signature rather than listed, so an augmentation that gains a draw and forgets
+# the seed fails here (see decision 0057).
+SEEDED = [
+    cls for cls in (getattr(catalog, name) for name in dir(catalog) if name[0].isupper())
+    if "seed" in inspect.signature(cls).parameters
+]
+DRAWING = [
+    cls for cls in (getattr(catalog, name) for name in dir(catalog) if name[0].isupper())
+    if "default_rng" in inspect.getsource(importlib.import_module(cls.__module__))
+]
+
+
+def test_every_augmentation_that_draws_a_setting_takes_a_seed() -> None:
+    assert sorted(c.__name__ for c in SEEDED) == sorted(c.__name__ for c in DRAWING)
+
+
+def test_no_augmentation_takes_a_seed_it_would_never_use() -> None:
+    assert all(c in DRAWING for c in SEEDED)
+
+
+@pytest.mark.parametrize("cls", SEEDED, ids=lambda c: c.__name__)
+def test_one_seed_settles_every_draw_an_instance_makes(cls: type[Any]) -> None:
+    left, right = cls(seed=7), cls(seed=7)
+
+    assert np.array_equal(left.apply(frame()), right.apply(frame()))
+
+
+@pytest.mark.parametrize("cls", SEEDED, ids=lambda c: c.__name__)
+def test_a_seeded_pair_still_agrees_after_the_runner_redraws_between_items(cls: type[Any]) -> None:
+    # The batch runner calls reseed between items when random_state is set, so agreement has
+    # to survive a redraw or only the first item of a dataset would be reproducible.
+    left, right = cls(seed=7), cls(seed=7)
+    before = left.apply(frame())
+    left.reseed()
+    right.reseed()
+
+    assert np.array_equal(left.apply(frame()), right.apply(frame()))
+    assert not np.array_equal(left.apply(frame()), before), "a redraw must move the setting"
+
+
+@pytest.mark.parametrize("cls", SEEDED, ids=lambda c: c.__name__)
+def test_a_whole_pass_replays_from_the_same_seed(cls: type[Any]) -> None:
+    def pass_of_three(seed: int) -> list[npt.NDArray[np.uint8]]:
+        instance = cls(seed=seed)
+        rendered = []
+        for _ in range(3):
+            rendered.append(instance.apply(frame()).copy())
+            instance.reseed()
+        return rendered
+
+    assert all(np.array_equal(a, b) for a, b in zip(pass_of_three(11), pass_of_three(11), strict=True))
+
+
+@pytest.mark.parametrize("cls", SEEDED, ids=lambda c: c.__name__)
+def test_two_seeds_settle_on_different_draws(cls: type[Any]) -> None:
+    assert not np.array_equal(cls(seed=7).apply(frame()), cls(seed=8).apply(frame()))
+
+
+@pytest.mark.parametrize("cls", SEEDED, ids=lambda c: c.__name__)
+@pytest.mark.parametrize("bad", ["7", 1.5, -1])
+def test_a_seed_that_is_not_a_whole_count_is_refused(cls: type[Any], bad: Any) -> None:
+    with pytest.raises(ValueError, match="seed"):
+        cls(seed=bad)

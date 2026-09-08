@@ -22,11 +22,14 @@ class Exposure:
     1 leaves the frame alone while a large factor blows the highlights out. An
     unspecified factor is drawn once per instance. The multiplication is the
     same for every pixel, so it collapses into a 256-entry table that is built
-    once per draw rather than per frame.
+    once per draw rather than per frame. Passing a seed fixes every draw
+    this instance makes, including the ones a later redraw asks for, so a
+    dataset built from unspecified settings can be built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     exposed = aug.Exposure(1.3).apply(frame)
+    repeatable = aug.Exposure(seed=7)
     ```
 
     """
@@ -36,7 +39,7 @@ class Exposure:
     exposure_factor: float
 
 
-    def __init__(self, exposure_factor: int | float | None = None) -> None:
+    def __init__(self, exposure_factor: int | float | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -49,6 +52,10 @@ class Exposure:
             The multiplier applied to every channel. Drawn from [0.3, 1.7]
             when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -58,7 +65,8 @@ class Exposure:
         Raises
         ------
         ValueError
-            If `exposure_factor` is not a number, or is negative.
+            If `exposure_factor` is not a number or is negative, or `seed`
+            is not a non-negative integer.
 
         """
 
@@ -66,10 +74,14 @@ class Exposure:
             raise ValueError(f"exposure_factor must be a number. Received: {exposure_factor} with type {type(exposure_factor)}")
         if exposure_factor is not None and exposure_factor < 0:
             raise ValueError(f"exposure_factor must not be negative. Received: {exposure_factor} with type {type(exposure_factor)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_factor = exposure_factor
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
         if not FACTOR_RANGE[0] <= self.exposure_factor <= FACTOR_RANGE[1]:

@@ -22,11 +22,14 @@ class Blur:
     unspecified one is drawn once per instance, so every frame of a video is
     softened by the same amount. Three box passes converge on a Gaussian and
     cost the same at every radius, which is the construction Pillow's own
-    Gaussian blur uses underneath.
+    Gaussian blur uses underneath. Passing a seed fixes every draw this
+    instance makes, including the ones a later redraw asks for, so a dataset
+    built from unspecified settings can be built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     blurred = aug.Blur(2.5).apply(frame)
+    repeatable = aug.Blur(seed=7)
     ```
 
     """
@@ -36,7 +39,7 @@ class Blur:
     radius: float
 
 
-    def __init__(self, radius: int | float | None = None) -> None:
+    def __init__(self, radius: int | float | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -48,6 +51,10 @@ class Blur:
         radius : int | float | None, optional
             The kernel's standard deviation. Drawn from [0, 5] when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -57,7 +64,8 @@ class Blur:
         Raises
         ------
         ValueError
-            If `radius` is not a number, or is negative.
+            If `radius` is not a number or is negative, or `seed` is not a
+            non-negative integer.
 
         """
 
@@ -65,10 +73,14 @@ class Blur:
             raise ValueError(f"radius must be a number. Received: {radius} with type {type(radius)}")
         if radius is not None and radius < 0:
             raise ValueError(f"radius must not be negative. Received: {radius} with type {type(radius)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_radius = radius
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
         if self.radius > RADIUS_RANGE[1]:

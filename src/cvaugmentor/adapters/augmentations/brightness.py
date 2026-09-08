@@ -18,11 +18,15 @@ class Brightness:
     The factor is an offset from the frame as it is, so 0 leaves it alone,
     a positive factor lightens it, and -1 takes it to black. An unspecified
     factor is drawn once per instance. The scaling collapses into a 256-entry
-    table, which is built once per draw rather than per frame.
+    table, which is built once per draw rather than per frame. Passing a
+    seed fixes every draw this instance makes, including the ones a later
+    redraw asks for, so a dataset built from unspecified settings can be
+    built again.
     ```python
     from cvaugmentor import augmentations as aug
 
     brightened = aug.Brightness(0.25).apply(frame)
+    repeatable = aug.Brightness(seed=7)
     ```
 
     """
@@ -32,7 +36,7 @@ class Brightness:
     brightness_factor: float
 
 
-    def __init__(self, brightness_factor: int | float | None = None) -> None:
+    def __init__(self, brightness_factor: int | float | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -45,6 +49,10 @@ class Brightness:
             The offset applied to the frame's brightness. Drawn from [0, 0.5]
             when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -54,7 +62,8 @@ class Brightness:
         Raises
         ------
         ValueError
-            If `brightness_factor` is not a number, or is below -1.
+            If `brightness_factor` is not a number or is below -1, or `seed`
+            is not a non-negative integer.
 
         """
 
@@ -62,10 +71,14 @@ class Brightness:
             raise ValueError(f"brightness_factor must be a number. Received: {brightness_factor} with type {type(brightness_factor)}")
         if brightness_factor is not None and brightness_factor < -1:
             raise ValueError(f"brightness_factor must not be below -1. Received: {brightness_factor} with type {type(brightness_factor)}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self._requested_factor = brightness_factor
-        self._rng = np.random.default_rng()
+        self._rng = np.random.default_rng(seed)
         self.reseed()
 
 

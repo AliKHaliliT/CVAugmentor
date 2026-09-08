@@ -1,13 +1,12 @@
 import numpy as np
 import numpy.typing as npt
 
-from cvaugmentor.adapters.augmentations.frames import Pixels, as_pixels
+from cvaugmentor.adapters.augmentations.frames import SEED_LIMIT, Pixels, as_pixels
 from cvaugmentor.core.acceleration import opencv
 from cvaugmentor.domain.schemas.media import Frame
 
 NEAR_DIVISOR = 1.5
 FAR_DIVISOR = 2.5
-SEED_LIMIT = 2**32
 # The term that shapes the cubic kernel, and the one OpenCV's own cubic resize carries.
 # Pillow's resize carried -0.5, whose negative lobes are shallower, so a stretched window
 # now comes out a shade sharper than 1.x drew it. Both paths hold the same term, which is
@@ -134,11 +133,15 @@ class Zoom:
     to the frame it lands on, and one larger than the frame is clamped to it.
     The stretch runs through a cubic kernel, which is what Pillow's own resize
     defaulted to and what keeps a magnified window from turning blocky; both
-    paths carry the same kernel, so they agree to within a level.
+    paths carry the same kernel, so they agree to within a level. Passing a
+    seed fixes every draw this instance makes, including the ones a later
+    redraw asks for, so a dataset built from unspecified settings can be built
+    again.
     ```python
     from cvaugmentor import augmentations as aug
 
     zoomed = aug.Zoom((128, 128)).apply(frame)
+    repeatable = aug.Zoom(seed=7)
     ```
 
     """
@@ -148,7 +151,7 @@ class Zoom:
     zoom_size: tuple[int, int] | None
 
 
-    def __init__(self, zoom_size: tuple[int, int] | None = None) -> None:
+    def __init__(self, zoom_size: tuple[int, int] | None = None, seed: int | None = None) -> None:
 
         """
 
@@ -161,6 +164,10 @@ class Zoom:
             The width and height of the window to crop. Scaled to between a
             half and two fifths of the frame's shorter side when None.
 
+        seed : int | None, optional
+            Fixes every draw this instance makes. Drawn unpredictably when
+            None.
+
 
         Returns
         -------
@@ -170,7 +177,8 @@ class Zoom:
         Raises
         ------
         ValueError
-            If `zoom_size` is not a pair of positive integers.
+            If `zoom_size` is not a pair of positive integers, or `seed` is not
+            a non-negative integer.
 
         """
 
@@ -179,11 +187,15 @@ class Zoom:
                 raise ValueError(f"zoom_size must be a tuple of two integers. Received: {zoom_size} with type {type(zoom_size)}")
             if not all(isinstance(value, int) and value > 0 for value in zoom_size):
                 raise ValueError(f"zoom_size values must be positive integers. Received: {zoom_size}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"seed must be an integer. Received: {seed} with type {type(seed)}")
+        if seed is not None and seed < 0:
+            raise ValueError(f"seed must not be negative. Received: {seed} with type {type(seed)}")
 
 
         self.zoom_size = zoom_size
-        self._rng = np.random.default_rng()
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
+        self._rng = np.random.default_rng(seed)
+        self._window_seed = int(self._rng.integers(0, SEED_LIMIT))
 
 
     def apply(self, frame: Frame) -> Frame:
@@ -213,7 +225,7 @@ class Zoom:
         """
 
         pixels = as_pixels(frame)
-        rng = np.random.default_rng(self._seed)
+        rng = np.random.default_rng(self._window_seed)
         height, width = pixels.shape[0], pixels.shape[1]
 
         if self.zoom_size is not None:
@@ -263,6 +275,6 @@ class Zoom:
 
         """
 
-        self._seed = int(self._rng.integers(0, SEED_LIMIT))
+        self._window_seed = int(self._rng.integers(0, SEED_LIMIT))
 
         return None
