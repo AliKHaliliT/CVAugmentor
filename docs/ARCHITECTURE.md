@@ -68,8 +68,7 @@ CVAugmentor/
 │           └── test_package.py # Library citizenship, pinned (logger, environment, version)
 │
 └── util_resources/             # Tracked repository assets
-    ├── readme/                 # Every image the repository embeds
-    └── reference/              # The API reference's theme, picked up by pdoc
+    └── readme/                 # Every image the repository embeds
 ```
 
 ## The shape of a pass

@@ -1,6 +1,6 @@
 # 0059. Theme the reference from a template directory
 
-Status: Accepted
+Status: Superseded by [0060](0060-keep-pdocs-own-theme-and-stop-looking-for-another.md)
 Date: 2026-09-09
 
 ## Context

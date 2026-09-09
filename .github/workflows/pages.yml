@@ -42,19 +42,18 @@ jobs:
       - name: Build the reference
         # The catalog is named explicitly because the layer directories are namespace
         # packages with no __init__.py, which no submodule walker discovers, and the shared
-        # frame helpers are excluded because they are internal to the adapters. The theme
-        # comes from the template directory, and the inline source listings are left out
-        # because the edit links reach the real thing with its history (decision 0059).
+        # frame helpers are excluded because they are internal to the adapters. The theme is
+        # pdoc's own: no premade alternative exists for it, and a hand-written one was tried
+        # and rejected as worse than the default (see decision 0060). Only the version
+        # footer and the per-module edit links are added, neither being a styling choice.
         run: |
           version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
           pdoc cvaugmentor \
                cvaugmentor.adapters.augmentations \
                '!cvaugmentor.adapters.augmentations.frames' \
                -o site --docformat numpy \
-               -t util_resources/reference \
                --footer-text "CVAugmentor $version" \
-               --edit-url cvaugmentor=https://github.com/AliKHaliliT/CVAugmentor/blob/main/src/cvaugmentor/ \
-               --no-show-source
+               --edit-url cvaugmentor=https://github.com/AliKHaliliT/CVAugmentor/blob/main/src/cvaugmentor/
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site
