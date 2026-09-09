@@ -42,12 +42,19 @@ jobs:
       - name: Build the reference
         # The catalog is named explicitly because the layer directories are namespace
         # packages with no __init__.py, which no submodule walker discovers, and the shared
-        # frame helpers are excluded because they are internal to the adapters.
+        # frame helpers are excluded because they are internal to the adapters. The theme
+        # comes from the template directory, and the inline source listings are left out
+        # because the edit links reach the real thing with its history (decision 0059).
         run: |
+          version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
           pdoc cvaugmentor \
                cvaugmentor.adapters.augmentations \
                '!cvaugmentor.adapters.augmentations.frames' \
-               -o site --docformat numpy
+               -o site --docformat numpy \
+               -t util_resources/reference \
+               --footer-text "CVAugmentor $version" \
+               --edit-url cvaugmentor=https://github.com/AliKHaliliT/CVAugmentor/blob/main/src/cvaugmentor/ \
+               --no-show-source
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site

@@ -1,0 +1,135 @@
+/* The API reference's theme. pdoc includes any custom.css it finds in the template
+   directory, which is the supported way to restyle it; overriding its Jinja style blocks
+   is deprecated. This appends to pdoc's own sheet rather than replacing it, so a pdoc
+   upgrade changes the layout underneath and never leaves the page unstyled.
+
+   Selectors here were read off generated output rather than guessed: every docstring
+   section arrives as an h6 whose id is usage, parameters, returns, or raises, and every
+   parameter list as a ul of li holding a strong name and a parenthesised type. */
+
+:root {
+    --ref-ink: #1b1f24;
+    --ref-muted: #5b6570;
+    --ref-rule: #e2e6ea;
+    --ref-bg: #ffffff;
+    --ref-panel: #f7f9fa;
+    --ref-brand: #0b6b5e;
+    --ref-brand-soft: #0b6b5e1a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ref-ink: #e6e9ec;
+        --ref-muted: #98a3ae;
+        --ref-rule: #2a3138;
+        --ref-bg: #14181c;
+        --ref-panel: #1b2126;
+        --ref-brand: #4fd1bd;
+        --ref-brand-soft: #4fd1bd1f;
+    }
+
+    html, body {
+        background: var(--ref-bg);
+        color: var(--ref-ink);
+    }
+}
+
+/* Measure. Prose is unreadable much past this, and the default runs wider. */
+main.pdoc {
+    max-width: 64rem;
+}
+
+main.pdoc .docstring p,
+main.pdoc .docstring li {
+    line-height: 1.65;
+}
+
+/* The section labels. Every docstring in this package carries three or four of them, so
+   this is where legibility is won or lost. h6 is the tag pdoc emits and it is tiny by
+   default, which reads as an afterthought rather than as a section. */
+main.pdoc .docstring h6 {
+    font-size: 0.72rem;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ref-muted);
+    border-bottom: 1px solid var(--ref-rule);
+    padding-bottom: 0.3rem;
+    margin: 1.7rem 0 0.85rem;
+}
+
+/* Parameter, return, and raise entries, which arrive as a plain bulleted list. Rendering
+   them as indented definitions puts the name in the reader's path rather than a bullet. */
+main.pdoc .docstring h6 + ul {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+main.pdoc .docstring h6 + ul > li {
+    border-left: 2px solid var(--ref-rule);
+    padding: 0.1rem 0 0.1rem 0.9rem;
+    margin-bottom: 0.7rem;
+}
+
+main.pdoc .docstring h6 + ul > li > strong {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-weight: 600;
+    color: var(--ref-brand);
+}
+
+/* Members. A left marker on the hovered or linked one makes a long page navigable. */
+main.pdoc .attr {
+    border-left: 3px solid transparent;
+    padding-left: 0.6rem;
+    margin-left: -0.9rem;
+    transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+main.pdoc .attr:hover,
+main.pdoc .attr:target {
+    border-left-color: var(--ref-brand);
+    background: var(--ref-brand-soft);
+}
+
+main.pdoc .classattr {
+    margin-top: 1.1rem;
+}
+
+/* Code, both the examples inside a Usage block and the source listings. */
+main.pdoc .pdoc-code {
+    border: 1px solid var(--ref-rule);
+    border-radius: 8px;
+    background: var(--ref-panel);
+}
+
+main.pdoc .pdoc-code pre {
+    padding: 0.55rem 0.2rem;
+}
+
+/* Navigation. Quieter than the default, and it stays put on a long page. */
+nav.pdoc {
+    border-right: 1px solid var(--ref-rule);
+    background: var(--ref-panel);
+}
+
+nav.pdoc a {
+    color: var(--ref-ink);
+}
+
+nav.pdoc a:hover {
+    color: var(--ref-brand);
+}
+
+nav.pdoc .module-list-button {
+    border-color: var(--ref-rule);
+}
+
+/* The footer line pdoc writes, kept legible but out of the way. */
+main.pdoc .attribution {
+    color: var(--ref-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--ref-rule);
+    padding-top: 1rem;
+    margin-top: 2.5rem;
+}
