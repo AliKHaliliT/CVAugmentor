@@ -40,3 +40,6 @@ env/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# The API reference builds here; it is regenerable and served from an artifact.
+site/

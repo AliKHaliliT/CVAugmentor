@@ -66,6 +66,11 @@ dev = [
     "mypy",
     "import-linter",
 ]
+# The API reference is published, not gated, so its tool is a group of its own rather than
+# one more thing every contributor installs to run the suite (see decision 0058).
+docs = [
+    "pdoc>=15",
+]
 
 [project.scripts]
 cvaugmentor = "cvaugmentor.facade.cli:main"

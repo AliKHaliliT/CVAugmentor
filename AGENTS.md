@@ -10,6 +10,7 @@ CVAugmentor is an installable Python package that augments images and videos for
 - Lint: `ruff check . && lint-imports` (ruff checks style and docstring presence; import-linter checks the Dependency Rule)
 - Type-check: `mypy src tests` (strict mode is configured in `pyproject.toml`)
 - Docs: `python scripts/audit_docs.py` (the living documents against the tree and the calendar)
+- API reference: `pdoc cvaugmentor cvaugmentor.adapters.augmentations '!cvaugmentor.adapters.augmentations.frames' -o site --docformat numpy` (add the tool with `pip install --group docs`; the catalog is named explicitly because the layer directories are namespace packages that no walker discovers, and the shared frame helpers are excluded as internal)
 
 The checks report at two levels. A failure is a verdict, it stops the
 command, and it means a rule the tool fully decides has been broken. A warning is

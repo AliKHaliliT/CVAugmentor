@@ -1,0 +1,63 @@
+name: API reference
+
+# Publishes the docstrings as a site. This is a deployment and not a check, so it lives
+# apart from ci.yml and its failure never blocks a merge; what the gate holds about
+# docstrings is their shape, which the docs audit already decides. Nothing is committed
+# anywhere: the site is built into an artifact and served from it, so there is no second
+# branch to keep merged with this one, which is what retired the previous arrangement
+# (see decision 0058).
+# Actions ride major-version tags so the workflow starts current; pin them to commit
+# digests when your threat model warrants hardening.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# The deploy job needs these; the build job needs none of them.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A newer push supersedes an older one rather than queueing behind it, and a run in flight
+# is left to finish so a half-uploaded artifact is never served.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install the package and the reference tool
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install --group docs
+      - name: Build the reference
+        # The catalog is named explicitly because the layer directories are namespace
+        # packages with no __init__.py, which no submodule walker discovers, and the shared
+        # frame helpers are excluded because they are internal to the adapters.
+        run: |
+          pdoc cvaugmentor \
+               cvaugmentor.adapters.augmentations \
+               '!cvaugmentor.adapters.augmentations.frames' \
+               -o site --docformat numpy
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

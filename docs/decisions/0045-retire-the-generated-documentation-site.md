@@ -1,6 +1,6 @@
 # 0045. Retire the generated documentation site
 
-Status: Accepted
+Status: Superseded by [0058](0058-publish-the-api-reference-from-main-with-pdoc.md)
 Date: 2026-09-05
 
 ## Context
