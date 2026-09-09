@@ -11,6 +11,7 @@ CVAugmentor is an installable Python package that augments images and videos for
 - Type-check: `mypy src tests` (strict mode is configured in `pyproject.toml`)
 - Docs: `python scripts/audit_docs.py` (the living documents against the tree and the calendar)
 - API reference: `pdoc cvaugmentor cvaugmentor.adapters.augmentations '!cvaugmentor.adapters.augmentations.frames' -o site --docformat numpy -t util_resources/reference --no-show-source` (add the tool with `pip install --group docs`; the catalog is named explicitly because the layer directories are namespace packages that no walker discovers, the shared frame helpers are excluded as internal, and the theme lives in the template directory; the published build adds the footer and the edit links, which the workflow carries)
+- Release: `git tag -a vX.Y.Z -m "CVAugmentor X.Y.Z" && git push origin vX.Y.Z` (the tag runs the gate against the tagged tree, builds both artifacts, imports the wheel from a clean environment, and uploads through trusted publishing with no stored token; a tag disagreeing with the version in `pyproject.toml` fails before anything is built)
 
 The checks report at two levels. A failure is a verdict, it stops the
 command, and it means a rule the tool fully decides has been broken. A warning is

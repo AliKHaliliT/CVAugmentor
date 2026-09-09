@@ -1,0 +1,93 @@
+name: Publish
+
+# Uploads a release to PyPI. The trigger is a version tag rather than a push, because an
+# index refuses a version it already holds, so publishing on every change would fail on
+# every change after the first (see decision 0061). Nothing is uploaded until the gate has
+# run against the tagged tree, so a red release cannot ship.
+# No token is stored anywhere: the upload authenticates through OpenID Connect, which is
+# why the publish job asks for an id-token and runs in its own environment.
+# Actions ride major-version tags so the workflow starts current; pin them to commit
+# digests when your threat model warrants hardening.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[fast,video]"
+          python -m pip install --group dev
+      - name: The tag names the version the project declares
+        # A tag that disagrees with pyproject.toml would publish a number nobody chose, and
+        # an index entry cannot be taken back, so this is checked before anything is built.
+        run: |
+          tagged="${GITHUB_REF_NAME#v}"
+          declared=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          if [ "$tagged" != "$declared" ]; then
+            echo "Tag $GITHUB_REF_NAME carries $tagged while pyproject.toml declares $declared"
+            exit 1
+          fi
+          echo "Publishing $declared"
+      - name: Docs
+        run: python scripts/audit_docs.py
+      - name: Lint
+        run: ruff check . && lint-imports
+      - name: Type-check
+        run: mypy src tests
+      - name: Test
+        run: pytest
+
+  build:
+    needs: gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Build both artifacts
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*
+      - name: Prove the wheel imports from a clean environment
+        # An editable install never exercises packaging, so a broken build configuration
+        # would otherwise reach the index unnoticed.
+        run: |
+          python -m venv "$RUNNER_TEMP/wheel-check"
+          "$RUNNER_TEMP/wheel-check/bin/python" -m pip install dist/*.whl
+          "$RUNNER_TEMP/wheel-check/bin/python" -c "import cvaugmentor; print(cvaugmentor.__version__)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/CVAugmentor/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
