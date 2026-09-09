@@ -94,7 +94,8 @@ CVAugmentor/
 
 ## Getting Started
 
-This package is built with **Python 3.14**.
+This package is built with **Python 3.14**. Every class and method is documented at its
+source, and those docstrings are published as the [API reference](https://alikhalilit.github.io/CVAugmentor/).
 
 ### 1. Installation
 
