@@ -82,6 +82,12 @@ Repository = "https://github.com/AliKHaliliT/CVAugmentor"
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvaugmentor"]
 
+[tool.hatch.build.targets.sdist]
+# The showcase image is 3.4 MB and the README fetches it from GitHub by absolute URL, as
+# the baseline requires of a published README, so shipping it would make the source
+# distribution mostly picture for no reader's benefit.
+exclude = ["util_resources"]
+
 [tool.isort]
 known_first_party = ["cvaugmentor"]
 src_paths = ["src", "tests"]
