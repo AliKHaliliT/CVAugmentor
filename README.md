@@ -10,15 +10,25 @@
 
 Augment images and videos for computer vision tasks, from one file or a whole directory.
 
-CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. It is built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template in my [styles repository](https://github.com/AliKHaliliT/My-Styles), and is aligned to template commit `175e7fa47b6480d2cd2def8e43a42943be2633f5`.
+CVAugmentor applies a catalog of transformations to stills and moving pictures through one pipeline, either writing each augmentation on its own or chaining them into a single output. Built from [Keel](https://github.com/AliKHaliliT/My-Styles/tree/main/Keel), the package template of the My-Styles family.
 
 ## The Philosophy: Why Does This Exist?
 
-Augmentation code rots in a particular way. It starts as a handful of Pillow calls, then grows a video path that re-implements them, then grows a batch path that re-implements that, and each new medium multiplies the places a transformation has to be taught about. The result is a library where a bug in colour handling exists in three copies and gets fixed in one.
+People training vision models need more data than they have, and the usual answer is a
+transform pipeline that lives inside the training loop and hands tensors to a model. That
+serves the loop well and leaves the dataset implicit. It stops serving when the augmented
+set has to exist as files: when a result must be reproducible months later, when the same
+transformations have to reach video as well as stills, or when the data is something a team
+reviews, shares, and versions rather than something regenerated invisibly every epoch.
 
-CVAugmentor answers that by refusing to let the imaging libraries reach the logic that walks the work. An augmentation is a transformation of one frame and knows nothing about files, directories, or video. The runner walks media and augmentations and cannot decode a pixel, because nothing in it may import Pillow, OpenCV, NumPy, or tqdm; the import contracts in `pyproject.toml` check that on every run rather than trusting it. So a still and a video differ in one adapter, the codec, and in nothing else. Fifteen augmentations and two media kinds cost fifteen plus two pieces of code rather than thirty.
+CVAugmentor takes the other position and materialises the dataset. Point it at a file or a
+directory, name the augmentations, and it writes the outputs, either one file per
+augmentation or all of them chained into one. Video passes through the same augmentations as
+stills. A seed makes a whole pass replay. Every run returns a report naming each file
+written and each input skipped, so what you have is inspectable rather than inferred.
 
-The same boundary is what makes the package safe to embed. It reads no environment at import, configures no logging on your behalf, holds no global mutable state, and keeps its own random draws out of NumPy's global generator.
+The output is lossless, because a dataset that quietly loses a level per pass is worse than
+no dataset. Nothing here is written back through a lossy encoder unless you name one.
 
 ## The Domain: Why Augmentation Demands This
 
@@ -28,24 +38,19 @@ Augmenting a dataset looks like a loop and turns out not to be one, because the 
 - **A dataset must vary.** The opposite requirement holds across files, so `PipelineConfig(random_state=True)` redraws every augmentation between items in a batch.
 - **The two modes are genuinely different jobs.** Writing fifteen variants of one image and writing one image with fifteen effects stacked on it read the same in a call and share almost no code path, so `sequential` and `singular` are named and separated rather than inferred.
 - **One bad file must not cost a dataset.** A directory of ten thousand images with one truncated PNG in it should not lose the other 9,999, so a failure is recorded against its item and the walk continues unless you ask it to halt.
-- **A frame is too expensive to convert twice.** The core never touches pixel data, so frames cross it as opaque handles rather than being marshalled into a neutral representation and back.
+- **Augmented data must lose nothing the augmentation did not intend.** A pass that shifts a level here and rounds one there compounds over a dataset, so the output is lossless and the two colour paths a machine may take are held to one level of each other.
+- **The fast codecs are not installable everywhere.** Two of the platforms this runs on publish no wheel for them, so the work has to complete without them rather than refuse to start.
 
 ---
 
 ## Core Architectural Pillars
 
-CVAugmentor enforces the **Dependency Rule**: inner layers (Business Logic) must not depend on outer layers (Public Surface, Codecs, IO).
+The reasoning behind each of these is in the map at [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and the records it links.
 
-1. **Ports & Adapters (Dependency Inversion)**
-   The orchestration service (`AugmentationRunner`) depends only on pure Python `Protocols` (`IAugmentation`, `IMediaCodec`, `IProgressSink`, `IWorkspace`). The `PipelineBuilder` injects concrete implementations at construction time, and every one is checked against its Protocol there.
-2. **The Opaque Frame**
-   Pixels cross the core as a handle nothing inside it reads, so the Dependency Rule holds without a conversion at every boundary. The suites carry plain strings where production carries images, which is the same property paying for itself in tests.
-3. **Strict Translators**
-   Domain objects never leak through the public surface. A finished pass is translated into the facade's `AugmentationReport` before a caller sees it.
-4. **Decoupled Exceptions**
-   Business logic raises pure Python exceptions (`MediaReadError`, `UnsupportedMediaError`, `DuplicateAugmentationError`). Nothing in the domain imports a framework or an SDK.
-5. **Library Citizenship**
-   No global mutable state, no environment reads at import time, a `NullHandler` on the package logger, an immutable `PipelineConfig`, curated `__init__` exports, and a `py.typed` marker.
+1. **Ports and Adapters.** The orchestration depends only on Protocols, and `PipelineBuilder` checks every injected implementation against its own at wiring time rather than mid-directory.
+2. **The Opaque Frame.** Pixels cross the core as a handle nothing inside it reads, so a codec can be swapped without the loop that walks a directory noticing ([decision 0042](docs/decisions/0042-carry-a-frame-as-an-opaque-handle.md)).
+3. **Optional Accelerators.** Every accelerated operation carries a NumPy fallback, and the two agree within one level, so a platform without the fast wheels loses speed and never a format ([decision 0053](docs/decisions/0053-declare-the-accelerators-optional-and-fall-back-in-code.md)).
+4. **Library Citizenship.** No global mutable state, no environment read at import, a `NullHandler` on the package logger, and random draws kept out of NumPy's global generator.
 
 ---
 
@@ -74,7 +79,7 @@ CVAugmentor/
 
 ## Key Features
 
-- **Roughly Ten Times Faster Than 1.x:** One 1920x1080 image through fifteen augmentations went from 4716 ms to 453 ms, and eight of them from 38.1 s to 3.7 s. The output is still lossless PNG.
+- **Lossless and Fast:** Fifteen augmentations over a 1920x1080 image, written as fifteen PNGs, take 413 ms with the accelerators installed ([decision 0052](docs/decisions/0052-thread-the-writes-and-leave-the-operations-serial.md) measures where that time goes). Nothing is re-encoded lossily unless you ask for a lossy format.
 - **Runs Everywhere, Accelerates Where It Can:** NumPy and Pillow are the only hard requirements and both ship wheels for every target, so a plain install never fails. OpenCV and Intel ISA-L are optional and simply make it faster.
 - **Fifteen Augmentations:** Blur, Brightness, Cutout, Exposure, Flip, Grayscale, Hue, Negative, NoAugmentation, Noise, Rotate, Saturation, Shear, Translation, and Zoom.
 - **Images and Video Through One Pipeline:** The same augmentations apply to a still or to every frame of a video, and a long video is decoded lazily rather than held in memory.
@@ -220,9 +225,9 @@ pipeline = PipelineBuilder().with_discovered_augmentations().build()
 
 ## Conventions
 
-The project's conventions live in one place, the rulebook at [docs/CONVENTIONS.md](docs/CONVENTIONS.md). It holds the documentation system (a vendor-neutral [AGENTS.md](AGENTS.md) as the agent entry point and the single index of every document, [STATE.md](STATE.md) as the living project state, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) as the current map, and immutable decision records under [docs/decisions/](docs/decisions/) as the reasoning behind every settled choice), the docstring convention in its code-level section, and the prose law in its Prose section. That file is normative and must not be modified; the rationale behind the system itself is recorded in [its founding decision record](docs/inherited/0001-adopt-the-documentation-system.md).
+The project's conventions live in one place, the rulebook at [docs/CONVENTIONS.md](docs/CONVENTIONS.md). It holds the documentation system (a vendor-neutral [AGENTS.md](AGENTS.md) as the agent entry point and the single index of every document, [STATE.md](STATE.md) as the living project state, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) as the current map, and immutable decision records under [docs/decisions/](docs/decisions/) as the reasoning behind every settled choice), the docstring convention in its code-level section, and the prose law in its Prose section. That file is normative and must not be modified; the rationale behind the system itself is recorded in the style's founding decision record, 0001.
 
-The rulebook is owned at the style level. A project built from this template never changes it locally, and an improvement discovered while refactoring against the template is not kept as a private advantage; [AGENTS.md](AGENTS.md) describes the upstream report that carries it back to the template, where it is verified and, if it holds, adopted for every project that follows the style.
+The rulebook is owned at the style level. A project built from this template never changes it locally, and an improvement discovered while refactoring against the template is not kept as a private advantage; the project's `UPSTREAM.md` carries it back to the template as [AGENTS.md](AGENTS.md) describes, where it is verified and, if it holds, adopted for every project that follows the style.
 
 ---
 

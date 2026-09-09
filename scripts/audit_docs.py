@@ -58,6 +58,7 @@ UPSTREAM_KIND = re.compile(r"^Kind: (improvement|defect)$", re.MULTILINE)
 UPSTREAM_PIN = re.compile(r"^Pin: [0-9a-f]{7,40}$", re.MULTILINE)
 UPSTREAM_PARTS = ("**What it is", "**How the work surfaced it", "**Records checked")
 UPSTREAM_WHY = ("**Why it is believed better", "**What was worked around")
+UPSTREAM_ALIGNED = re.compile(r"^Aligned to .+ at (`?[0-9a-f]{7,40}`?|the host's own commit)\.?$", re.MULTILINE)
 FENCE = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
 DOTTED_MODULE = re.compile(r"[a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+")
 TREE_FILE = re.compile(r"[A-Za-z0-9_\-]+(?:\.[A-Za-z0-9_\-]+)+")
@@ -296,6 +297,8 @@ def check_upstream(problems: list[str]) -> None:
     if not path.exists():
         return
     text = path.read_text(encoding="utf-8")
+    if not UPSTREAM_ALIGNED.search(text):
+        problems.append("docs/UPSTREAM.md: no Aligned line naming the template and the commit the project is aligned to")
     if "## Open" not in text:
         problems.append("docs/UPSTREAM.md: no ## Open section")
         return
